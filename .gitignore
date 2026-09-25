@@ -1,0 +1,6 @@
+# Licensed font files — not redistributed publicly, see homepage-concept-plan.md §1
+LINE_Seed_Sans_TH/
+fonts/
+
+# session-specific local dev config
+.claude/

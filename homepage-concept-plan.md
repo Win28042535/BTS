@@ -1,0 +1,452 @@
+# BTS Group Homepage Redesign — Concept Plan (Working Draft)
+
+> สถานะ: วางแผน/ตกลงแนวทางแล้ว **ยังไม่ลงมือสร้าง mockup**
+> อ้างอิงจาก: `BTS_Connected_Future.pdf` (concept doc), เว็บจริง btsgroup.co.th/th/home, blueprintapps.io (hero DNA reference)
+
+## 1. Design DNA
+
+### Typography
+- **LINE Seed Sans TH** — ข้อความไทยทั้งหมด (headline/body)
+- **LINE Seed Sans (EN)** — headline/ตัวเลขภาษาอังกฤษ
+- **มีไฟล์ฟอนต์จริงแล้ว** (ไม่ต้องใช้ fallback อีกต่อไป) — เก็บที่ `C:\Users\pawin.s\Desktop\BTS\LINE_Seed_Sans_TH\LINE_Seed_Sans_TH_V1.003\Web\WOFF2\` ใช้ชุด Web (WOFF2) สำหรับ self-host ผ่าน `@font-face` ในเว็บจริง/mockup: `LINESeedSansTH_W_Th` (Thin), `_Rg` (Regular), `_Bd` (Bold), `_XBd` (ExtraBold), `_He` (Heavy) — ครบ 5 น้ำหนัก
+- Section headline ระดับหัวข้อใหญ่ใช้สไตล์ all-caps ช่องไฟกว้างแบบ manifesto (เช่น "MOVE · MIX · MATCH")
+
+### Icon DNA
+- **Lucide** (lucide.dev) — เส้น outline, stroke-width 2px สม่ำเสมอ, มุมโค้งมน
+- โหลดผ่าน jsdelivr, ใช้แบบ inline SVG
+- ไอคอนที่เล็งไว้: `move`, `layers` (MIX), `link`/`handshake` (MATCH), `trending-up` (ตัวเลข), `network`
+
+### Color (sample จริงจาก logo.svg ของเว็บ btsgroup.co.th)
+| สี | Hex | บทบาท |
+|---|---|---|
+| BTS Blue | `#00599B` | Accent หลัก, CTA, ลิงก์ |
+| BTS Red | `#ED1D24` | Accent รอง ใช้น้อย/เฉพาะจุด |
+| Navy | `#23324E` | หัวข้อ, footer, dark section |
+| Charcoal | `#292B2C` | body text |
+| White/Cream | `#FFFFFF` + ครีมหินอ่อนอ่อน (จาก concept doc) | พื้นหลังหลัก (section สว่าง) |
+| Near-black | `~#1B1B1B` (อ้างอิง blueprintapps.io) | พื้นหลัง section 2 (dark) |
+| Silver/metallic gradient | เทาเงิน | กราฟิกเส้น-จุดเชื่อมโยง (node-line motif) ใช้แทน grid ธรรมดา |
+
+## 2. Homepage Structure (7 Sections)
+
+| # | Section | Perception Funnel stage | สถานะ |
+|---|---|---|---|
+| 1 | เชื่อมต่อความเป็นไปได้ (Hero) | ดึงดูด | วางแผนละเอียดแล้ว (ดูข้อ 16 — hero video concept) |
+| 2 | หนึ่งกลุ่มธุรกิจ หลายความเชื่อมโยง | เกริ่น Ecosystem | วางแผนละเอียดแล้ว (ดูข้อ 3) |
+| 3 | 3 แพลตฟอร์ม หนึ่งระบบนิเวศ (MOVE·MIX·MATCH) | ให้ความรู้ | วางแผนละเอียดแล้ว (ดูข้อ 4) |
+| 4 | เครือข่ายที่ขับเคลื่อนธุรกิจ | ให้ความรู้ (ต่อ MATCH) | วางแผนละเอียดแล้ว (ดูข้อ 5) |
+| 5 | การเชื่อมต่อที่สร้างผลกระทบ | พิสูจน์ (Impact) | วางแผนละเอียดแล้ว (ดูข้อ 9) — ไม่มีต้นแบบใน PDF เดิม, ออกแบบใหม่โดยอิง DNA จาก unitedcarriers.com "Why us" |
+| 6 | ตัวเลขเบื้องหลังเครือข่าย (IR) | สร้างการมีส่วนร่วม | วางแผนคร่าวๆ (ย้ายจากตำแหน่งบนสุดเดิม → ท้ายหน้า แต่คง quick-access) |
+| 7 | เรื่องราวจากเครือข่ายของเรา | สร้างการมีส่วนร่วม | วางแผนคร่าวๆ ปิดท้ายด้วย "Where will we connect next?" |
+
+## 3. Section 2 — รายละเอียดที่ตกลงแล้ว (clone DNA จาก blueprintapps.io hero)
+
+**อ้างอิง DNA จาก blueprintapps.io:**
+- พื้นหลังเกือบดำ `rgb(27,27,27)` + grid เส้นบาง
+- การ์ดภาพกระจายแบบ scattered mosaic (ขนาด/มุมไม่เท่ากัน มุมโค้งมน)
+- Headline หนา 2 บรรทัดกลางจอ + subhead สั้น + CTA pill เดียว
+- แต่ละการ์ดมี caption/label กำกับ (proof point)
+- Nav แบบ floating pill
+
+**การตัดสินใจสำหรับ BTS (ยืนยันแล้ว):**
+1. **โทนพื้นหลัง**: มืดเกือบดำแบบ Blueprint ตรงๆ (ต่อเนื่องจาก Hero video เพื่อ journey ลื่นไหล ก่อนสลับสว่างที่ section 3)
+2. **จำนวน/เนื้อหาการ์ด**: ยึด **4 การ์ดหลัก** ตาม diagram เดิมในเอกสาร — **People / Business / Data / Opportunities** โดยใช้ภาพจริงจาก Image DNA (Infrastructure/Human/Business/Future)
+3. **Motion**: ใส่ **parallax เบื้องต้น** (การ์ดขยับความเร็วต่างกันตาม scroll/mouse)
+
+**Mapping เพิ่มเติม:**
+- Grid เส้นบางของ Blueprint → แทนด้วย motif เส้น-จุดเชื่อมโยงสีเงินของ BTS
+- Headline กลางจอ: "ONE GROUP. MANY CONNECTIONS. ENDLESS POSSIBILITIES." + บรรทัดไทยรอง "เว็บไซต์ต้องทำให้ผู้ใช้รู้สึกถึงความเชื่อมต่ออย่างแท้จริง"
+- CTA: "Explore BTS Group" / "สำรวจระบบนิเวศ BTS"
+- Caption ใต้การ์ด: proof point สั้นๆ ต่อกลุ่ม (เช่น "People — ผู้โดยสารกว่า X ล้านคน/วัน", "Data — แพลตฟอร์มเชื่อมข้อมูล O2O")
+
+> **หมายเหตุ**: Section 2 มี **เวอร์ชัน B และ C แบบคู่ขนาน** — B: clone จาก unitedcarriers.com/services "Our Services" (ดูข้อ 11), C: clone จาก unitedcarriers.com/careers "Why Join Us" (ดูข้อ 13) — ยังไม่ตัดสินใจว่าจะใช้เวอร์ชันไหนสร้างจริง
+
+## 4. Section 3 — รายละเอียดที่ตกลงแล้ว (clone DNA จาก blueprintapps.io "What we do")
+
+**อ้างอิง DNA จาก blueprintapps.io:**
+- ไม่ใช่การ์ดนิ่งเรียงต่อกัน แต่เป็น **pinned feature module**: การ์ดเดียวตำแหน่งคงที่กลางจอ (rounded 24px, bg `#242424`, ทรงตั้ง) สลับภาพภายใน 4 สถานะตามจังหวะ scroll (pinned-scroll-crossfade)
+- แต่ละสถานะภาพเป็นอุปมาโดยตรงของ claim ที่อยู่ใต้การ์ด (constellation, โปรไฟล์เดี่ยว, orbit rings, stat bubbles)
+- Eyebrow label: จุดสี + ข้อความสั้น เหนือ headline
+- Headline หนา 2 บรรทัด + subtext เทา 1 บรรทัดใต้การ์ดทุกสถานะ
+- Intro paragraph มี highlight-on-scroll (คำค่อยๆ สว่างขึ้นตามการอ่าน) ก่อนเข้าโมดูลการ์ด
+
+**การตัดสินใจสำหรับ BTS (ยืนยันแล้ว):**
+1. **โทนพื้นหลัง**: การ์ดเข้ม (`#242424` หรือ navy `#23324E`) เป็น "เกาะ" ลอยบนพื้นครีม/ขาว — section 3 สลับเป็นโทนสว่างตามแผนเดิม (ตัดกับ section 1-2 ที่มืด)
+2. **ภาพ MATCH**: ใช้กราฟิก steel-beam ตัด X ของเดิมจากเอกสาร concept ไปก่อน (อาจปรับเปลี่ยนภายหลังให้เข้าชุดเดียวกับ MOVE/MIX)
+3. **Motion**: ทำ **pinned-scroll-crossfade แบบเต็ม** (การ์ดค้างตำแหน่งเดิม ภาพสลับตาม scroll progress เหมือนต้นแบบ)
+
+**Mapping 3 สถานะ = 3 แพลตฟอร์ม:**
+
+| Platform | Visual metaphor (แทน constellation/profile/orbit/bubbles) | Headline + Subtext |
+|---|---|---|
+| **MOVE** | เส้น route/จุด station พร้อม dot เคลื่อนที่ตามเส้นทาง (door-to-door journey) — ต่อยอด Layer 1 motif จากเอกสารเดิม | "MOVE — Transportation solution" / การสัญจร · คมนาคมขนส่ง · โครงสร้างพื้นฐาน · Door-to-door |
+| **MIX** | กลุ่มไอคอน Lucide เล็ก (O2O, สื่อ, ดิจิทัล, กระจายสินค้า, ข้อมูล) ลอยรอบ node กลาง สีตาม BTS | "MIX — Connecting data & experience" / O2O · สื่อ · ดิจิทัล · การกระจายสินค้า · ข้อมูล |
+| **MATCH** | กราฟิก steel-beam ตัด X ของเดิม | "MATCH — Connecting capability & opportunity" / พันธมิตร · ธุรกิจบริการ · ICT · บริการการเงิน · โอกาสใหม่ |
+
+**องค์ประกอบที่ยืมมาตรงๆ**: eyebrow label แบบจุดสี ("● MOVE" ฯลฯ), headline หนา 2 บรรทัดใต้การ์ด + subtext เทาบรรทัดเดียว, ลิงก์ปลายทางไปหน้าธุรกิจเดิมที่มีอยู่แล้ว (/our-business/move, /mix, /match)
+
+> **หมายเหตุ**: Section 3 มี **เวอร์ชัน B และ C แบบคู่ขนาน** — B: clone จาก unitedcarriers.com/about "Vision/Mission/Strategy" (ดูข้อ 10), C: clone จาก unitedcarriers.com (โฮมเพจ) "Our Services" sticky 2-คอลัมน์ (ดูข้อ 15) — ยังไม่ตัดสินใจว่าจะใช้เวอร์ชันไหนสร้างจริง
+
+## 5. Section 4 (เครือข่ายที่ขับเคลื่อนธุรกิจ) — รายละเอียดที่ตกลงแล้ว (clone DNA จาก blueprintapps.io "The model works")
+
+**อ้างอิง DNA จาก blueprintapps.io:**
+- ไม่มีภาพประกอบเลย เน้นตัวพิมพ์ล้วน (ต่างจาก section 2/3 ที่เน้นภาพ) — สร้างจังหวะเปลี่ยนโทนของหน้า
+- Eyebrow "● The model works" + headline หนา "Here's the proof."
+- รายการตัวเลขใหญ่เรียงแนวตั้ง 4 ตัว (`<5%`, `94%`, `84%`, `86%`) ขนาด **60px น้ำหนัก regular (400)** สีขาวครีม `rgb(247,245,242)`
+- แต่ละตัวเลข **เยื้องซ้าย-ขวาเพิ่มขึ้นทีละนิด** (cascade เฉียงลงขวา) — ค่าจริงที่ inspect ได้: left 24px → 24px → 39px → 104px
+- คำอธิบาย 1-2 บรรทัดสีเทา `rgb(146,146,146)` ใต้ตัวเลขแต่ละตัว
+- **Opacity ผูกกับ scroll**: ตัวเลขตรงจุดโฟกัส = opacity 1, ตัวถัดไปที่ยังไม่ถึง ≈ 0.6, ตัวไกลออกไป ≈ 0.01 — นับหลักฐานทีละตัวขณะเลื่อน
+
+**การตัดสินใจสำหรับ BTS (ยืนยันแล้ว):**
+1. **โทนพื้นหลัง**: คงสว่างต่อเนื่องจาก section 3 (ไม่สลับมืดตามต้นแบบ) — ใช้ตัวเลขสีเข้ม/navy (`#23324E`) แทนสีครีมขาวบนพื้นขาว
+2. **แหล่งข้อมูลตัวเลข**: ใช้ placeholder ชั่วคราวใน mockup รอบแรก รอข้อมูลจริงจากทีมธุรกิจภายหลัง (จำนวนพันธมิตร, สัดส่วน ICT, ผลิตภัณฑ์การเงิน ฯลฯ)
+3. **จำนวนตัวเลข**: ยึด **4 ตัว** ตามต้นแบบ (คัดจาก 5 หมวดของ MATCH เดิม — พันธมิตร/ธุรกิจบริการ/ICT/บริการการเงิน/โอกาสใหม่ เลือก 4 ที่มี impact สุด)
+4. **Motion**: ทำ **cascade + opacity-fade แบบเต็ม** ตามต้นแบบ (ผูกกับ scroll progress เหมือน section 3)
+
+**องค์ประกอบที่ยืมมาตรงๆ**: eyebrow + headline พิสูจน์, ตัวเลขใหญ่ 60px regular, cascade เยื้องซ้าย-ขวาทีละนิด, คำอธิบายเทา/navy ใต้ตัวเลข, opacity fade ตาม scroll focus
+
+## 6. Footer — รายละเอียดที่ตกลงแล้ว (clone DNA จาก unitedcarriers.com/industries)
+
+**อ้างอิง DNA จาก unitedcarriers.com/industries (mega-footer, 8 บล็อกคั่นด้วยเส้นแบ่ง):**
+1. แถบดำคั่นต่อจาก nav
+2. Tagline 2 บรรทัด ("One operator. Every leg of the journey.") ฟอนต์ `BT Steinhart` ตัวหนา
+3. Segmented pill toggle ("INDUSTRIES / SERVICES") + marquee ticker เลื่อนแนวนอนอัตโนมัติ
+4. Nav 2 คอลัมน์ ใต้ label mono uppercase ("COMPANY")
+5. Secure Payments: คำอธิบาย + badge วิธีชำระเงิน
+6. Hotline / Email / Office Hours (label mono + ค่าตัวหนา) + Socials (ปุ่มวงกลม outline)
+7. Head Office + "Direction on Google" + Operating Across + แผนที่โลก dotted พร้อมจุดไฮไลต์
+8. Legal utility grid (QHSE/Privacy/Terms/Payment/Delivery/Refund/Cookie)
+9. Wordmark ghost ตัวใหญ่เต็มความกว้าง ("UNITED CARRIERS" ลาย dotted จาง)
+10. แถบ copyright เล็กสุดท้าย
+
+Typography เฉพาะ footer: label เล็ก uppercase ใช้ **mono font** (`BT Steinhart Mono`) ให้ความรู้สึก technical/manifest, heading/nav ใช้ `BT Steinhart` sans ตัวหนา
+
+**การตัดสินใจสำหรับ BTS (ยืนยันแล้ว):**
+1. **ขอบเขต**: ตัด **บล็อก "Secure Payments"** ออก (ไม่มี e-commerce ตรงๆ ในบริบทนี้) — เหลือ 7 บล็อก: Tagline → Pill toggle+ticker → Nav 2 คอลัมน์ → Contact+Socials → Head Office+Map → Legal grid → Wordmark ghost → Copyright
+2. **เนื้อหา ticker/marquee**: รวมทุกอย่างเข้าด้วยกันในเส้นเดียว (ชื่อบริษัทในเครือ + sub-items ของ MOVE/MIX/MATCH + หัวข้อข่าวล่าสุด) จัดองค์ประกอบผสมกันเป็น ticker เดียว
+3. **แผนที่**: โฟกัสเฉพาะเครือข่าย **BTS Skytrain ในกรุงเทพฯ** (ไม่รวมธุรกิจ/การลงทุนต่างประเทศ) — จุดไฮไลต์สถานีบนแผนที่ dotted โทนน้ำเงิน BTS
+4. **Wordmark ghost**: ใช้ **"BTS GROUP"** ตรงๆ ตามต้นแบบ ตัวใหญ่เต็มความกว้าง ลาย dotted จาง
+5. **Typography**: ใช้ **LINE Seed Sans ตัวปกติ** แทนทั้ง `BT Steinhart` และ `BT Steinhart Mono` (LINE Seed ไม่มีตัวแปร mono) — บล็อก label เล็ก uppercase จะจำลองความรู้สึก "technical label" ด้วยขนาดเล็ก + ตัวพิมพ์ใหญ่ + letter-spacing กว้าง + สีจางแทนการใช้ mono font จริง
+
+**Mapping เนื้อหา:**
+
+| บล็อก unitedcarriers | แปลงเป็นของ BTS |
+|---|---|
+| Tagline 2 บรรทัด | Reprise headline ปิดท้าย เช่น "One Group. Many Connections." หรือ "Connected Future, Today." |
+| Pill toggle + ticker | Toggle **"MOVE / MIX / MATCH"** + ticker รวมชื่อบริษัทในเครือ/sub-items/ข่าว ตามข้อ 2 |
+| Nav 2 คอลัมน์ | IA เดิม: เกี่ยวกับเรา / ธุรกิจของเรา / นักลงทุนสัมพันธ์ / การกำกับดูแลกิจการ / ความยั่งยืน / ข่าวสาร / สมัครงาน / ติดต่อ |
+| Hotline/Email/Office Hours + Socials | คงรูปแบบเดิม ใส่ช่องทางติดต่อ IR/นักลงทุน + social ของ BTS Group |
+| Head Office + Operating Across + dotted map | ที่อยู่สำนักงานใหญ่ BTS Group + จุดไฮไลต์เครือข่าย BTS Skytrain ในกรุงเทพฯ |
+| Legal utility grid | ตรงกับ footer เดิมของเว็บอยู่แล้ว (Privacy Policy, Cookie Policy, Career, Contact, Sitemap, T&C) — reuse ตรงๆ |
+| Wordmark ghost ใหญ่ | "BTS GROUP" |
+| Copyright bar | คงข้อมูลลิขสิทธิ์เดิม |
+
+## 7. Header (global component) — รายละเอียดที่ตกลงแล้ว (clone DNA จาก unitedcarriers.com/industries)
+
+**อ้างอิง DNA จาก unitedcarriers.com/industries (inspect DOM/CSS จริง):**
+- โครงสร้าง 2 แถว โปร่งใสทับ hero ตอนโหลด:
+  - แถว utility บน: "CARBON CALCULATOR | LIVE TRACKING PORTAL" ตัวเล็ก mono uppercase สีขาวโปร่ง 60%
+  - แถวหลัก: โลโก้ "UC" (ซ้าย) ... ไอคอน **dot-cluster ไล่ความทึบ** (5 จุด, opacity 0.24/0.5/0.7) + ข้อความ "MENU" (ขวา) — สอดคล้องกับ motif วงกลม/จุดจาก preloader ของแบรนด์
+- **Scroll behavior (จาก CSS จริง)**:
+  1. `.header.on-scroll` → พื้นหลังเปลี่ยนเป็นขาวทึบ+ตัวอักษรดำ (ปกติโปร่งใส+ขาว) ยกเว้น section ที่ mark เป็น dark จะโปร่งใสต่อ
+  2. `.header.on-hide` → header เลื่อนซ่อนขึ้นเมื่อ scroll ลง, โผล่กลับเมื่อ scroll ขึ้น (auto-hide sticky)
+  3. โลโก้มี 2 ส่วน (mark + full text) — ส่วน full หดความกว้างเป็น 0 ตอน scroll เหลือแต่ mark ย่อ
+  4. Mobile: padding header แน่นขึ้นเมื่อ scroll
+- **Full overlay menu**: ไอคอน dot-cluster มอร์ฟเป็น "CLOSE", list เมนูตัวใหญ่ uppercase (หน้าปัจจุบัน = ขาวตัวหนา, อื่นๆ = เทาจาง — ใช้ contrast น้ำหนัก/ความสว่างแทนสี), ปุ่ม CTA pill outline, เส้นคั่น, "CONNECT WITH US:" + อีเมล
+
+**การตัดสินใจสำหรับ BTS (ยืนยันแล้ว):**
+1. **แถว utility บน**: ใช้ทั้งหมดตามต้นแบบ — stock ticker ย่อ ("ราคาหุ้น BTS 2.00 ▼0.99%") + ลิงก์ IR ด่วน + ตัวสลับภาษา TH/EN รวมกันในแถวเดียว
+2. **โครงสร้างเมนู**: คง **2 ระดับ** ไว้ (ตามเมนูเดิมของเว็บที่มี sub-item เยอะ เช่น นักลงทุนสัมพันธ์มีลิงก์ย่อย 10 รายการ) แต่ปรับสไตล์การแสดงผลตาม DNA นี้ (หน้าปัจจุบัน = ขาวตัวหนา, อื่นๆ = เทาจาง, list ตัวใหญ่ uppercase)
+3. **Scroll behavior**: ทำเต็มรูปแบบตามต้นแบบ — transparent→white บน scroll, hide-on-scroll-down/show-on-scroll-up, โลโก้ collapse เหลือ mark ย่อ
+4. **Dot-cluster icon**: ใช้แทนไอคอน hamburger เดิมของเว็บทั้งหมด — เชื่อมกับ motif เส้น-จุดเชื่อมโยงสีเงินที่ใช้ทั่วทั้งเว็บ (reuse element เดียวกัน)
+
+**หมายเหตุ**: Header เป็น **global component** ทำงานร่วมกับทุก section (ไม่ใช่ 1 ใน 7 section ของ homepage) — ต้องรองรับทั้งพื้นหลังมืด (section 1-2) และสว่าง (section 3-4) ของหน้า
+
+## 8. Loader (global component, ก่อนเข้าหน้า homepage) — รายละเอียดที่ตกลงแล้ว (clone DNA จาก unitedcarriers.com)
+
+**อ้างอิง DNA จาก unitedcarriers.com (inspect CSS/DOM จริง — มี 2 loader):**
+
+1. **`loader-page`** (ใช้ข้ามหน้า/มือถือ) — วงกลม 4 วงซ้อนศูนย์กลางเดียวกัน (`circ-1..4` ขนาด 30/45/60/75vmax เส้นขอบบาง) fade+ripple stagger แบบ sonar ping + wordmark fade เข้ากลางจอ, header ซ่อนระหว่างโหลด
+2. **`loader-home`** (เฉพาะหน้าแรก, desktop, 3 คอลัมน์):
+   - ซ้าย: โลโก้ + ลิสต์ประเทศเลื่อนเข้าทีละบรรทัด (stagger opacity)
+   - กลาง: แผนที่โลกพร้อมจุด office (สีแบรนด์) / worldwide (สีเทา)
+   - ขวา: ตัวนับ % progress + ลิสต์บริการเลื่อนเข้าทีละบรรทัด
+3. **กลไก reveal (`loader-bg-mask`)**: circle-wipe 3 ชั้นสี — div วงกลม `width:0;height:0` แต่มี `box-shadow` แผ่ 100vmax (ไล่เฉดสี) บังเต็มจอ, ขยายขนาดวงกลมทำให้เกิด "รูม่านตา" โปร่งใสขยายจากศูนย์กลาง เผยหน้าเว็บจริง ซ้อน 3 ชั้น stagger เวลาต่างกันได้เอฟเฟกต์เปิดม่านตาไล่เฉดสีนุ่มๆ
+
+**การตัดสินใจสำหรับ BTS (ยืนยันแล้ว):**
+1. **ความเข้ม**: ทำเวอร์ชัน **rich เต็มรูปแบบแบบ `loader-home`** — 3 คอลัมน์: ซ้าย = ลิสต์บริษัทในเครือ/ธุรกิจ (BTS SkyTrain, VGI, Kerry Express, U City ฯลฯ) เลื่อนเข้าทีละบรรทัด, กลาง = แผนที่เครือข่าย BTS Skytrain กรุงเทพฯ (asset เดียวกับ footer), ขวา = ตัวนับ % + ลิสต์ "MOVE · MIX · MATCH" เลื่อนเข้าทีละบรรทัด
+2. **สีของ iris-wipe**: ไล่เฉด **navy → charcoal → ครีม/ขาว** (จบที่โทนพื้นหลัง hero) แทนเฉดเทาของต้นแบบ
+3. **ความถี่การแสดง**: **โชว์ทุกครั้งที่เข้าหน้าแรก** (ไม่ gate ด้วย sessionStorage แบบต้นแบบ)
+4. **ระยะเวลา**: คุมให้เร็วใกล้เคียงต้นแบบ (~1 วินาที) ไม่ให้กวนใจผู้ใช้
+
+**Synergy กับส่วนอื่นที่วางแผนไว้แล้ว**: วงแหวน sonar ต่อยอด motif เส้น-จุดเชื่อมโยงสีเงิน, แผนที่ BTS Skytrain reuse asset เดียวกับ footer, ลิสต์ขวาใช้ชื่อแพลตฟอร์ม MOVE/MIX/MATCH ที่ปรากฏซ้ำใน section 3 — ทำให้ loader ทำหน้าที่ "teaser" เนื้อหาในหน้าจริงตั้งแต่แรกเห็น
+
+## 9. Section 5 (การเชื่อมต่อที่สร้างผลกระทบ) — รายละเอียดที่ตกลงแล้ว (clone DNA จาก unitedcarriers.com "Why us")
+
+**อ้างอิง DNA จาก unitedcarriers.com (section "Why us" ก่อน testimonials):**
+- ไม่มีการ์ดเลย ใช้ **ภาพถ่ายจริงแบบ pinned + parallax ช้า** เป็นฉากหลังตลอด section (ภาพเรือขนส่งสินค้ามุมสูง เลื่อนช้ากว่าหน้าจอ ให้ความรู้สึกภาพ "ปัก" อยู่กับที่)
+- Eyebrow "WHY US" + headline ใหญ่กลางจอ ซ้อนทับภาพ
+- 5 รายการเรียงต่อกันบนภาพเดียวกันตลอด แต่ละรายการมี: **ไอคอน dot-matrix/halftone เฉพาะตัว** (รูปทรงต่างกันแต่ละข้อ ทำจากจุดขาว) + headline หนา + คำอธิบาย 1-2 บรรทัดสีขาว, crossfade เข้า-ออกตามจังหวะ scroll โดยไม่มีกรอบการ์ด ข้อความลอยตรงบนภาพ
+- Feel โดยรวม: cinematic/documentary เน้นภาพจริงเป็นหลักฐาน มากกว่ากราฟิกนามธรรม
+
+**การตัดสินใจสำหรับ BTS (ยืนยันแล้ว):**
+1. **ภาพพื้นหลัง**: ใช้ **ภาพเดียวคงที่ตลอด section** (ภาพจริงจาก Image DNA — Human/Future category) พร้อม parallax ช้าตามต้นแบบ + gradient scrim มืดทับภาพเพื่อให้ตัวอักษรขาวอ่านง่าย
+2. **จำนวนข้อ**: ปรับเป็น **4 ข้อ** ให้สอดคล้อง pattern เดียวกับ section 4 (เครือข่ายที่ขับเคลื่อนธุรกิจ)
+3. **เนื้อหา claim**: ใช้ **placeholder ชั่วคราว** ใน mockup รอบแรก รอข้อมูลจริงจากทีม ESG/Sustainability ภายหลัง (แนวทาง: ผู้โดยสาร/ชุมชน/ESG/พันธมิตร หรือความปลอดภัย — เลือก 4 จาก 5 แนวทางที่เสนอไว้)
+4. **ไอคอน dot-matrix**: สร้างชุดไอคอนเฉพาะของ BTS ด้วยเทคนิค halftone dot เดียวกับต้นแบบ — **เชื่อมกับ motif จุดที่ใช้ใน loader (sonar ping rings) และ header (dot-cluster MENU icon) อยู่แล้ว** ทำให้ motif จุด/วงกลมกลายเป็นภาษาภาพร่วม (visual thread) ที่ปรากฏซ้ำตั้งแต่ loader → header → section 5
+
+**Mapping เนื้อหา:**
+
+| unitedcarriers | BTS |
+|---|---|
+| Eyebrow "WHY US" + headline | Eyebrow "IMPACT" + headline "การเชื่อมต่อที่สร้างผลกระทบจริง" / "CONNECTIONS THAT CREATE REAL IMPACT" |
+| 5 รายการ + ไอคอน dot-matrix | 4 ข้อ claim เชิงผลกระทบ (placeholder เช่น ผู้โดยสาร/ชุมชน/ESG/พันธมิตร) แต่ละข้อมีไอคอน dot-matrix เฉพาะตัว |
+| Text ลอยตรงบนภาพ | ใช้ตรงๆ พร้อม scrim มืด |
+
+## 10. Section 3 — เวอร์ชัน B (ทางเลือกคู่ขนาน, clone DNA จาก unitedcarriers.com/about "Vision/Mission/Strategy")
+
+**สถานะ**: บันทึกเป็น **ตัวเลือกคู่ขนาน** กับเวอร์ชัน A (Blueprint pinned-card crossfade, ดูข้อ 4) — ยังไม่ฟันธงว่าจะสร้างเวอร์ชันไหนจริง รอตัดสินใจภายหลัง
+
+**อ้างอิง DNA จาก unitedcarriers.com/about (inspect DOM/CSS จริง):**
+- กลไก **`position: sticky` แบบซ้อนทับกัน (stacking sticky panels)** — ไม่ใช่ pinned-card หรือ crossfade: panel เต็มจอค้างอยู่กับที่จนกว่า panel ถัดไปจะเลื่อนขึ้นมาคลุมทับไปเลย (เหมือนสไลด์การ์ดซ้อนทีละใบ)
+- โครงสร้าง 3 panel เต็มความสูงจอ (VISION / MISSION / STRATEGY) แต่ละ panel มี **ภาพถ่ายเต็มพื้นหลัง (full-bleed) โทนสีเฉพาะตัวตามความหมาย**:
+  - VISION: พื้นดำ + ภาพโลกจากอวกาศยามค่ำคืน (สเกลระดับโลก/แรงบันดาลใจ)
+  - MISSION: โทนส้ม/อุ่น + ภาพตู้คอนเทนเนอร์สินค้าระยะใกล้ (จับต้องได้จริง)
+  - STRATEGY: โทนน้ำเงินเข้ม + ภาพเครื่องบินพุ่งขึ้นพร้อมควันไอพ่น (ทิศทาง/แรงขับเคลื่อน)
+- Layout เหมือนกันทุก panel: headline ตัวใหญ่หนาชิดซ้ายบน + พารากราฟคำอธิบายใต้ headline ไม่มี eyebrow label ไม่มีไอคอน ไม่มีกรอบการ์ด
+
+**การตัดสินใจสำหรับ BTS (ยืนยันแล้ว):**
+1. **สถานะ**: บันทึกเป็นตัวเลือกคู่ขนาน (เวอร์ชัน A/B) — ไม่ replace เวอร์ชัน A
+2. **ภาพต่อแพลตฟอร์ม**: MOVE และ MIX ใช้ภาพถ่ายจริงจาก Image DNA, ส่วน **MATCH ยังคง reuse กราฟิก steel-beam ตัด X เดิม** — ผสมภาพถ่าย+กราฟิกในชุดเดียวกัน (ไม่บังคับให้ทั้ง 3 เป็นภาพถ่ายล้วน)
+3. **โทนสีต่อ panel**: ให้แต่ละแพลตฟอร์มมีโทนสีเฉพาะตัวแบบต้นแบบ — เสนอ MOVE = น้ำเงิน BTS (`#00599B`), MIX = เทาเงิน/metallic (silver gradient), MATCH = แดง BTS (`#ED1D24`) หรือ navy (`#23324E`)
+4. **Motion**: ทำกลไก **sticky-stack เต็มรูปแบบ** ตามต้นแบบ (panel ถัดไปเลื่อนขึ้นคลุมทับ panel ก่อนหน้า)
+
+**Mapping เนื้อหา:**
+
+| unitedcarriers | BTS (เวอร์ชัน B) |
+|---|---|
+| Headline ใหญ่ชิดซ้ายบน + พารากราฟ | ชื่อแพลตฟอร์ม (MOVE/MIX/MATCH) + นิยามใหม่ที่ร่างไว้แล้วในเวอร์ชัน A (เช่น "MOVE — Transportation solution ที่เน้น door-to-door") |
+| ภาพ full-bleed โทนสีเฉพาะตัว | MOVE = ภาพขบวนรถไฟฟ้ากำลังเคลื่อนที่ (โทนน้ำเงิน), MIX = ภาพเมือง/ข้อมูลยามค่ำคืน (โทนเทาเงิน), MATCH = กราฟิก steel-beam เดิม (โทนแดง/navy) |
+| ไม่มีการ์ด/กรอบ | ใช้ตรงๆ — เวอร์ชัน B ให้ความรู้สึก cinematic เต็มจอ ต่างจากเวอร์ชัน A ที่มีกรอบการ์ดชัดเจน |
+
+## 11. Section 2 — เวอร์ชัน B (ทางเลือกคู่ขนาน, clone DNA จาก unitedcarriers.com/services "Our Services")
+
+**สถานะ**: บันทึกเป็น **ตัวเลือกคู่ขนาน** กับเวอร์ชัน A (Blueprint photo collage กระจายบนพื้นมืด, ดูข้อ 3) — ยังไม่ฟันธงว่าจะสร้างเวอร์ชันไหนจริง รอตัดสินใจภายหลัง
+
+**อ้างอิง DNA จาก unitedcarriers.com/services (inspect จริง):**
+- ไม่มี pinned/parallax/crossfade เลย เป็น **list แบบ editorial เรียบง่าย** อ่านง่ายเหมือน directory
+- Intro: "OUR SERVICES" + headline + คำอธิบายสั้น
+- แบ่ง 2 กลุ่ม สลับพื้นหลังเข้ม-อ่อนแบบ **ตัดชัด (hard cut ไม่ fade)**: CORE SERVICES (พื้นดำ, 6 รายการ) / INTEGRATED SOLUTIONS (พื้นขาว, 6 รายการ)
+- แต่ละแถว: ไอคอน **dot-matrix เฉพาะตัว** (บ้าน, ตะขอเครน, เครื่องหมายถูก ฯลฯ) + headline หนา + tagline 1 บรรทัด + จุดกลมเล็กชิดขวา (ตกแต่ง/ตัวคั่น) + เส้นแบ่งบางระหว่างแถว
+
+**การตัดสินใจสำหรับ BTS (ยืนยันแล้ว):**
+1. **สถานะ**: บันทึกเป็นตัวเลือกคู่ขนาน (เวอร์ชัน A/B) — ไม่ replace เวอร์ชัน A
+2. **การแบ่งกลุ่ม**: ใช้ 2 กลุ่มจาก 4 node เดิม — **"การเชื่อมโยงหลัก" (People + Business)** และ **"การเชื่อมโยงขยาย" (Data + Opportunities)**
+3. **สีพื้นหลังสลับ**: **กลับด้าน** จากที่เสนอไว้ — "การเชื่อมโยงหลัก" (People + Business) = พื้น**อ่อน/ครีม-ขาว**, "การเชื่อมโยงขยาย" (Data + Opportunities) = พื้น**เข้ม/navy**
+4. **จุดคั่นขวา**: เป็นแค่ตกแต่งเหมือนต้นแบบ (ไม่ทำเป็นลิงก์คลิกได้)
+
+**Mapping เนื้อหา:**
+
+| unitedcarriers | BTS (เวอร์ชัน B) |
+|---|---|
+| Intro "OUR SERVICES" + headline | Intro "OUR CONNECTIONS" + headline "ONE GROUP. MANY CONNECTIONS." (ข้อความเดิมจากเวอร์ชัน A) |
+| CORE SERVICES (พื้นดำ) / INTEGRATED SOLUTIONS (พื้นขาว) | "การเชื่อมโยงหลัก" People+Business (พื้นอ่อน/ครีม-ขาว) / "การเชื่อมโยงขยาย" Data+Opportunities (พื้นเข้ม/navy) |
+| ไอคอน dot-matrix ต่อแถว | ไอคอน dot-matrix เฉพาะตัวต่อ node (คน, ตึก/ธุรกิจ, ข้อมูล/กราฟ, ไอเดีย/โอกาส) — เชื่อมกับ motif จุดที่ใช้ใน loader/header/section 5 อยู่แล้ว |
+| Headline + tagline 1 บรรทัด + จุดคั่นขวา (ตกแต่ง) | ชื่อ node + proof point สั้น (เช่น "People — ผู้โดยสารกว่า X ล้านคน/วัน") + จุดคั่นขวาตกแต่งเหมือนต้นแบบ |
+
+## 13. Section 2 — เวอร์ชัน C (ทางเลือกคู่ขนาน, clone DNA จาก unitedcarriers.com/careers "Why Join Us")
+
+**สถานะ**: บันทึกเป็น **เวอร์ชัน C คู่ขนาน** กับเวอร์ชัน A (Blueprint photo collage, ข้อ 3) และเวอร์ชัน B (Our Services 2-กลุ่มสลับสี, ข้อ 11) — ยังไม่ฟันธงว่าจะสร้างเวอร์ชันไหนจริง
+
+**อ้างอิง DNA จาก unitedcarriers.com/careers (section "Why Join Us"):**
+- Eyebrow "WHY JOIN US" + headline ใหญ่ + พารากราฟอินโทรสั้น บนพื้นดำล้วน
+- List ต่อเนื่อง 9 รายการ **ไม่มีการแบ่งกลุ่ม/สลับสีพื้นหลัง** (ต่างจากเวอร์ชัน B ที่มี 2 กลุ่มสีตัดกัน) — ทั้ง section เป็นพื้นเข้มเดียวตลอด
+- แต่ละแถว: ไอคอน **dot-matrix เฉพาะตัว** (กุญแจ, ตึก/สกายไลน์ ฯลฯ) ที่ **ค่อยๆ ก่อตัวจากจุดกระจายเป็นรูปทรงตอน scroll เข้า viewport** + headline หนา + คำอธิบาย 2-3 บรรทัด + เส้นแบ่งบางระหว่างแถว
+- สรุป DNA: ภาษาภาพเดียวกับเวอร์ชัน B (ไอคอน dot-matrix + headline + description + divider) แต่เรียบง่ายกว่า ไม่มีการแบ่งกลุ่มสี
+
+**การตัดสินใจสำหรับ BTS (ยืนยันแล้ว):**
+1. **สถานะ**: บันทึกเป็นเวอร์ชัน C คู่ขนานกับ A และ B
+2. **สีพื้นหลัง**: ใช้ **navy (`#23324E`)** เดียวตลอด section แทนสีดำล้วนของต้นแบบ
+3. **จำนวนรายการ**: คงแค่ **4 node เดิม** (People/Business/Data/Opportunities) ไม่ขยายเป็น 9 แบบต้นแบบ
+4. **แอนิเมชัน**: ทำ **icon ก่อตัวจากจุดกระจายเต็มรูปแบบ** ตามต้นแบบ (ไอคอนค่อยๆ รวมจากจุดกระจายเป็นรูปทรงตอน scroll เข้า viewport)
+
+**Mapping เนื้อหา:**
+
+| unitedcarriers | BTS (เวอร์ชัน C) |
+|---|---|
+| Eyebrow "WHY JOIN US" + headline | Eyebrow เดิม + headline "ONE GROUP. MANY CONNECTIONS. ENDLESS POSSIBILITIES." |
+| List ต่อเนื่อง พื้นดำเดียวตลอด | List 4 node เดิม เรียงต่อเนื่องบนพื้น navy เดียว ไม่สลับสี |
+| ไอคอน dot-matrix ก่อตัวตอน scroll | ไอคอนต่อ node (คน/ตึก/กราฟข้อมูล/ไอเดีย) พร้อมแอนิเมชันก่อตัวจากจุด — เชื่อม motif จุดเดิมที่ใช้ทั่วเว็บ (loader/header/section 5) |
+| Headline + description + divider | ชื่อ node + proof point + เส้นแบ่ง |
+
+## 15. Section 3 — เวอร์ชัน C (ทางเลือกคู่ขนาน, clone DNA จาก unitedcarriers.com โฮมเพจ "Our Services")
+
+**สถานะ**: บันทึกเป็น **เวอร์ชัน C คู่ขนาน** กับเวอร์ชัน A (Blueprint pinned-card, ข้อ 4) และเวอร์ชัน B (Vision/Mission/Strategy sticky-stack, ข้อ 10) — ยังไม่ฟันธงว่าจะสร้างเวอร์ชันไหนจริง
+
+**อ้างอิง DNA จาก unitedcarriers.com โฮมเพจ (section "Our Services" — คนละแบบกับ "Our Services" ของหน้า `/services` ที่ clone เป็น Section 2 เวอร์ชัน B):**
+- Headline two-tone: "EVERYTHING YOUR FREIGHT NEEDS. **UNDER ONE GROUP.**" (บรรทัดแรกขาวเข้ม บรรทัดหลังเทาจาง) + พารากราฟอินโทร บนพื้นดำล้วน
+- เลย์เอาต์ **2 คอลัมน์**: ซ้าย = **ภาพประกอบ flat illustration แบบ sticky** ค้างอยู่กับที่ และ **สลับภาพตามกลุ่มบริการที่ scroll ผ่าน** (รถเทรลเลอร์ตู้คอนเทนเนอร์ → เครนยก reach-stacker), ขวา = list บริการเลื่อนผ่าน (6 รายการ) แต่ละแถวมีไอคอน dot-matrix + headline + คำอธิบาย + เส้นแบ่ง
+- ปิดท้าย section ด้วย **ghost wordmark ตัวใหญ่จาง** คล้าย motif เดียวกับ footer
+
+**การตัดสินใจสำหรับ BTS (ยืนยันแล้ว):**
+1. **สถานะ**: บันทึกเป็นเวอร์ชัน C คู่ขนานกับ A และ B
+2. **จำนวนรายการใน list**: คัดมา**แพลตฟอร์มละ 3-4 รายการเด่น** จาก sub-item เดิม (ไม่ใส่ครบทุกรายการ) — MOVE เลือกจาก การสัญจร/คมนาคมขนส่ง/โครงสร้างพื้นฐาน/Door-to-door, MIX เลือกจาก O2O/สื่อ/ดิจิทัล/กระจายสินค้า/ข้อมูล, MATCH เลือกจาก พันธมิตร/ธุรกิจบริการ/ICT/บริการการเงิน/โอกาสใหม่
+3. **โทนพื้นหลัง**: **navy** (`#23324E`) แทนดำล้วนของต้นแบบ ให้เข้าธีม BTS
+4. **ภาพประกอบ sticky**: **MOVE และ MIX ใช้ภาพถ่ายจริง** (จาก Image DNA) แทน flat illustration ของต้นแบบ ส่วน **MATCH ยังคงใช้กราฟิก steel-beam เดิม** — ผสมภาพถ่าย+กราฟิกในคอลัมน์ซ้ายเดียวกัน สลับ 3 ช่วงตามกลุ่มที่ scroll ผ่าน
+
+**Mapping เนื้อหา:**
+
+| unitedcarriers | BTS (เวอร์ชัน C) |
+|---|---|
+| Headline two-tone | "3 แพลตฟอร์ม หนึ่งระบบนิเวศ" (navy เข้ม) / "MOVE · MIX · MATCH" (เทาจาง) |
+| ภาพประกอบ sticky สลับตามกลุ่ม | MOVE = ภาพถ่ายขบวนรถไฟฟ้า, MIX = ภาพถ่ายเมือง/ข้อมูลยามค่ำคืน, MATCH = กราฟิก steel-beam เดิม |
+| List 6 บริการ + ไอคอน dot-matrix | List คัดสรร 3-4 รายการต่อแพลตฟอร์ม (~10-12 แถวรวม) ไอคอน dot-matrix เฉพาะตัวต่อ item |
+| Ghost wordmark ปิดท้าย | "ECOSYSTEM" หรือ "MOVE · MIX · MATCH" ตัวใหญ่จาง |
+
+## 16. Section 1 (เชื่อมต่อความเป็นไปได้ / Hero) — Hero Video Concept
+
+**เป้าหมาย**: ตามเอกสาร concept เดิม วิดีโอต้องสื่อ "WHO WE CONNECT" และ "MANY CONNECTIONS. ONE GROUP." ให้รับรู้ได้ภายใน 15 วินาทีแรก — เปลี่ยนการรับรู้จาก "แค่รถไฟฟ้า" เป็น "เครือข่ายที่เชื่อมโยงทุกมิติของเมือง" (สร้างการรับรู้ใหม่)
+
+**โครงเรื่อง (Shot List) — วนลูป 15-18 วินาที:**
+
+| ช่วงเวลา | ภาพ | Image DNA category | Text overlay |
+|---|---|---|---|
+| 0-4s | โดรนมุมสูงจับภาพรถไฟฟ้า BTS วิ่งผ่านเมืองยามเช้า/โกลเด้นอาวร์ | Infrastructure | "Moving people." |
+| 4-8s | Match-cut ผ่าน motif เส้น-จุดสีเงิน (เส้นทางรถไฟยืดออกกลายเป็นเส้นเชื่อมข้อมูล) → คนหลากหลายบนสถานี/ในเมือง | Human | (เส้นเชื่อมขยับไปภาพถัดไป) |
+| 8-12s | เส้นบรรจบเป็นจุด hub (สะท้อน diagram "ONE GROUP") → ตัดเข้าภาพบรรยากาศธุรกิจจริง (ตึกกระจก/ประชุม) | Business | "Connecting businesses." |
+| 12-16s | เส้นขยายออกอีกครั้งสู่ภาพเมืองแห่งอนาคต (ตึกสีเขียว/โซลาร์) | Future | "Creating possibilities." |
+| 16-18s | วนกลับเข้าภาพแรกด้วย motif เส้นเดิม (loop ไร้รอยต่อ) | — | โลโก้ + CTA "Explore BTS Group" |
+
+**จุดเชื่อมกับสิ่งที่วางแผนไว้แล้ว:**
+- motif เส้น-จุดสีเงินเป็นตัวเชื่อมทุกช็อต (transition) — element เดียวกับ loader/header/section 5/6
+- สีเปิดวิดีโอต่อเนื่องจาก iris-wipe ของ loader (navy→charcoal→ครีม) ให้ transition จาก loader เข้า hero ไร้รอยต่อ
+- Copy ใช้ของเดิมที่ยืนยันแล้ว: "Moving people. Connecting businesses. Creating possibilities." sync กับจังหวะภาพ
+- คงปุ่ม "View Full VDO" ไว้เหมือนเว็บปัจจุบัน (ลิงก์ไป YouTube เวอร์ชันเต็ม)
+
+**การตัดสินใจสำหรับ BTS (ยืนยันแล้ว):**
+1. **แหล่งภาพ**: ใช้ฟุตเทจจริงของ BTS (จากคลังที่มีอยู่) ไปก่อน — ไม่ถ่ายทำ/หา stock ใหม่ในรอบนี้
+2. **ความยาว loop**: **15-18 วินาที** ตามที่ร่าง
+3. **เสียง**: **ไม่ต้องคิดเรื่องเสียง** ในรอบนี้ (mute-by-default ตาม pattern ปกติของ hero video)
+4. **"Full VDO" เวอร์ชันยาว**: **นอก scope รอบนี้** — โฟกัสแค่ loop สั้นสำหรับ hero background เท่านั้น ปุ่ม "View Full VDO" คงไว้แต่ไม่ต้อง storyboard เวอร์ชันยาวตอนนี้
+
+## 17. Next Step (ยังไม่ลงมือ)
+
+- ใช้ token ชุดนี้เป็นฐาน: สีจาก logo.svg จริง + ฟอนต์ LINE Seed Sans TH จริง (self-host WOFF2) + ไอคอน Lucide
+- Section อื่นที่ยังไม่ลงรายละเอียดระดับ section 2 (6, 7) จะออกแบบเพิ่มเติมระหว่าง build หรือรอ brief เพิ่มจากผู้ใช้
+
+## 18. Build Kickoff — เริ่มสร้าง Mockup จริง (ทีละ Section)
+
+**สถานะ**: เริ่มลงมือ build แล้ว (ไม่ใช่แค่วางแผน)
+
+**Tech stack ที่ยืนยัน:**
+- Artifact เดียว (HTML) publish ซ้ำ URL เดิมทุกครั้งที่เพิ่ม section
+- ฟอนต์ LINE Seed Sans TH จริง (self-host WOFF2 จาก path ข้างบน) แทน fallback เดิม
+- Lucide icon ผ่าน jsdelivr, dot-matrix icon วาดมือเป็น SVG
+- Motion: vanilla JS + IntersectionObserver/scroll listener
+- ภาพ/วิดีโอจริงยังไม่มีให้ใช้ — ใช้ placeholder คั่นตำแหน่งไว้ก่อน
+
+**ลำดับ build**: Foundation+Header → Section 1 (Hero) → Section 2 → Section 3 → Section 4 → Section 5 → Section 6+7 → Footer → Loader → Polish
+
+**การตัดสินใจสำหรับรอบ build นี้ (ยืนยันแล้ว):**
+1. **Section 2**: build **เวอร์ชัน A** ก่อน (Blueprint photo collage) — B และ C เก็บไว้เป็นทางเลือกทีหลัง
+2. **Section 3**: build **เวอร์ชัน A** ก่อน (Blueprint pinned-card crossfade) — B และ C เก็บไว้เป็นทางเลือกทีหลัง
+3. **ฟอนต์**: ใช้ไฟล์จริงจาก `C:\Users\pawin.s\Desktop\BTS\LINE_Seed_Sans_TH\` (self-host ผ่าน Artifact `files`)
+4. **Responsive**: ช่วงเริ่ม build **ยังไม่ต้องคำนึงถึง** — เน้นเลย์เอาต์ PC/desktop ก่อน ค่อยทำ responsive ทีหลังเป็น pass แยก (จะไม่เสียเวลาไปกับ media query ระหว่างต่อ section ใหม่แต่ละรอบ)
+
+**Build log:**
+- **รอบ 1 (เสร็จแล้ว)**: Foundation (design tokens, @font-face 5 น้ำหนัก) + Header (global, scroll behavior เต็มรูปแบบ, full overlay menu 2 ระดับ, dot-cluster icon) + Section 1 Hero (static shell: headline/subcopy/CTA/motif เส้น-จุด ตามที่ตกลง — วิดีโอจริงยังไม่ใส่ เพราะยังไม่มีฟุตเทจ ใช้ gradient+motif แทนตำแหน่งไปก่อน)
+  - Artifact: https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+  - โลโก้ใช้ SVG จริงจาก btsgroup.co.th/storage/logo.svg (ไม่ใช่ของจำลอง)
+  - ข้อจำกัดที่รู้ตัว: หน้ายังสูงแค่ 100vh (มีแค่ hero) จึงยังทดสอบ header hide-on-scroll ไม่ได้เต็มที่ รอ section 2 เข้ามาต่อ
+- **รอบ 2 (เสร็จแล้ว)**: Section 2 เวอร์ชัน A — headline "ONE GROUP. MANY CONNECTIONS. ENDLESS POSSIBILITIES." กลางจอ, การ์ด 4 ใบ (People/Business/Data/Opportunities) กระจายรอบ motif เส้น-จุดเชื่อมสู่ศูนย์กลาง, parallax ตาม scroll (ความเร็วต่างกันต่อการ์ด), ใช้ icon-tile ไล่สี BTS blue/red/silver แทนภาพถ่ายจริง (ยังไม่มีคลังภาพให้ใช้)
+  - Focus **PC/desktop ก่อนตามที่ตกลง** — ยังไม่ทำ responsive breakpoint ละเอียด
+  - Artifact เดิม อัปเดตแล้ว (Version 2): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+- **รอบ 3 (เสร็จแล้ว)**: Section 3 เวอร์ชัน A — พื้นครีม (สลับสว่างจาก section 1-2), intro 2 คอลัมน์: headline "3 แพลตฟอร์ม หนึ่งระบบนิเวศ" + พารากราฟ highlight-on-scroll (คำสว่างขึ้นทีละวลี, MOVE/MIX/MATCH เป็นสีน้ำเงิน), ตามด้วย pinned module (สูง 390vh, sticky 100vh) 3 คอลัมน์:
+  - ซ้าย: rail MOVE/MIX/MATCH พร้อมแถบ progress ตาม scroll (คลิกเพื่อข้ามไปแต่ละแพลตฟอร์มได้)
+  - กลาง: การ์ด navy rounded 24px (dot-grid จาง) crossfade 3 ฉาก — MOVE = เส้นทาง metro-style HOME→DESTINATION + dot วิ่งตามเส้น (เดิน/รถไฟฟ้า BTS/ฟีดเดอร์/ส่งถึงที่), MIX = hub "MIX" + ไอคอน Lucide 5 ตัวโคจรรอบ (O2O/สื่อ/ดิจิทัล/กระจายสินค้า/ข้อมูล), MATCH = คาน steel-beam 2 ท่อนเลื่อนเข้ามาตัดกันเป็น X + แผ่นเพลทจุดแดงตรงกลาง + chip 4 หมวด; ใต้การ์ด eyebrow จุดสี + headline 2 บรรทัด + subtext เทา + ลิงก์ /our-business/move|mix|match
+  - ขวา: ตัวนับ 01/02/03 ตัวบาง (Thin) ขนาดใหญ่
+  - MATCH วาดกราฟิก steel-beam ขึ้นใหม่เป็น SVG (ยังไม่มีไฟล์ต้นฉบับจากเอกสาร concept) — เปลี่ยนเป็นภาพจริงได้ภายหลัง
+  - ไฟล์ต้นฉบับหน้าเว็บ: scratchpad ของ session นี้ `bts-mockup/index.html` (fonts อยู่ใน Artifact แล้ว ไม่ต้องอัปซ้ำ)
+  - Artifact เดิม อัปเดตแล้ว (Version 3): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+- **รอบ 4 (เสร็จแล้ว)**: Section 4 เครือข่ายที่ขับเคลื่อนธุรกิจ — พื้นครีมต่อจาก section 3 (คั่นด้วยเส้นบาง), 2 คอลัมน์: ซ้าย sticky = eyebrow จุดแดง + headline "เครือข่ายที่ทำงานได้จริง / นี่คือหลักฐาน" + lede + ป้าย "ตัวเลขตัวอย่าง · รอข้อมูลจริงจากทีมธุรกิจ", ขวา = ตัวเลข 4 ตัว 60px/400 สี navy เยื้อง cascade 24→24→39→104px ตามต้นแบบ, label หมวดสีน้ำเงินเหนือตัวเลข + คำอธิบายเทาใต้ตัวเลข
+  - 4 หมวดที่เลือก (ตัด "โอกาสใหม่"): พันธมิตร 200+ / ธุรกิจบริการ 40 บริษัท / ICT 98% / บริการการเงิน 1.2 ล้านราย — **ทั้งหมดเป็น placeholder**
+  - Opacity ตาม scroll: ตัวที่ใกล้กึ่งกลางจอ = 1, ตัวถัดไป = 0.6, ตัวที่ผ่านไปแล้ว = 0.18, ตัวไกลออกไป = 0.01 (prefers-reduced-motion = แสดงทึบทั้งหมด)
+  - Artifact เดิม อัปเดตแล้ว (Version 4): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+- **รอบ 5 (เสร็จแล้ว)**: Section 5 การเชื่อมต่อที่สร้างผลกระทบ — pinned stage (สูง 440vh, sticky 100vh) ภาพเดียวค้างเป็นฉากหลังพร้อม parallax ช้า (-18vh ตลอด section) + scrim มืดซ้าย→ขวาและล่าง
+  - ภาพพื้นหลัง: ยังไม่มีภาพจริง → วาด placeholder ด้วย canvas (เมืองยามเย็น + รางยกระดับ + ขบวนรถไฟฟ้า) พร้อมป้าย "ภาพตัวอย่าง · แทนที่ด้วยภาพจริงหมวด Human / Future"
+  - ซ้าย: eyebrow "IMPACT" จุดแดง + headline "การเชื่อมต่อที่สร้างผลกระทบจริง" + "CONNECTIONS THAT CREATE REAL IMPACT"; ขวา: 4 claim crossfade ตาม scroll ไม่มีกรอบการ์ด; ล่าง: แถบขั้น 4 ข้อ
+  - 4 claim (placeholder ทั้งหมด): ผู้โดยสาร / ชุมชน / ESG / พันธมิตร
+  - ไอคอน dot-matrix halftone สร้างด้วย JS (grid 15×15, ขนาดจุดตาม coverage ขอบ): คน / บ้าน / ใบไม้ / วงแหวนคล้องกัน — จุดค่อยๆ ขยายจากศูนย์กลางออกตอน claim เข้ามา
+  - **แก้ Header (global)**: ตอน scroll บน section สว่าง = พื้นครีมทึบ+ตัว navy, บน section มืด (hero / section 2 / section 5 ที่ mark `data-header="dark"`) = โปร่งใส+ตัวขาว ตามข้อ 7
+  - Artifact เดิม อัปเดตแล้ว (Version 5): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+- **รอบ 6 (เสร็จแล้ว)**: Section 6 ตัวเลขเบื้องหลังเครือข่าย (IR) — ไม่มีต้นแบบ clone เฉพาะ ออกแบบจาก DNA ที่ใช้อยู่แล้ว: พื้นครีม, หัว section = eyebrow "นักลงทุนสัมพันธ์" + headline "ตัวเลขเบื้องหลังเครือข่าย" / "THE NUMBERS BEHIND THE NETWORK" + ป้าย placeholder + ลิงก์ไปหน้า IR
+  - ซ้าย (7/12): การ์ด navy แบบ "เกาะ" (ตระกูลเดียวกับการ์ด section 3) — ราคาหุ้น BTS 2.00 ▼−0.99% (ตรงกับ ticker ใน header), กราฟเส้น+area ราคาปิด ปุ่มช่วง 1M/3M/6M/1Y, hover crosshair+tooltip, แถวสถิติ ราคาเปิด/ต่ำสุด–สูงสุด/ปริมาณ/มูลค่าตลาด
+  - ขวา (5/12): การ์ดขาว "ข้อมูลทางการเงินโดยสรุป" 2×2 (รายได้รวม/EBITDA/กำไรสุทธิ/เงินปันผล) + list ทางลัด IR 5 รายการ (งบการเงิน, One Report, เอกสารนำเสนอ, ปฏิทินนักลงทุน, ข่าวแจ้งตลาด)
+  - **ตัวเลข/กราฟทั้งหมดเป็นข้อมูลตัวอย่าง** (กราฟสร้างจาก random walk แบบ fix seed) — รอเชื่อมข้อมูลจริงจาก SET/ทีม IR
+  - Artifact เดิม อัปเดตแล้ว (Version 6): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+- **รอบ 7 (เสร็จแล้ว)**: Section 7 เรื่องราวจากเครือข่ายของเรา — ไม่มีต้นแบบ clone เฉพาะ ออกแบบจาก DNA เดิม
+  - พื้นครีม, eyebrow "ข่าวสารและเรื่องราว" + headline, ปุ่มกรอง pill (ทั้งหมด / MOVE / MIX / MATCH / ความยั่งยืน) ใช้จุดสีแพลตฟอร์มเดียวกับ section 3
+  - Grid 3 คอลัมน์ editorial (ไม่มีกรอบการ์ด): เรื่องเด่น 1 เรื่อง (2×2) + 5 เรื่อง — ภาพเป็น placeholder ไล่สีตามแพลตฟอร์ม (MOVE น้ำเงิน / MIX เงิน / MATCH แดง / ความยั่งยืน navy) + ลาย dot-grid + ไอคอน Lucide, แต่ละเรื่องมี หมวด+วันที่ / หัวข้อ
+  - ท้าย section: ป้าย "เนื้อหาตัวอย่าง" + ลิงก์ "ดูข่าวสารองค์กรทั้งหมด"
+  - **ปิดท้าย "Where will we connect next?"**: แถบมืด (`data-header="dark"`) + motif เส้น-จุด (reuse จาก hero) + headline ใหญ่ + 3 เส้นทางต่อ: ร่วมเป็นพันธมิตร / ร่วมงานกับเรา / ติดต่อ BTS Group — ส่งต่อเข้า footer
+  - **ข่าวทั้งหมดเป็นเนื้อหาตัวอย่าง** ลิงก์ยังเป็น `#`
+  - Artifact เดิม อัปเดตแล้ว (Version 7): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+- **รอบ 8 (เสร็จแล้ว)**: Footer (global) ตามข้อ 6 — พื้น near-black `#0C1018` + แถบดำคั่นบน, `data-header="dark"`
+  - Tagline "One Group. Many Connections. / Connected Future, Today." (บรรทัดสองสีจาง)
+  - Pill toggle MOVE / MIX / MATCH + marquee วิ่งอัตโนมัติ (หยุดเมื่อ hover) — แต่ละแพลตฟอร์มรวมชื่อบริษัท (ตัวหนาขาว) + sub-items + หัวข้อข่าว (สีฟ้า) ไว้ในเส้นเดียว; toggle สลับชุดข้อความ
+  - แถวหลัก 3 ช่องคั่นเส้น: Nav 2 คอลัมน์ (8 เมนู IA เดิม) / Hotline + Email + เวลาทำการ + social 4 ปุ่มวงกลม / Head Office (TST Tower) + ปุ่ม "เส้นทางบน Google Maps" + Operating across (สายสุขุมวิท/สายสีลม) + **แผนที่ dotted** (JS สร้างจุดพื้นหลัง เว้นแนวแม่น้ำเจ้าพระยา, เส้นสุขุมวิท/สีลมเป็นจุดน้ำเงิน, สถานีหลัก + Siam interchange + จุด Head Office สีแดง) — เป็นแผนผังโดยประมาณ ไม่ใช่พิกัดจริง
+  - Legal grid 6 ช่อง, wordmark ghost "BTS GROUP" เต็มความกว้างลายจุดจาง (SVG pattern), แถบ copyright
+  - ใช้ LINE Seed Sans ทั้งหมด (label เล็ก uppercase + letter-spacing กว้าง + สีจาง แทน mono)
+  - Artifact เดิม อัปเดตแล้ว (Version 8): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+- **รอบ 9 (เสร็จแล้ว)**: Loader (global, หน้าแรก) ตามข้อ 8 — เวอร์ชัน rich 3 คอลัมน์บนพื้น navy
+  - ซ้าย: wordmark "BTS GROUP / Connected Future" + label "Our network" + รายชื่อ BTS SkyTrain / สายสีชมพู / สายสีเหลือง / VGI / Kerry Express / U City เลื่อนเข้าทีละบรรทัดตาม progress
+  - กลาง: แผนที่ dotted BTS Skytrain (**asset เดียวกับ footer** — refactor เป็นฟังก์ชัน `drawBtsMap()` ใช้ร่วมกัน) + วงแหวน sonar 4 วง (30/45/60/75vmax) ping แบบ stagger
+  - ขวา: ตัวนับ 0→100% (ตัวบาง 112px) + MOVE / MIX / MATCH เลื่อนเข้าทีละบรรทัด
+  - Reveal: iris-wipe 3 ชั้น (วงกลม 0×0 + box-shadow 150vmax ขยายเป็น 300vmax) ไล่ navy → charcoal → ครีม stagger 0.12s — ตัวนับ ~0.85s + iris ~0.9s
+  - โชว์ทุกครั้งที่เข้าหน้า (ไม่ gate), ล็อก scroll + ซ่อน header ระหว่างโหลด, prefers-reduced-motion = ข้ามแอนิเมชัน, มี failsafe ถอด loader อัตโนมัติใน 4 วินาทีถ้าสคริปต์หลักพัง
+  - Artifact เดิม อัปเดตแล้ว (Version 9): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+- **รอบ 10 (เสร็จแล้ว)**: Section 2 เวอร์ชัน B + C พร้อมตัวสลับ A/B/C ในหน้าเดียวกัน (ตัดสินใจ 2026-09-25: แทรกในไฟล์หลักแบบ toggle, ทำ Section 2 ก่อน แล้วค่อย Section 3 B/C)
+  - **ตัวสลับเวอร์ชัน**: แถบ pill ลอยกลางล่างจอ ("Section 2 · เวอร์ชัน" A Collage / B 2 กลุ่ม / C List) แสดงเฉพาะตอน scroll อยู่ใน section 2 (sticky dock ท้าย wrapper), จำเวอร์ชันที่เลือกไว้ต่อผู้ชม (localStorage), สลับแล้วดึงกลับมาต้น section อัตโนมัติ
+  - **เวอร์ชัน B** (ตามข้อ 11): intro "OUR CONNECTIONS" + "ONE GROUP. / MANY CONNECTIONS." บนพื้นครีม → กลุ่ม "การเชื่อมโยงหลัก" (People + Business) พื้นครีม / ตัดแข็งเป็น "การเชื่อมโยงขยาย" (Data + Opportunities) พื้น navy; เลย์เอาต์ 2 คอลัมน์ (หัวกลุ่มซ้าย, แถวรายการขวา) แต่ละแถว = ไอคอน dot-matrix + เลข + ชื่อ node + proof point + จุดกลมตกแต่งขวา + เส้นแบ่ง, ไม่มี motion
+  - **เวอร์ชัน C** (ตามข้อ 13): พื้น navy เดียวตลอด, eyebrow "หนึ่งกลุ่มธุรกิจ หลายความเชื่อมโยง" + headline 3 บรรทัด + lede, list 4 แถว (ไอคอน | ชื่อ node EN+TH | คำอธิบาย 2-3 บรรทัด) — ไอคอน **ก่อตัวจากจุดกระจาย** เมื่อแถวเข้า viewport 60% (เล่นซ้ำเมื่อ scroll ออกแล้วกลับมา), prefers-reduced-motion = แสดงรูปทรงเต็มทันที
+  - ไอคอน dot-matrix ชุดใหม่ 4 แบบ (คนสองคน / ตึก / กราฟแท่ง / หลอดไฟ) ใช้ฟังก์ชัน halftone ตัวเดียวกับ section 5 (refactor เป็น `drawHalftone()` ใช้ร่วมกัน)
+  - ตัวเลข (700,000 คน/วัน, 200+ พันธมิตร) เป็น **placeholder** — มีป้ายกำกับในทั้ง B และ C
+  - Artifact เดิม อัปเดตแล้ว (Version 10): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+- **รอบ 11 (เสร็จแล้ว)**: Section 3 เวอร์ชัน B + C พร้อมตัวสลับ A/B/C (แถบ "Section 3 · เวอร์ชัน": A Pinned card / B Sticky stack / C 2 คอลัมน์ — ใช้ฟังก์ชันตัวสลับตัวเดียวกับ Section 2, จำเวอร์ชันแยกกันต่อ section)
+  - **เวอร์ชัน B** (ตามข้อ 10): intro สั้นบนพื้นครีม ("3 แพลตฟอร์ม หนึ่งระบบนิเวศ") → 3 panel เต็มจอแบบ sticky-stack (panel ถัดไปเลื่อนขึ้นคลุมทับ) แต่ละ panel = count 01/03 + ชื่อแพลตฟอร์มตัวใหญ่มาก (~168px) + นิยาม + พารากราฟ + sub-items + ลิงก์ /our-business, ไม่มี eyebrow/ไอคอน/การ์ด
+    - โทนสีที่เลือก: MOVE = น้ำเงิน BTS, MIX = เทาเงิน, **MATCH = แดง BTS** (เลือกแดงแทน navy เพื่อให้ 3 panel ต่างกันชัด)
+  - **เวอร์ชัน C** (ตามข้อ 15): พื้น navy, headline two-tone "3 แพลตฟอร์ม หนึ่งระบบนิเวศ" / "MOVE · MIX · MATCH" (จาง) + lede → 2 คอลัมน์: ซ้าย = การ์ดภาพ sticky (4:5, มุม 24px) crossfade ตามกลุ่มที่ scroll ผ่าน + caption "MOVE · 01 / 03", ขวา = list 3 กลุ่ม × 3 รายการ (ไอคอน dot-matrix ก่อตัวจากจุดกระจายแบบเดียวกับ S2-C) → ปิดท้าย ghost wordmark "MOVE · MIX · MATCH" ลายจุดจาง
+    - รายการที่คัด: MOVE = คมนาคมขนส่ง / โครงสร้างพื้นฐาน / Door-to-door; MIX = O2O / สื่อ / ข้อมูล; MATCH = พันธมิตร / บริการการเงิน / โอกาสใหม่ (ตัด การสัญจร, ดิจิทัล, การกระจายสินค้า, ธุรกิจบริการ, ICT ออก เพื่อให้ได้ 3 ต่อแพลตฟอร์ม)
+  - **ภาพ placeholder** (ใช้ร่วม B และ C) วาดเป็น SVG ด้วย JS: MOVE = ขบวนรถไฟฟ้าบนรางยกระดับ + เส้นความเร็ว (โทนน้ำเงิน), MIX = เมืองยามค่ำ + เส้นเชื่อมจุดข้อมูล (โทนเทาเงิน), MATCH = คาน steel-beam ตัด X บนพื้นแดง — มีป้าย "ภาพตัวอย่าง" กำกับ รอเปลี่ยนเป็นภาพจริง
+  - ไอคอน dot-matrix เพิ่ม 5 แบบ: รถไฟ / สะพาน-ทางยกระดับ / ถุงช้อปปิ้ง / จอ / เหรียญ
+  - Artifact เดิม อัปเดตแล้ว (Version 11): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+- **รอบ 12 (เสร็จแล้ว)**: แก้ข้อมูลบริษัทในเครือ + เปลี่ยนรูปแบบตัวสลับเวอร์ชัน + ปุ่ม Back to Top (ตัดสินใจ 2026-09-25)
+  - **บริษัทในเครือ (ข้อมูลจริงที่ยืนยันแล้ว)**: BTSG ถือหุ้นใน VGI, Super Turtle (STL), ROCTEC Global, Thanulux (TNL), Rabbit Holdings (RBH) — ลบชื่อ placeholder ที่ผิด (`Kerry Express`, `U City`) ออกจากทุกจุดในหน้าเว็บ
+    - Footer ticker: จัดกลุ่มใหม่ VGI → MIX, ROCTEC Global (ICT) + Rabbit Holdings (บริการการเงิน) → MATCH, **เพิ่ม toggle ที่ 4 "อื่นๆ"** สำหรับ Super Turtle + Thanulux (ยังไม่ทราบหมวดธุรกิจชัดเจน จึงแยกไว้ต่างหากตามที่ตกลง)
+    - Loader ซ้าย ("Our network"): เปลี่ยนจาก 6 เป็น 8 รายการ — BTS SkyTrain, สายสีชมพู, สายสีเหลือง, VGI, Super Turtle, ROCTEC Global, Thanulux, Rabbit Holdings (ปรับจังหวะ stagger ใหม่ให้พอดีกับ 8 รายการ)
+    - ลิงก์เว็บบริษัทในเครือ (vgi.co.th, superturtle.co.th, roctecglobal.co.th, tnl.co.th, rabbitholdings.co.th) **ยังไม่ได้ใช้จริง** ในหน้าเว็บ — รอบริบทว่าจะใส่ตรงไหน (footer nav / ส่วนใหม่ "บริษัทในเครือ")
+  - **ตัวสลับเวอร์ชัน (redesign)**: เปลี่ยนจากแถบ pill ลอยที่โผล่เฉพาะตอน scroll อยู่ใน section เดิม → เป็น **แผงตั้งค่าเดโม** (การ์ดลอยมุมขวาล่าง, สไตล์ segmented control ตามภาพอ้างอิงที่ผู้ใช้ส่งมา) เปิด/ปิดด้วยปุ่มกลม (ไอคอน sliders) มุมขวาล่าง
+    - แผงมีหัวข้อ + ปุ่มปิด (X), 2 กลุ่ม (Section 2 / Section 3) แต่ละกลุ่ม = label + segmented control 3 ตัวเลือก (A/B/C, ปุ่มที่เลือกพื้นน้ำเงิน BTS ตัวหนังสือขาว)
+    - ปิดได้ด้วยปุ่ม X, กด Esc, หรือคลิกนอกแผง; เลือกเวอร์ชันแล้ว smooth-scroll ไปยัง section นั้นให้อัตโนมัติ (เผื่อเปิดแผงจากที่อื่นของหน้า ไม่ใช่แค่ตอนอยู่ใน section แล้ว); จำค่าที่เลือกไว้ต่อ section แยกกันใน localStorage เหมือนเดิม
+  - **ปุ่ม Back to Top**: ปุ่มกลมลอยมุมขวาล่าง (เหนือปุ่มเปิดแผงเดโม) โผล่หลัง scroll ผ่าน ~80% ของความสูงจอแรก, กด smooth-scroll กลับบนสุด
+  - Artifact เดิม อัปเดตแล้ว (Version 12): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+- **รอบ 13 (เสร็จแล้ว)**: Hero ใหม่ — ฉากเปิดประตูรถไฟฟ้า BTS แบบ scroll-locked (clone DNA จาก 21st.dev "Scroll-Locked Video Hero" by Guglielmo Giannattasio — ดูจาก live preview เพราะโค้ดต้นฉบับถูกล็อก)
+  - **DNA ต้นแบบ**: ภาพประตูรถไฟปิดเต็มจอ + headline กลางจอ + "SCROLL ↓" → section ปักหน้าจอไว้ขณะเลื่อน: headline เบลอหาย, ประตู 2 บานเลื่อนแยกออกตาม scroll progress, เส้นแสง lens-flare พาดกลาง, แถบ progress บางที่ขอบล่าง → หลังประตูคือวิดีโอเมืองกลางคืนที่เล่นวนอยู่แล้ว (ไม่ได้ scrub ตาม scroll) เผยจนเต็มจอแล้วค่อยปลด scroll
+  - **การตัดสินใจ (2026-09-25)**: (1) ประตูเป็นภาพประกอบ SVG ชั่วคราว (2) วิดีโอเป็น canvas animation ชั่วคราวแบบเดียวกับ section 5 (3) ความยาวโมเมนต์สั้นกระชับ (4) มือถือไม่ scroll-jack
+  - **Closed state**: ประตู BTS 2 บาน (น้ำเงิน BTS, หน้าต่างกระจกมีหยดน้ำฝน/รอยไหล, ขอบยาง, ป้าย "ระวังประตูหนีบ · MIND THE DOOR", สติกเกอร์ BTS, ช่องมือจับ, แถบแดง livery, ยางกลางรอยต่อ) — กระจกโปร่งแสง เห็นเมืองขยับอยู่ด้านหลังผ่านหน้าต่าง + ชื่อ "THE CONNECTED FUTURE" / "ก้าวผ่านประตู สู่เมืองที่ทุกอย่างเชื่อมถึงกัน" + ปุ่ม pill "เลื่อนเพื่อเปิดประตู ↓"
+  - **กลไก**: hero สูง 190vh (เลื่อน ~90vh เพื่อเปิด), ชั้นใน sticky 100vh — ชื่อเบลอ+จางใน 20% แรก, ประตูเปิด (ease-in-out) ช่วง 8–88%, flare เข้มสุดกลางทาง, "วิดีโอ" ซูมจาก 1.14 → 1.0, เนื้อหา hero (h1 + CTA) เลื่อนขึ้นมาช่วง 78–100%
+  - **"วิดีโอ" placeholder = เล่าเรื่อง 3 จังหวะ วนทุก ~12.6 วิ** ซิงก์กับบรรทัด "Moving people. / Connecting businesses. / Creating possibilities." (คำที่ตรงจังหวะสว่างขึ้น):
+    1. Moving people — ขบวนรถไฟฟ้า BTS วิ่งผ่านทางยกระดับ + ไฟรถบนถนนเป็นเส้นแสง (วิ่งตลอดทั้งลูป)
+    2. Connecting businesses — ดาดฟ้าตึกเชื่อมกันด้วยเส้น-จุดสีเงิน (motif เดียวกับทั้งเว็บ) ค่อยๆ ลากเส้นทีละเส้น
+    3. Creating possibilities — ฟ้าเริ่มสาง แสงอุ่นที่ขอบฟ้า + วงแหวนขยายจากทุก node
+  - CTA "สำรวจ BTS Group" เปลี่ยนลิงก์ไป Section 2 (เดิมชี้ #hero ซึ่งจะพากลับไปประตูปิด)
+  - **มือถือ (≤720px) และ prefers-reduced-motion**: hero สูง 100vh ไม่ปักจอ ไม่มีประตู — เห็นเนื้อหาบน "วิดีโอ" ทันที (reduced motion = เฟรมนิ่ง + ทุกวลีสว่าง)
+  - ป้าย placeholder ในหน้าเว็บ (Section 3B / 5 / hero) ขยับไป right:92px เพื่อไม่ทับปุ่ม Back to Top
+  - Artifact เดิม อัปเดตแล้ว (Version 13): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+  - **ถัดไป**: เลือกเวอร์ชันจริงของ Section 2 และ 3 → ถอดเวอร์ชันที่ไม่ใช้ + แผงเดโมออก → Polish / responsive pass; เปลี่ยนประตูเป็นภาพถ่ายจริง + canvas เป็นฟุตเทจจริงเมื่อได้ไฟล์
+- **รอบ 14 (เสร็จแล้ว)**: Section 2 เวอร์ชัน D — photo/colour mosaic (clone DNA จาก cpgroupglobal.com/th/home banner section — inspect DOM/animation จริงจากเว็บ)
+  - **DNA ต้นแบบ**: กริด 8 คอลัมน์ × 4 แถว เต็มกรอบมนไม่มีช่องว่าง ผสมภาพถ่าย (ขนาด 1×1 ถึง 2×2) กับ "การ์ดสี" (คำโปรย 1 บรรทัด) — การ์ดสีมีสองสถานะ: ข้อความ ↔ ไอคอน สลับกันเป็นสองกลุ่มสลับเฟส (checkerboard) ทุก 3 วินาที แบบ crossfade 1s; ก่อนกริดโชว์มี motto เต็มจอทับอยู่ก่อนแล้วค่อยหด/จางออก เผยกริดซูมเข้า stagger ตามระยะจากมุมซ้ายบน
+  - **Map เข้า BTS**: 21 ช่อง (13 รูปภาพ placeholder + 8 การ์ดสี) วางตำแหน่ง/ขนาดตรงกับต้นแบบเป๊ะ (รวมถึงตำแหน่งการ์ดสีที่ตรงกับ index เดิมของ CP โดยบังเอิญจากการ map shape) — รูปภาพใช้ icon-tile ไล่สีน้ำเงิน/แดง/เงิน/navy (จำกัดอยู่ในโทนที่กำหนดไว้แล้วในเอกสารข้อ 1 ไม่ใช้สีสันหลากหลายแบบต้นแบบ CP เพราะ brand DNA ของ BTS ใช้สีจำกัด) แต่ละช่องมี caption มุมซ้ายล่าง (PEOPLE/BUSINESS/DATA/MOVE/MIX/MATCH ฯลฯ), การ์ดสีมีคำโปรย 8 อัน: Moving People / Connecting Business / Data-Driven City / Endless Opportunity / One Ecosystem / Sustainable Future / Trusted Network / Driving Growth
+  - **มือถือ**: กริดเล็กเกินอ่านไม่ออกถ้าบีบ 8 คอลัมน์ในจอแคบ จึงคง min-width ไว้ (920px) แล้วให้ scroll แนวนอนแทน — เป็นข้อยกเว้นเดียวที่ใส่ mobile fallback ให้ (ปกติ section อื่นยังไม่ทำ responsive ตามแผน)
+  - Artifact เดิม อัปเดตแล้ว (Version 14): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+  - **ถัดไป**: เลือกเวอร์ชันจริงของ Section 2 (ตอนนี้มี A/B/C/D) และ Section 3 → ถอดเวอร์ชันที่ไม่ใช้ + แผงเดโมออก → Polish / responsive pass
