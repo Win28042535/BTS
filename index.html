@@ -366,10 +366,10 @@
     position:sticky; top:calc(100vh - 960px); /* pins when its bottom meets the viewport bottom */
     height:960px;
   }
-  /* cream preview that rises in as the pin ends, so the hard dark→cream cut into Section 3 reads as a blend, not a jump */
+  /* navy preview (matches the card/hub tones already in this scene) that rises in as the pin ends, so the cut into Section 3's cream reads as a blend, not a jump */
   .eco-inner::after{
     content:""; position:absolute; z-index:3; left:0; right:0; bottom:0; height:42%;
-    background:linear-gradient(to bottom, transparent, var(--cream));
+    background:linear-gradient(to bottom, transparent, var(--navy));
     opacity:var(--seam, 0); pointer-events:none;
   }
   .eco-copy{
