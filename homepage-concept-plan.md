@@ -498,3 +498,49 @@ Typography เฉพาะ footer: label เล็ก uppercase ใช้ **mono
 - Loader (ตอน pane ไม่ focus จะไปเข้า failsafe 4 วินาทีแทน flow ปกติ — พฤติกรรมนี้เกิดเฉพาะตอน tab ไม่ active ซึ่งผู้ใช้จริงจะไม่เจอ เพราะ tab ที่กำลังโหลดหน้าเว็บจะ active อยู่เสมอ)
 
 **ขั้นต่อไป**: รอผู้ใช้ระบุให้ชัดว่าเจอปัญหาที่ section/เวอร์ชันไหนกับขนาดจอ/เบราว์เซอร์ใด เพื่อ reproduce และแก้ตรงจุด — หรือถ้าเป็นไปได้ ให้เปิดหน้าต่างพรีวิวไว้ (focus) ระหว่างตรวจรอบหน้าเพื่อยืนยัน scroll-driven effect ที่เหลือได้ครบ
+
+## 20. Section 4.5 — เครือข่ายที่เชื่อมทั้งเมือง (Network Map) — clone DNA จาก 21st.dev "Map"
+
+**คำขอผู้ใช้ (2026-09-25)**: อยากได้ 1 section ที่บอกภาพรวมโครงข่ายการเดินทาง/เส้นทางรถไฟฟ้า BTS สื่อความครอบคลุม เชื่อมต่อ วงกว้าง และ impact ต่อเมือง โดย clone DNA จาก https://21st.dev/@shailendrakumar19999/components/map
+
+**DNA ต้นแบบ**: แพทเทิร์น "World Map" (Aceternity/Magic UI style) — แผนที่โลกแบบจุด (dotted-map) พื้นเข้ม + เส้นโค้ง (arc) ที่ animate ลากจากจุดหนึ่งไปอีกจุด (framer-motion) พร้อม pulse วงแหวนที่ปลายจุดเชื่อมต่อ สื่อธีม "เชื่อมทีม/ลูกค้าทั่วโลก"
+
+**การตัดสินใจสำหรับ BTS (ยืนยันแล้ว)**:
+1. **ตำแหน่ง**: section ใหม่แทรกระหว่าง Section 4 (ตัวเลขเบื้องหลังเครือข่าย) กับ Section 5 (การเชื่อมต่อที่สร้างผลกระทบ) — ต่อเนื่อง narrative จากพิสูจน์ด้วยตัวเลขธุรกิจ → พิสูจน์ด้วยภาพโครงข่ายจริง → ผลกระทบต่อคน/เมือง
+2. **แผนที่**: ขยาย asset `drawBtsMap()` เดิม (ใช้ร่วมกับ footer/loader อยู่แล้ว) เป็นเวอร์ชันใหญ่เฉพาะของ section นี้ — คง coordinate/motif เดิมทั้งหมด (จุดพื้นหลัง, เส้นทางสุขุมวิท/สีลมแบบจุดสี, สถานีหลัก, hub สยาม) เพื่อให้เป็น "asset เดียวกันทั้งเว็บ" ตามที่ตั้งใจไว้ตั้งแต่ข้อ 1
+3. **เพิ่มจากต้นแบบ 21st.dev**: schematic spur เส้นประไปยัง "เชื่อมต่อสายสีชมพู" (เหนือ Khu Khot) และ "เชื่อมต่อสายสีเหลือง" (ใต้ Kheha), ป้ายจุดเชื่อมต่อ MRT ที่หมอชิตและอโศก (จุดใหม่ interpolate บนเส้นสุขุมวิท), หมายเหตุเชื่อมเรือด่วนเจ้าพระยาที่สะพานตากสิน (สถานีเดิม), pulse วงแหวนสีแดงที่สยาม (จุดเชื่อมต่อหลัก BTS) — ทั้งหมดเป็นแผนผังโดยประมาณ ไม่ใช่พิกัดจริง (ป้ายกำกับไว้)
+4. **Motion**: route dots (เฉพาะเส้นทาง ไม่รวมจุดพื้นหลัง) fade-in แบบ stagger ตอน scroll เข้าจอ (คล้าย "เส้นค่อยๆ ลาก" ของต้นแบบ) + "รถไฟ" แบบ comet-trail 2 ขบวน วิ่งวนตามเส้นทางสุขุมวิท/สีลมต่อเนื่อง (rAF, cumulative-length interpolation) + ring pulse ที่ Siam/Mo Chit/Asok — ใช้ IntersectionObserver enter/leave pattern เดียวกับ proofB (เล่น/หยุดตาม visibility, prefers-reduced-motion = แสดงนิ่ง)
+5. **สถิติร่วม section**: stat strip 4 ค่าใต้แผนที่ (60+ สถานี, 70+ กม., 13 เขต, 700,000+ คน/วัน) — คนละชุดกับ Section 4 ที่เน้นสถิติธุรกิจ, เน้นสถิติ "ขนาดโครงข่ายการเดินทาง" โดยเฉพาะ — **ตัวเลขตัวอย่างทั้งหมด** (ป้ายกำกับไว้)
+6. **โทนสี**: พื้น `var(--dark)` ต่อเนื่องธีมเข้มของ hero/section 2/5, การ์ดแผนที่ไล่เฉด navy-black, เส้นทางสีน้ำเงิน/ฟ้าเดิม (`#3FA3EC`/`#8FD0FF`), จุดเชื่อมต่อระบบอื่นสีเงิน (`#7C8CA6`), hub หลักสีแดง BTS
+
+**หมายเหตุ**: มี HTML `<rect>` width ติดลบ (console error) อยู่ก่อนแล้วในโค้ด hero door SVG (`winW - 22` ตอน resize จอแคบมาก) — ไม่เกี่ยวกับ section ใหม่นี้ ยังไม่ได้แก้ (นอก scope รอบนี้)
+
+- Artifact เดิม อัปเดตแล้ว (Version 17): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+
+## 21. Closing CTA "Where will we connect next?" — clone DNA จาก 21st.dev "cta69" + ลดทอน Footer (2026-09-25)
+
+**DNA ต้นแบบ**: closing CTA แบบ full-bleed — พื้นหลังเป็น marquee ข้อความใหญ่มากโทนเดียววิ่งวนต่อเนื่อง, เนื้อหากลางจอ: badge → headline → note → "seal button" (ปุ่มวงกลมแบบตราประทับ มีข้อความวิ่งรอบวง)
+
+**สิ่งที่ทำ**:
+1. **ไม่สร้าง section ใหม่** — reskin section "Where will we connect next?" เดิม (ทำหน้าที่ Future/Closing CTA อยู่แล้ว) ถอด motif เส้น-จุด (hero-net) เดิมออก
+2. **Marquee พื้นหลัง**: 2 แถววิ่งสวนทางกัน — แถวบน "CONNECT ·" ตัวโปร่งเส้นขอบเงินจาง, แถวล่าง "MOVE · MIX · MATCH ·" ตัวทึบขาวจางมาก, ตัวใหญ่ ~15vw, ขอบซ้าย-ขวาจางด้วย mask
+3. **เนื้อหากลางจอ**: badge pill "Connected Future" (จุดแดง) → headline "Where will we connect next?" + บรรทัดไทย "เราจะเชื่อมต่ออะไรต่อไป?" → คำโปรยเดิม → **seal button** 176px: วงข้อความ "สำรวจการเชื่อมต่อ · EXPLORE CONNECTIONS ·" หมุนช้าๆ (22 วิ/รอบ) รอบแกนวงกลมน้ำเงิน BTS + ลูกศร (hover = แกนขยาย + ลูกศรเอียงขึ้น 45°) → ลิงก์ไปยัง footer (ช่องทางติดต่อ/เมนู) ในรอบนี้
+4. **3 ลิงก์เดิม** (ร่วมเป็นพันธมิตร / ร่วมงานกับเรา / ติดต่อ BTS Group) ลดเป็น pill เล็กเรียงใต้ seal button (ลิงก์ยังเป็น `#`)
+5. **Footer ลดทอน**: ถอดบล็อก pill toggle MOVE/MIX/MATCH + ticker marquee (รวม JS `ftLines`/`renderTicker`) และ ghost wordmark "BTS GROUP" ท้ายสุดออกทั้งหมด — footer เหลือ tagline → nav/contact/head office+map → legal → copyright (สูงราว 830px บนจอ 1440px, ลดลง ~280px)
+6. prefers-reduced-motion = marquee และวงข้อความหยุดนิ่ง
+
+- Artifact เดิม อัปเดตแล้ว (Version 18): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+
+## 22. Section 5 · เวอร์ชัน B — Tabs (clone DNA จาก 21st.dev shadcnblocks "feature108") (2026-09-25)
+
+**DNA ต้นแบบ**: "3 features inside a tabs component" (Radix Tabs + Lucide) — แถบ tab เป็นการ์ดคลิกได้ (ไอคอน + หัวข้อ + คำอธิบายสั้น) และ content stage ที่สลับตาม tab: ภาพ + headline + พารากราฟ + checklist, ขับเคลื่อนด้วยการคลิก ไม่ใช่ scroll
+
+**การตัดสินใจ**:
+1. เพิ่มเป็น **ตัวเลือกคู่ขนาน** — Section 5 ได้ตัวสลับเวอร์ชันครั้งแรก (A · Pinned photo = ของเดิม ไม่แตะ / B · Tabs = ใหม่) ในแผงเดโม, ห่อด้วย `s5-wrap`, localStorage key `bts-s5-variant`
+2. ใช้ **4 หมวดเดิม** (ผู้โดยสาร / ชุมชน / ESG / พันธมิตร) แทน 3 ของต้นแบบ — headline/พารากราฟเดิมจากเวอร์ชัน A, ไอคอน dot-matrix ชุดเดิม (คน/บ้าน/ใบไม้/วงแหวน) บน tab
+3. **พื้นเข้ม** `var(--dark)` ต่อเนื่องแบบเวอร์ชัน A — section สูงปกติ ไม่ปักจอ/ไม่ parallax (ต่างจาก A ที่สูง 440vh)
+4. **Checklist ใหม่ 3 ข้อต่อหมวด** (placeholder ไม่ใส่ตัวเลข รอทีม ESG): เช่น ESG = ขับเคลื่อนด้วยไฟฟ้า / ระบบเบรกนำพลังงานกลับมาใช้ / พลังงานแสงอาทิตย์บนศูนย์ซ่อมบำรุง
+5. **ภาพ placeholder** reuse ฉากเดิม: ผู้โดยสาร = ชานชาลา (platform), ชุมชน = ทางเท้า (street), ESG = ขบวนรถไฟฟ้าโทนน้ำเงิน (pf-photo move), พันธมิตร = พื้นที่ค้าปลีก (market)
+6. **Interaction**: tab ใช้ role tablist/tab/tabpanel, คลิกหรือลูกศร ←→ / Home / End (roving tabindex), panel crossfade ในช่อง grid เดียวกัน (ความสูงไม่กระโดด), ≤960px tab เรียง 2×2 และ panel เป็น 1 คอลัมน์
+
+- Artifact เดิม อัปเดตแล้ว (Version 19): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
