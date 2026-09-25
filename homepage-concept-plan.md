@@ -634,3 +634,22 @@ Typography เฉพาะ footer: label เล็ก uppercase ใช้ **mono
 **Technical**: เปลี่ยน `.ld-inner` จาก `display:grid` 3 คอลัมน์ เป็น `display:flex; flex-direction:column; align-items:center` แคบลงเหลือ `max-width:640px`, ลบ CSS ที่ไม่ใช้แล้วทั้งหมด (`.ld-brand`, `.ld-label`, `.ld-list` และลูก, `.ld-right`) และลบ JS ส่วน stagger-list (`items`/`forEach` ที่ toggle class `.in` ตาม `data-at`) ออกจากฟังก์ชัน loader เพราะไม่มี list เหลือให้ stagger แล้ว — ตรวจแล้วว่า brace/tag ยังสมดุล ไม่มี reference ค้างถึง class ที่ลบไป และโหลดในเบราว์เซอร์ไม่มี console error
 
 - Artifact เดิม อัปเดตแล้ว (Version 29): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+
+## 29. Responsive Audit — เริ่ม (2026-09-25)
+
+**ขอบเขตที่ตกลง**: ตรวจเฉพาะเวอร์ชัน A (default), แบ่งเป็นหลายรอบทีละ section, จอเป้าหมาย Mobile + Tablet (768–1024px)
+
+**ลำดับรอบที่วางไว้**: 1) Header+Hero → 2) Section 2-A → 3) Section 3-A → 4) Section 4-A + 4.5 Network Map → 5) Section 5-A → 6) Section 6+7 → 7) Closing CTA+Footer+Loader
+
+### รอบ 1 — Header + Hero (เสร็จแล้ว)
+
+**พบข้อจำกัดของเครื่องมือตรวจที่สำคัญ**: หน้าต่างพรีวิวของ Claude Code desktop app **จำลองความกว้าง viewport แคบกว่า ~480px ไม่ได้จริง** สำหรับ element ที่เป็น `position:fixed` (เช่น header, menu overlay) — `window.innerWidth` และ `getBoundingClientRect()` ของ fixed element จะรายงานความกว้างของ pane จริง (~466-490px) แทนค่าที่ขอจำลอง (เช่น 390px) ทำให้ตอนแรกดูเหมือนมี overflow ~100px แต่ตรวจสอบแล้วว่าเป็น **artifact ของเครื่องมือ ไม่ใช่บั๊กจริง** — ยืนยันด้วย 2 วิธี: (1) เทียบกับ `document.documentElement.clientWidth` ซึ่งรายงานค่าจริงถูกต้อง (390) และ non-fixed element (เช่น `.hero-content`) ก็วัดได้ตรง 390 พอดี (2) คำนวณความกว้างเนื้อหาจริงของ header (u-left+u-right+padding ≈ 164px) พบว่าเหลือ margin เยอะมากเทียบกับ 390px — ถ้า container ถูกวัดถูกต้องก็จะไม่ล้นแน่นอน, และทุกแถวที่ถูกวัดว่า "ล้น" ใน menu overlay (`.menu-cta-row`, `.menu-foot`, `.submenu-inner`) ล้วนมี `flex-wrap:wrap` อยู่แล้วในโค้ด (พร้อมยุบบรรทัดเองถ้า container เล็กจริง) — **บทเรียน**: การตรวจ responsive รอบต่อๆไปต้องระวังจุดนี้ — ถ้า element เป็น `position:fixed` ให้เชื่อ `clientWidth` + คำนวณเนื้อหาเอง มากกว่าเชื่อ `getBoundingClientRect()`/`innerWidth` ตรงๆ
+
+**ผลตรวจจริง**:
+- **Tablet (768–1024px)**: Header + Hero ไม่มีปัญหา overflow ที่ไหนเลย (ตรวจด้วย `clientWidth` เทียบ `scrollWidth` ที่ทั้งสองขนาด ตรงกันพอดี ไม่มี horizontal scroll) — ไม่ต้องแก้อะไร
+- **Mobile (390px, และคำนวณแล้วว่าเช่นเดียวกันที่ 360-430px)**: breakpoint `≤720px` ที่มีอยู่แล้วครอบคลุมดีอยู่แล้ว — ปุ่ม hero-actions 2 ปุ่มยังอยู่แถวเดียวกันได้สบาย, hero-foot ยุบเป็นคอลัมน์ถูกต้อง, hero-h1/hero-phrases ไม่ล้น, ประตู/hero-gate ถูกซ่อนตามที่ตั้งใจ
+- **บั๊กเล็กที่พบและแก้แล้ว**: ป้าย "ภาพประกอบชั่วคราว · ประตู BTS + วิดีโอ รอฟุตเทจจริง" (`.hero-tag`) ยังโชว์อยู่บนมือถือ ทั้งที่ตัวประตูที่ป้ายอธิบายถูกซ่อนไปแล้วด้วย breakpoint เดียวกัน — เพิ่ม `.hero-tag` เข้าไปในลิสต์ `display:none` ของ `@media (max-width:720px)` เดียวกัน
+
+**สรุปรอบ 1**: Header/Hero ผ่านเกือบทั้งหมดโดยไม่ต้องแก้ (ของเดิมทำมาดีอยู่แล้ว) แก้แค่ 1 จุดเล็กเรื่อง label ไม่ตรงกับสถานะ
+
+- Artifact เดิม อัปเดตแล้ว (Version 30): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
