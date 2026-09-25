@@ -2898,9 +2898,6 @@ setTimeout(function(){
     o += '<rect x="' + X(560, 80) + '" width="80" height="1000" fill="url(#' + id + 'Seam)"/>';
     o += '<rect x="' + X(40, 560) + '" y="70" width="560" height="860" rx="20" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="2"/>';
     for(var ry = 100; ry <= 900; ry += 64) o += '<circle cx="' + X(22) + '" cy="' + ry + '" r="3" fill="rgba(255,255,255,.2)"/>';
-    var plX = X(170, 320);
-    o += '<rect x="' + plX + '" y="176" width="320" height="46" rx="6" fill="#061628" stroke="rgba(255,255,255,.18)"/>' +
-         '<text x="' + (plX + 160) + '" y="205" text-anchor="middle" fill="rgba(255,255,255,.85)" style="font-family:var(--font-body);font-size:15px;font-weight:700;letter-spacing:.04em">ระวังประตูหนีบ · MIND THE DOOR</text>';
     // semi-transparent glass so the city "video" shows through the windows
     o += '<rect x="' + winX + '" y="' + winY + '" width="' + winW + '" height="' + winH + '" rx="84" fill="url(#' + id + 'Glass)"/>';
     o += '<g clip-path="url(#' + id + 'Win)"><path d="M' + (winX - 40) + ' ' + (winY + 260) + ' L' + (winX + 200) + ' ' + winY + ' L' + (winX + 290) + ' ' + winY + ' L' + (winX + 20) + ' ' + (winY + 330) + ' Z" fill="rgba(255,255,255,.06)"/>';
