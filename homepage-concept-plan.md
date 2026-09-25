@@ -617,3 +617,12 @@ Typography เฉพาะ footer: label เล็ก uppercase ใช้ **mono
 **Technical**: ทำผ่านสคริปต์ Node.js ชั่วคราว (sweep แบบ mechanical สำหรับ weight/letter-spacing/line-height/gap ที่เป็น flat value ทั้งไฟล์ โดยป้องกัน `font-weight:700` ของ @font-face Bold ไม่ให้โดน sweep ผิด) ตามด้วยแก้ `clamp()` ของ headline ทีละจุดด้วยมือ (~30 selector) เพราะต้องใช้ role-based judgment — ตรวจสอบหลัง sweep แล้วว่า: มี `@font-face` เหลือ 2 รายการพอดี, ไม่มี font-weight 300/600/800/900 หลงเหลือ, letter-spacing/line-height เหลือค่าเดียว, HTML/CSS/JS ยังสมดุล (brace/tag count ตรง), โหลดในเบราว์เซอร์ไม่มี console error, คอมพิวเต็ดสไตล์ของ .hero-h1/.eyebrow/.eco-sub ตรงตามสเปกใหม่ทุกจุด
 
 - Artifact เดิม อัปเดตแล้ว (Version 27): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+
+## 27. Border-radius DNA — ปรับ 2 ระดับ (2026-09-25)
+
+- **การ์ดพิเศษ/เวทีใหญ่**: `28px → 32px` (imB-stage, netmap-stage ที่ใช้ 28 เดิม)
+- **องค์ประกอบเล็ก**: clamp ค่าเดิมที่กระจาย `2–18px` เข้ากรอบใหม่ `8–16px` — ค่าที่อยู่ในกรอบอยู่แล้ว (10, 14, 16) ไม่แตะ, ค่าต่ำกว่าขอบล่างดันขึ้น (2,4,6 → 8: pf-rail .bar, focus outline, ft-lines i, ir-links .thumb), ค่าเกินขอบบนตัดลง (18 → 16: ecoB-scene, imB-tab)
+- **ไม่แตะ**: Pill (999px) และ การ์ด/บล็อกใหญ่ (20–24px) — ผู้ใช้ไม่ได้ระบุให้เปลี่ยน 2 ระดับนี้
+- ตรวจแล้ว: กระจายค่าหลัง sweep = `8,10,14,16,20,24,32,999` ตรงตามแผน, brace/tag ยังสมดุล, ไม่มี console error
+
+- Artifact เดิม อัปเดตแล้ว (Version 28): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
