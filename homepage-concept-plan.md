@@ -566,3 +566,54 @@ Typography เฉพาะ footer: label เล็ก uppercase ใช้ **mono
 4. **ตรวจแล้ว** (bypass rAF ผ่าน resize event เพราะพรีวิวพักอยู่เบื้องหลังทำให้ rAF/IntersectionObserver ไม่ยิง — ปัญหาเดิมที่เจอในรอบ audit ข้อ 19): ระยะปักจอใหม่ = 495px ที่ vh 900 (≈55vh) ตรงตามตั้งใจ, `--seam` และ `dropY2` ไล่ 0→1 / 480→960 สอดคล้องกันพอดีตอน c เข้าใกล้ 1 — ส่วน IntersectionObserver ของ `.pf-intro` ยืนยันด้วยโค้ด (pattern เดียวกับ `proofB`/`ecoD` ที่ทำงานถูกต้องอยู่แล้ว) ยังไม่ได้เห็นด้วยตาเพราะพรีวิวไม่ focus จริง
 
 - Artifact เดิม อัปเดตแล้ว (Version 24): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+
+## 25. ภาพจริงชุดแรก — จากโฟลเดอร์ `Image` (2026-09-25)
+
+**วิเคราะห์ภาพทั้ง 10 ไฟล์ใน `C:\Users\pawin.s\Desktop\BTS\Image\`**: Banner (CGI monorail+ป้าย BTS เรืองแสง), Icons (เอกสาร/กราฟหุ้น 2 ไฟล์), Logo (ตรงกับที่ inline ในโค้ดอยู่แล้ว), News ×2 (แบนเนอร์หุ้นกู้ + ภาพกิจกรรมปลูกต้นไม้), Popup ×2 (แบนเนอร์หุ้นกู้เวอร์ชันใหญ่ + **ภาพไว้อาลัยพระราชวงศ์ — ไม่ใช้เด็ดขาด เนื้อหาละเอียดอ่อนเฉพาะกิจ**), Reports ×2 (ปกรายงานประจำปี/ความยั่งยืนจริง)
+
+**ผู้ใช้เลือกใช้ 5 ไฟล์** (ไม่รวม hero banner — Hero section ยังไม่แตะ): `news-2026-09-07.webp`, `annual-report-2025-cover.jpg`, `sustainability-report-2025-26-cover.jpg`, `news-2026-08-28.webp`, `popup-2026-08-31.webp`
+
+**ที่เก็บไฟล์**: คัดลอกเข้าโฟลเดอร์ใหม่ `img/` ในโปรเจกต์ (ตั้งชื่อสื่อความหมาย) แล้วอ้างอิงแบบ relative path เหมือน `fonts/` เดิม — อัปโหลดเข้า Artifact ผ่านพารามิเตอร์ `files` แล้ว (ยืนยันด้วย `list scope:files`: ทั้ง 5 ไฟล์ขนาดตรงกับต้นฉบับ)
+
+**จุดที่ใช้**:
+1. **Section 7 (เรื่องราว) — การ์ด ESG**: `story-esg-treeplanting.webp` (ภาพพนักงานถือต้นกล้าในสถานี มีป้าย Net Zero) แทนที่ placeholder ไล่สี — เปลี่ยนพาดหัวจากเดิม (พลังงานแสงอาทิตย์) เป็น "พนักงานบีทีเอสร่วมกิจกรรมปลูกต้นไม้ เดินหน้าสู่เป้าหมาย Net Zero 2050" ให้ตรงกับภาพจริง
+2. **Section 7 — การ์ด MATCH**: `story-debenture-offering.webp` (แบนเนอร์หุ้นกู้เวอร์ชันใหญ่) แทนที่การ์ด "จับมือพันธมิตรใหม่..." เดิม — เปลี่ยนพาดหัวเป็น "เตรียมเสนอขายหุ้นกู้ 3 ชุดแก่ผู้ลงทุนทั่วไป ระดับ Investment Grade BBB+" วันที่ 24 ส.ค. 2569 (วันที่ TRIS จัดอันดับตามที่ระบุในภาพจริง)
+3. **Section 6 (IR) — ลิสต์เอกสาร**: เพิ่ม thumbnail ภาพปกจริง (40×52px มุมโค้ง) แทนไอคอนวงกลมเดิมในแถว "รายงานประจำปี" (`report-annual-2025.jpg`) และ "ข่าวแจ้งตลาดหลักทรัพย์" (`ir-debenture-notice.webp`, ปรับคำอธิบายเป็นข่าวจัดอันดับหุ้นกู้จริง) + **เพิ่มแถวใหม่ที่ 6** "รายงานความยั่งยืน" (`report-sustainability-2025-26.jpg`) ต่อจากแถวรายงานประจำปี
+4. **ไม่ใช้**: ไอคอน PNG 2 ไฟล์ (ขัดกับ Icon DNA แบบ Lucide outline ที่ยึดมาตั้งแต่ต้น), โลโก้ svg (ซ้ำกับที่มีอยู่แล้ว), ภาพไว้อาลัย (ห้ามใช้), hero banner poster (ผู้ใช้ยังไม่ให้ใช้รอบนี้)
+
+**Technical**: เพิ่ม CSS `.st-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}` (คลุม gradient placeholder เดิมและลาย dot ::before ที่ยังไม่ได้ถอด), `.ir-links .thumb{width:40px;height:52px;border-radius:6px;object-fit:cover;box-shadow:...}` — โครงสร้าง `.st-img`/`.ir-links a` เดิมไม่ต้องแก้
+
+- Artifact เดิม อัปเดตแล้ว (Version 26): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+
+## 26. Typography/Spacing DNA overhaul — ยุบเหลือ 2 น้ำหนัก, สเกลใหม่, letter-spacing/line-height เดียวทั้งเว็บ (2026-09-25)
+
+**เหตุผล**: ผู้ใช้ขอให้ลดความซับซ้อนของระบบตัวอักษร/spacing ที่สะสมมาหลายรอบ build ให้เป็นกฎที่จำง่ายและสม่ำเสมอกว่าเดิม
+
+**น้ำหนักตัวอักษร — เหลือ 2 น้ำหนักจริงในเว็บ**:
+- ตัดสินใจ: `500` ไม่มีไฟล์ฟอนต์จริง (Thin/Regular/Bold/ExtraBold/Heavy เท่านั้น) → ใช้ `400` แทนทั้งจุดที่ตั้งใจเป็น "500" และจุดที่เดิมตั้งใจเป็น "300" (ผู้ใช้ยืนยันให้รวมเป็นก้อนเดียว)
+- **ถอด `@font-face` ที่ไม่ใช้แล้วทิ้ง 3 รายการ**: Thin(300), ExtraBold(800), Heavy(900) — เหลือแค่ Regular(400) และ Bold(700) 2 ไฟล์ (ลดข้อมูลที่ต้องโหลด ~92KB)
+- Mapping ตรงไปตรงมา: เดิม 900→700, 800→700, 700→400, 600→400 (เจอ 2 จุดหลุด), 400→400 (คงเดิม), 300→400
+- ผลลัพธ์: **700 = หัวข้อ/ตัวหนาทั้งหมด, 400 = ทุกอย่างอื่น** (eyebrow, label, ปุ่ม, body, ตัวเลขสถิติ)
+
+**สเกลขนาด (clamp) — ปรับทุก headline/subhead ตาม role**:
+| กลุ่ม | ใหม่ | ตัวอย่าง |
+|---|---|---|
+| Hero H1 | `40→80px` | .hero-h1 |
+| Headline ใหญ่สุด | `40→84px` (pfB-h ตัวเลขยักษ์ 01/03 คงสัดส่วนพิเศษที่ `64→140px`) | hero-gate h2, ecoB-h2, next-h2, pfB-h |
+| Headline มาตรฐาน | `32→58px` | ทุกหัว section 3-7 (pf-h2, proof-h2, im-h2, imB-h2, ir-h2, st-h2, netmap-h2, proofB-h2, pfC-h2, ecoC-h2, ft-tagline, ecoD-motto) |
+| หัวข้อการ์ด/รอง | `24→36px` | เกือบทุกหัวข้อย่อยในการ์ด (ecoB/C/D, pf-cap, pfB-def, pfC-row, im-claim, imB-panel, st-item.feature, menu-row .label) |
+| Label/eyebrow | `10→12px` | .eyebrow, dt-text, ทุก label ตัวเล็ก uppercase |
+| Body ทั่วไป | รวมเป็น `16px` คงที่ | ข้อความในการ์ด/ลิสต์ที่กระจัดกระจาย 13.5-17px เดิม |
+| Intro/lede | `18-20px` (pf-read พิเศษ `24→32px` เพราะมี highlight-on-scroll) | eco-sub, proof-lede, pfB-lede ฯลฯ |
+| ตัวเลขสถิติใหญ่ | คงเดิมถ้าอยู่ในกรอบ `40→56-116px` อยู่แล้ว (proof-num, ir-price, proofB-stat b, ld-pct ไม่ต้องแก้) — เกินกรอบตัดลง (pf-count-num 128→116px) | |
+| **ไม่แตะ** | marquee ghost text พื้นหลัง (next-row 96-236px, pfC-ghost wordmark 128px), netmap-stat/ir-fin dd (KPI ขนาดกะทัดรัดในกริด ไม่ใช่ headline hierarchy) | เหตุผล: เป็นข้อความตกแต่ง/สถิติย่อยขนาดกะทัดรัด ไม่ใช่ลำดับชั้น headline ที่ตารางนี้ควบคุม |
+
+**Letter-spacing**: ทุกจุด (85 จุด) → `0em` เดียวกันหมด (เดิมมี 2 กลุ่มคือ headline แคบ vs label กว้าง .12-.26em)
+
+**Line-height**: ทุกจุด (67 จุด) → `1.5` เดียวกันหมด (เดิม headline แน่น 0.86-1.15, body หลวม 1.55-1.7, label 1)
+
+**Spacing (gap)**: ปรับ 3 ระดับล่างด้วยการ clamp ค่าเดิมเข้ากรอบใหม่ (ค่าที่อยู่ในกรอบอยู่แล้วไม่แตะ, ค่าที่เกินกรอบตัดเข้าขอบบน/ล่าง) — จิ๋ว `4-8px`, เล็ก `12-16px`, กลาง `24-32px` — **ระดับใหญ่ (64px) และกว้างพิเศษ (80px) คงเดิมตามที่ตกลง** ไม่อยู่ในสโคปนี้
+
+**Technical**: ทำผ่านสคริปต์ Node.js ชั่วคราว (sweep แบบ mechanical สำหรับ weight/letter-spacing/line-height/gap ที่เป็น flat value ทั้งไฟล์ โดยป้องกัน `font-weight:700` ของ @font-face Bold ไม่ให้โดน sweep ผิด) ตามด้วยแก้ `clamp()` ของ headline ทีละจุดด้วยมือ (~30 selector) เพราะต้องใช้ role-based judgment — ตรวจสอบหลัง sweep แล้วว่า: มี `@font-face` เหลือ 2 รายการพอดี, ไม่มี font-weight 300/600/800/900 หลงเหลือ, letter-spacing/line-height เหลือค่าเดียว, HTML/CSS/JS ยังสมดุล (brace/tag count ตรง), โหลดในเบราว์เซอร์ไม่มี console error, คอมพิวเต็ดสไตล์ของ .hero-h1/.eyebrow/.eco-sub ตรงตามสเปกใหม่ทุกจุด
+
+- Artifact เดิม อัปเดตแล้ว (Version 27): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
