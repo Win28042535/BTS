@@ -544,3 +544,25 @@ Typography เฉพาะ footer: label เล็ก uppercase ใช้ **mono
 6. **Interaction**: tab ใช้ role tablist/tab/tabpanel, คลิกหรือลูกศร ←→ / Home / End (roving tabindex), panel crossfade ในช่อง grid เดียวกัน (ความสูงไม่กระโดด), ≤960px tab เรียง 2×2 และ panel เป็น 1 คอลัมน์
 
 - Artifact เดิม อัปเดตแล้ว (Version 19): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+
+## 23. ปรับแก้ย่อย + Section 2-A scroll convergence (2026-09-25)
+
+- **Hero**: ถอดป้าย "ระวังประตูหนีบ · MIND THE DOOR" ออกจากประตูทั้งสองบาน (Version 20)
+- **ตัวสลับเวอร์ชัน**: เลิกจำค่าใน localStorage — ทุก section (2/3/4/5) เปิดที่เวอร์ชัน A เสมอ, สลับได้เฉพาะระหว่างเปิดหน้าอยู่ (Version 21)
+- **Section 4-A**: "บริการการเงิน" (รายการที่ 4) เยื้องซ้าย 39px เท่ากับ "ICT" แทน 104px (Version 22)
+- **Section 2-A — การ์ดรวมเข้ากลางแล้วนำสายตาลงสู่ Section 3** (Version 23):
+  - เวทีการ์ด (สูง 960px) ปักจอ (sticky) เมื่อขอบล่างชนขอบล่างจอ ค้างไว้ระยะ scroll 110vh แล้วค่อยปล่อย — section ยาวขึ้นเท่านี้ (ถอด `min-height:132vh` ออก, `overflow:hidden` → `overflow:clip` เพื่อไม่ให้ sticky พัง)
+  - ขาเข้า: parallax แนวตั้งแบบเดิม (ความเร็วต่อใบเท่าเดิม) และจบที่ตำแหน่ง CSS พอดีตอนเริ่มปักจอ
+  - ระหว่างปักจอ: การ์ดทั้ง 4 เคลื่อนเข้าหาจุดกลางใต้ hub (ทั้งแกน X และ Y) ใน 80% แรก + ย่อเหลือ 55% + จางจนหาย (opacity 0) ช่วง 45–85%; เส้นเชื่อมทั้ง 4 วิ่งตามการ์ดและสว่างขึ้น; hub ขยาย + วงแหวนฟ้ารอบ hub; **เส้นฟ้าพุ่งจาก hub ลงถึงขอบล่างจอ** (ช่วง 30–100%) มีจุดขาวนำหน้า เป็นตัวชี้ทางไป Section 3
+  - มือถือ (≤720px) และ prefers-reduced-motion: ไม่ปักจอ ไม่มี convergence, การ์ดอยู่ตำแหน่งเดิม
+
+- Artifact เดิม อัปเดตแล้ว (Version 23): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+
+## 24. Section 2→3 transition — เร็วขึ้น + เชื่อมนุ่มนวลขึ้น (2026-09-25)
+
+1. **ลดระยะปักจอ**: `.eco-track` จาก `960px + 110vh` เหลือ `960px + 55vh` — สัดส่วนจังหวะเดิมทั้งหมด (การ์ดเริ่มยุบที่ c=0, จางหมดที่ c=0.85, เส้นฟ้าเริ่มไหลที่ c=0.3 ถึงพื้นที่ c=1) ยังคงเดิม แค่ระยะ scroll จริงสั้นลงครึ่งหนึ่ง — Section 3 โผล่มาเร็วขึ้นชัดเจน
+2. **โซนเบลนด์สี**: เพิ่ม `.eco-inner::after` เป็น gradient จากโปร่งใสไปสีครีม สูง 42% ของกล่อง, opacity ผูกกับตัวแปร CSS `--seam` ที่ตั้งค่าจาก JS ให้ตรงกับความคืบหน้าของเส้นฟ้าที่หย่อนลง (`drop`) — ครีม "ไล่ขึ้น" มาบังส่วนล่างจอพอดีตอนเส้นฟ้าถึงพื้น แล้วพอปล่อยปักจอ ตัด hard-cut เข้าสีครีมจริงของ Section 3 จะรู้สึกต่อเนื่องแทนที่จะกระโดด
+3. **Section 3 intro โผล่ขึ้นมาหา**: `.pf-intro` (ใช้ร่วมกันทั้งเวอร์ชัน A และ B) เพิ่ม fade+translateY เข้า (40px, .6s) ตอนเลื่อนเข้า viewport ผ่าน IntersectionObserver (threshold .2) — headline ไม่โผล่นิ่งๆ อีกต่อไป แต่ "เคลื่อนขึ้นมา" ตามที่ขอ, prefers-reduced-motion แสดงทึบทันที
+4. **ตรวจแล้ว** (bypass rAF ผ่าน resize event เพราะพรีวิวพักอยู่เบื้องหลังทำให้ rAF/IntersectionObserver ไม่ยิง — ปัญหาเดิมที่เจอในรอบ audit ข้อ 19): ระยะปักจอใหม่ = 495px ที่ vh 900 (≈55vh) ตรงตามตั้งใจ, `--seam` และ `dropY2` ไล่ 0→1 / 480→960 สอดคล้องกันพอดีตอน c เข้าใกล้ 1 — ส่วน IntersectionObserver ของ `.pf-intro` ยืนยันด้วยโค้ด (pattern เดียวกับ `proofB`/`ecoD` ที่ทำงานถูกต้องอยู่แล้ว) ยังไม่ได้เห็นด้วยตาเพราะพรีวิวไม่ focus จริง
+
+- Artifact เดิม อัปเดตแล้ว (Version 24): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7

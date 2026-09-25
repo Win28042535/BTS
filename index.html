@@ -356,14 +356,21 @@
     background:
       radial-gradient(90% 70% at 15% 90%, rgba(0,89,155,.22), transparent 60%),
       linear-gradient(180deg, #0D1017 0%, var(--dark) 45%, var(--dark-2) 100%);
-    min-height:132vh;
     overflow:hidden;
+    overflow:clip; /* clip, not hidden: a hidden overflow would become the sticky stage's scroll container and stop it pinning */
     padding:140px 24px 0;
   }
+  /* extra 55vh of track = scroll room while the stage is pinned and the cards converge — kept short so Section 3 arrives quickly */
+  .eco-track{ position:relative; max-width:1320px; margin:0 auto; height:calc(960px + 55vh); }
   .eco-inner{
-    position:relative;
-    max-width:1320px; margin:0 auto;
+    position:sticky; top:calc(100vh - 960px); /* pins when its bottom meets the viewport bottom */
     height:960px;
+  }
+  /* cream preview that rises in as the pin ends, so the hard dark→cream cut into Section 3 reads as a blend, not a jump */
+  .eco-inner::after{
+    content:""; position:absolute; z-index:3; left:0; right:0; bottom:0; height:42%;
+    background:linear-gradient(to bottom, transparent, var(--cream));
+    opacity:var(--seam, 0); pointer-events:none;
   }
   .eco-copy{
     position:relative; z-index:3;
@@ -388,9 +395,19 @@
   }
   .eco-cta{ display:flex; justify-content:center; }
 
-  .eco-net{ position:absolute; inset:0; z-index:1; opacity:.5; pointer-events:none; }
-  .eco-net line{ stroke:var(--silver); stroke-width:1; opacity:.3; }
-  .eco-net circle{ fill:var(--silver); opacity:.6; }
+  .eco-net{ position:absolute; inset:0; z-index:1; pointer-events:none; }
+  .eco-net .eco-link{ stroke:var(--silver); stroke-width:1; opacity:.15; }
+  .eco-net .eco-hub{ fill:var(--silver); opacity:.35; }
+  .eco-net .eco-halo{ fill:none; stroke:#8FD0FF; stroke-width:1; opacity:0; }
+  .eco-net .eco-drop{ stroke:#8FD0FF; stroke-width:1.5; stroke-linecap:round; opacity:.8; }
+  .eco-net .eco-tip{ fill:var(--white); opacity:0; }
+
+  /* phones and reduced motion: no pin, cards stay put */
+  @media (max-width:720px), (prefers-reduced-motion:reduce){
+    .eco-track{ height:auto; }
+    .eco-inner{ position:relative; top:auto; }
+    .eco-net .eco-drop, .eco-net .eco-halo, .eco-net .eco-tip{ display:none; }
+  }
 
   .eco-card{
     position:absolute; z-index:2; overflow:hidden;
@@ -694,6 +711,12 @@
     padding:168px 24px 96px;
     display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.55fr); gap:64px;
     align-items:start;
+    opacity:0; transform:translateY(40px);
+    transition:opacity .55s ease, transform .6s cubic-bezier(.2,.8,.2,1);
+  }
+  .pf-intro.in{ opacity:1; transform:none; }
+  @media (prefers-reduced-motion:reduce){
+    .pf-intro{ opacity:1; transform:none; transition:none; }
   }
   .pf-intro .eyebrow{ color:var(--navy); display:flex; align-items:center; gap:10px; margin-bottom:22px; }
   .pf-h2{
@@ -983,7 +1006,7 @@
   .proof-item:nth-child(1){ margin-left:24px; }
   .proof-item:nth-child(2){ margin-left:24px; }
   .proof-item:nth-child(3){ margin-left:39px; }
-  .proof-item:nth-child(4){ margin-left:104px; }
+  .proof-item:nth-child(4){ margin-left:39px; }
   .proof-num{
     display:block;
     font-size:60px; font-weight:400; line-height:1;
@@ -1808,13 +1831,17 @@ setTimeout(function(){
       <div class="eco-cta"><a class="btn btn-solid" href="#">สำรวจระบบนิเวศ BTS</a></div>
     </div>
 
+    <div class="eco-track" id="ecoTrack">
     <div class="eco-inner">
-      <svg class="eco-net" viewBox="0 0 1320 960" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-        <line x1="180" y1="120" x2="660" y2="480"/>
-        <line x1="1040" y1="230" x2="660" y2="480"/>
-        <line x1="220" y1="720" x2="660" y2="480"/>
-        <line x1="1080" y1="800" x2="660" y2="480"/>
-        <circle cx="660" cy="480" r="3.5"/>
+      <svg class="eco-net" viewBox="0 0 1320 960" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <line class="eco-drop" x1="660" y1="480" x2="660" y2="480"/>
+        <line class="eco-link" x1="180" y1="120" x2="660" y2="480"/>
+        <line class="eco-link" x1="1040" y1="230" x2="660" y2="480"/>
+        <line class="eco-link" x1="220" y1="720" x2="660" y2="480"/>
+        <line class="eco-link" x1="1080" y1="800" x2="660" y2="480"/>
+        <circle class="eco-halo" cx="660" cy="480" r="10"/>
+        <circle class="eco-hub" cx="660" cy="480" r="3.5"/>
+        <circle class="eco-tip" cx="660" cy="480" r="3.5"/>
       </svg>
 
       <article class="eco-card eco-card--people" data-speed="0.10">
@@ -1846,6 +1873,7 @@ setTimeout(function(){
         <h3>Opportunities</h3>
         <p>โอกาสใหม่เกิดขึ้นทุกจุดเชื่อมต่อ — จากผู้โดยสารสู่พันธมิตรสู่นักลงทุน</p>
       </article>
+    </div>
     </div>
   </section>
 
@@ -2858,26 +2886,70 @@ setTimeout(function(){
     });
   });
 
-  /* ---- Section 2 parallax cards ---- */
+  /* ---- Section 2 · A: parallax on the way in, then (stage pinned) the cards converge on the hub and fade
+         while a line drops from the hub to the bottom of the screen, leading into Section 3 ---- */
   var ecoSection = document.getElementById('ecosystem');
+  var ecoTrack = document.getElementById('ecoTrack');
+  var ecoInner = ecoTrack && ecoTrack.querySelector('.eco-inner');
   var ecoCards = document.querySelectorAll('.eco-card');
+  var ecoLinks = document.querySelectorAll('.eco-net .eco-link');
+  var ecoHub = document.querySelector('.eco-net .eco-hub');
+  var ecoHalo = document.querySelector('.eco-net .eco-halo');
+  var ecoDrop = document.querySelector('.eco-net .eco-drop');
+  var ecoTip = document.querySelector('.eco-net .eco-tip');
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var ecoStaticMQ = window.matchMedia('(max-width: 720px)');
+  var ECO_VB_W = 1320, ECO_H = 960, HUB_X = 660, HUB_Y = 480;
+
+  function ecoClamp(v){ return v < 0 ? 0 : v > 1 ? 1 : v; }
+  function ecoEase(v){ return v < .5 ? 2 * v * v : 1 - Math.pow(-2 * v + 2, 2) / 2; }
+
+  // par: -1 → 0 on the way in (parallax lag), c: 0 → 1 while pinned (convergence)
+  function renderEco(par, c){
+    var ox = (ECO_VB_W - ecoInner.clientWidth) / 2; // svg is "slice" at scale 1, centred — layout x → viewBox x
+    var move = ecoEase(ecoClamp(c / .8));
+    var fade = ecoClamp((c - .45) / .4);
+    var drop = ecoEase(ecoClamp((c - .3) / .7));
+    var tx = ecoInner.clientWidth / 2, ty = HUB_Y + 60;
+    Array.prototype.forEach.call(ecoCards, function(card, i){
+      var speed = parseFloat(card.getAttribute('data-speed')) || .15;
+      var cx = card.offsetLeft + card.offsetWidth / 2, cy = card.offsetTop + card.offsetHeight / 2;
+      var dx = (tx - cx) * move, dy = par * 200 * speed + (ty - cy) * move;
+      card.style.transform = (par || c) ? 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px) scale(' + (1 - .45 * move).toFixed(3) + ')' : '';
+      card.style.opacity = fade ? (1 - fade).toFixed(3) : '';
+      var link = ecoLinks[i];
+      if(link){
+        link.setAttribute('x1', (cx + dx + ox).toFixed(1));
+        link.setAttribute('y1', (cy + dy).toFixed(1));
+        link.style.opacity = ((.15 + .5 * move) * (1 - .7 * fade)).toFixed(3);
+      }
+    });
+    ecoHub.setAttribute('r', (3.5 + 3 * move).toFixed(2));
+    ecoHub.style.opacity = (.35 + .65 * move).toFixed(3);
+    ecoHalo.setAttribute('r', (10 + 34 * move).toFixed(1));
+    ecoHalo.style.opacity = (.5 * move * (1 - drop)).toFixed(3);
+    var endY = HUB_Y + (ECO_H - HUB_Y) * drop;
+    ecoDrop.setAttribute('y2', endY.toFixed(1));
+    ecoTip.setAttribute('cy', endY.toFixed(1));
+    ecoTip.style.opacity = drop > 0 && drop < 1 ? '1' : '0';
+    ecoInner.style.setProperty('--seam', drop.toFixed(3)); // cream preview rises in sync with the drop-line reaching bottom
+  }
 
   function onEcoScroll(){
-    if(!ecoSection || reduceMotion) return;
-    var rect = ecoSection.getBoundingClientRect();
+    if(!ecoTrack || !ecoInner || ecoSection.hidden) return;
+    if(reduceMotion || ecoStaticMQ.matches){ renderEco(0, 0); return; }
     var vh = window.innerHeight;
-    var progress = (vh - rect.top) / (rect.height + vh);
-    progress = Math.max(0, Math.min(1, progress));
-    var travel = (progress - 0.5) * 260;
-    Array.prototype.forEach.call(ecoCards, function(card){
-      var speed = parseFloat(card.getAttribute('data-speed')) || 0.15;
-      card.style.transform = 'translateY(' + (travel * speed) + 'px)';
-    });
+    var tr = ecoTrack.getBoundingClientRect();
+    var pinTop = vh - ECO_H;                       // track top at the moment the stage pins
+    var span = tr.height - ECO_H;                  // pinned scroll distance
+    var par = ecoClamp((vh - tr.top) / ECO_H) - 1; // -1 as the track enters, 0 when pinned
+    var c = span > 0 ? ecoClamp((pinTop - tr.top) / span) : 0;
+    renderEco(par, c);
   }
   window.addEventListener('scroll', function(){
     requestAnimationFrame(onEcoScroll);
   }, {passive:true});
+  window.addEventListener('resize', onEcoScroll);
   onEcoScroll();
 
   /* ---- Hero: illustrated BTS doors (placeholder until real photography) ---- */
@@ -3115,6 +3187,20 @@ setTimeout(function(){
   window.addEventListener('scroll', function(){ requestAnimationFrame(onHeroScroll); }, {passive:true});
   window.addEventListener('resize', onHeroScroll);
   onHeroScroll();
+
+  /* ---- Section 3: intro rises in as it enters (A and B share .pf-intro; C has its own header) ---- */
+  (function(){
+    var intros = document.querySelectorAll('.pf-intro');
+    if(!intros.length) return;
+    if(reduceMotion || !('IntersectionObserver' in window)){
+      Array.prototype.forEach.call(intros, function(el){ el.classList.add('in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('in'); });
+    }, { threshold:.2 });
+    Array.prototype.forEach.call(intros, function(el){ io.observe(el); });
+  })();
 
   /* ---- Section 3: highlight-on-scroll intro ---- */
   var readEl = document.getElementById('pfRead');
@@ -3624,7 +3710,7 @@ setTimeout(function(){
   window.addEventListener('scroll', function(){ requestAnimationFrame(onPfCScroll); }, {passive:true});
 
   /* ---- Version switchers, sections 2 & 3 (A / B / C) — driven by the demo settings panel ---- */
-  function initSwitcher(wrap, storeKey){
+  function initSwitcher(wrap){
     if(!wrap) return;
     var variants = wrap.querySelectorAll('[data-variant]');
     var seg = document.querySelector('.seg[data-target="' + wrap.id + '"]');
@@ -3632,7 +3718,6 @@ setTimeout(function(){
     function set(v, jump){
       Array.prototype.forEach.call(variants, function(sec){ sec.hidden = sec.getAttribute('data-variant') !== v; });
       Array.prototype.forEach.call(buttons, function(b){ b.setAttribute('aria-pressed', b.getAttribute('data-v') === v ? 'true' : 'false'); });
-      try{ localStorage.setItem(storeKey, v); }catch(e){}
       if(jump){
         window.scrollTo({ top: wrap.getBoundingClientRect().top + window.scrollY - header.offsetHeight - 12, behavior: reduceMotion ? 'auto' : 'smooth' });
       }
@@ -3641,16 +3726,12 @@ setTimeout(function(){
     Array.prototype.forEach.call(buttons, function(b){
       b.addEventListener('click', function(){ set(b.getAttribute('data-v'), true); });
     });
-    var allowed = Array.prototype.map.call(variants, function(sec){ return sec.getAttribute('data-variant'); });
-    var saved = 'a';
-    try{ saved = localStorage.getItem(storeKey) || 'a'; }catch(e){}
-    if(allowed.indexOf(saved) === -1) saved = 'a';
-    set(saved, false);
+    set('a', false); // always default to version A on load, regardless of what was picked in a previous visit
   }
-  initSwitcher(document.getElementById('s2Wrap'), 'bts-s2-variant');
-  initSwitcher(document.getElementById('s3Wrap'), 'bts-s3-variant');
-  initSwitcher(document.getElementById('s4Wrap'), 'bts-s4-variant');
-  initSwitcher(document.getElementById('s5Wrap'), 'bts-s5-variant');
+  initSwitcher(document.getElementById('s2Wrap'));
+  initSwitcher(document.getElementById('s3Wrap'));
+  initSwitcher(document.getElementById('s4Wrap'));
+  initSwitcher(document.getElementById('s5Wrap'));
 
   /* ---- Section 4 · B: count-up stats + animated "scale & credibility" city inside the logo arch ---- */
   (function(){
