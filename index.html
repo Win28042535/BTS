@@ -438,6 +438,13 @@
     .eco-card--opportunities{ right:10px; }
   }
 
+  /* mobile: the 4 corner-positioned cards would overlap at narrow widths (they're placed for a 1320px-wide stage) — stack them instead, same as the pin/motion being disabled below this width */
+  @media (max-width:720px), (prefers-reduced-motion:reduce){
+    .eco-inner{ display:flex; flex-direction:column; gap:20px; height:auto; padding-bottom:40px; }
+    .eco-net{ display:none; }
+    .eco-card{ position:static; width:100%; }
+  }
+
   /* ============ Version switcher, sections 2 & 3 (A / B / C for design comparison) ============ */
   .s2-wrap, .s3-wrap{ position:relative; }
 

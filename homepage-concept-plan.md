@@ -653,3 +653,15 @@ Typography เฉพาะ footer: label เล็ก uppercase ใช้ **mono
 **สรุปรอบ 1**: Header/Hero ผ่านเกือบทั้งหมดโดยไม่ต้องแก้ (ของเดิมทำมาดีอยู่แล้ว) แก้แค่ 1 จุดเล็กเรื่อง label ไม่ตรงกับสถานะ
 
 - Artifact เดิม อัปเดตแล้ว (Version 30): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+
+### รอบ 2 — Section 2-A (เสร็จแล้ว)
+
+**Tablet (768–1024px)**: ผ่านแล้ว ไม่มี overlap/overflow — `@media(max-width:1180px)` เดิมที่ขยับการ์ดเข้าขอบ (`left:0/right:0/left:10px/right:10px`) เพียงพออยู่แล้ว
+
+**Mobile (≤720px, ยืนยันจริงที่ 390px)**: **พบบั๊กจริง 2 จุด** — การ์ด People ทับกับ Business, การ์ด Data ทับกับ Opportunities — สาเหตุ: `.eco-inner` ยังคง `height:960px` ตายตัว (ไม่มีการ override เป็น auto ตอนปิด pin) และการ์ดทั้ง 4 ยังเป็น `position:absolute` ที่ตำแหน่งมุมจอแบบเดสก์ท็อป (คำนวณสำหรับเวที 1320px) ถูกบีบเข้ามาในจอ 390px จึงซ้อนกัน
+
+**แก้แล้ว**: เพิ่ม `@media (max-width:720px), (prefers-reduced-motion:reduce)` บล็อกใหม่ (วางหลังกฎ `.eco-card--*` ทั้งหมดเพื่อให้ specificity/cascade ชนะถูกต้อง) — `.eco-inner` เปลี่ยนเป็น `display:flex;flex-direction:column;gap:20px;height:auto` ให้การ์ดเรียงลงมาเป็นแนวตั้งตามลำดับ HTML เดิม (People→Business→Data→Opportunities), การ์ดเปลี่ยนเป็น `position:static;width:100%` (ค่า top/left/right/bottom เดิมถูกละเว้นอัตโนมัติเมื่อ position เป็น static ไม่ต้อง override ทีละค่า), ซ่อน `.eco-net` (เส้น-จุดเชื่อมโยง) ทั้งหมดเพราะพิกัดอ้างอิงเวทีเดสก์ท็อป — เป็น pattern เดียวกับที่ Hero ใช้อยู่แล้ว (ปิดลูกเล่นซับซ้อนบนมือถือ โชว์เนื้อหาตรงไปตรงมาแทน)
+
+**ตรวจแล้ว**: ที่ 390px การ์ดเรียงต่อกันโดยไม่ทับกันเลย (gap 20px เท่ากันทุกคู่), ไม่มี overflow ขวา, `.eco-net` เป็น `display:none` จริง; ที่ 768/1024px ยืนยันว่า `.eco-net` ยังเป็น `block` และ `.eco-inner` ยังเป็น `sticky` เหมือนเดิม (fix ของมือถือไม่กระทบ tablet) — ไม่มี console error
+
+- Artifact เดิม อัปเดตแล้ว (Version 31): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
