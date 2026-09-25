@@ -450,3 +450,42 @@ Typography เฉพาะ footer: label เล็ก uppercase ใช้ **mono
   - **มือถือ**: กริดเล็กเกินอ่านไม่ออกถ้าบีบ 8 คอลัมน์ในจอแคบ จึงคง min-width ไว้ (920px) แล้วให้ scroll แนวนอนแทน — เป็นข้อยกเว้นเดียวที่ใส่ mobile fallback ให้ (ปกติ section อื่นยังไม่ทำ responsive ตามแผน)
   - Artifact เดิม อัปเดตแล้ว (Version 14): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
   - **ถัดไป**: เลือกเวอร์ชันจริงของ Section 2 (ตอนนี้มี A/B/C/D) และ Section 3 → ถอดเวอร์ชันที่ไม่ใช้ + แผงเดโมออก → Polish / responsive pass
+- **รอบ 15 (เสร็จแล้ว)**: เพิ่มความ "lifestyle" ให้ Section 2 และ 3 ทุกเวอร์ชัน (ตัดสินใจ 2026-09-25: ปรับพร้อมกันทั้งหมด — สื่อ "Human" ใน Image DNA ที่ระบุไว้ตั้งแต่ข้อ 1 แต่ยังไม่เคยถูกใช้จริงใน section เหล่านี้ เอียงไปทาง Infrastructure/abstract diagram มาตลอด)
+  - **เทคนิคใหม่**: ฟังก์ชัน `crowdFigure`/`crowdRow`/`lifeSceneSVG` วาดกลุ่มคนซิลูเอตแบบ flat (หัว+ลำตัว+ขา ด้วย path/circle ล้วน) หลากท่าทาง (ยืน/เดิน/ถือมือถือ/ถือกระเป๋า/ใช้ไม้เท้า/เข็นรถเข็นเด็ก/เด็ก/สะพายเป้) สื่อความหลากหลายผ่าน **ท่าทาง/ความสูง ไม่ใช่สี** (คงโทนน้ำเงิน/เงิน/ขาวจำกัดตามแบรนด์) — มี 3 ฉากพื้นหลัง: `platform` (ชานชาลารอรถไฟฟ้า), `street` (ทางเท้า/สี่แยกในเมือง), `market` (พื้นที่ค้าปลีก/ชุมชน) แต่ละฉากมีคนสองแถว (หลัง=เล็ก/จาง, หน้า=ใหญ่/ชัด) ขยับสวนทางกันช้าๆ (`ls-drift`/`ls-drift-r`) ให้ความรู้สึกคนกำลังเดินผ่าน
+  - **Section 2**: A — การ์ด People/Business มีฉากคนลอยด้านบน (icon-tile กลายเป็น badge ทับขอบล่างฉาก) ส่วน Data/Opportunities คงไอคอนเดิม (เป็นแนวคิดนามธรรมที่เหมาะสมอยู่แล้ว); B — แถว People/Business (กลุ่มอ่อน) เปลี่ยนไอคอน dot-matrix เป็น thumbnail ฉากคนสี่เหลี่ยม 96px; C — เพิ่มฉากคนแบบพาโนรามาคั่นระหว่าง intro กับ list; D (mosaic) — เปลี่ยน 3 ใน 13 ช่องภาพ (People/Business/Community) จาก icon-tile เป็นฉากคนเต็มช่อง ที่เหลือ (Data/Opportunities/MOVE/MIX/MATCH/Network/Growth/Future City/Finance/ICT) คงไอคอนเดิมเพราะเป็นแนวคิดนามธรรม
+  - **Section 3**: A — เพิ่มไอคอนคนเดิน/คนคู่ในวง node "รถไฟฟ้า BTS" และ "ฟีดเดอร์" ของฉาก MOVE (ขยายวงจาก r=6 เป็น r=13) ส่วน MIX/MATCH คงเป็นแนวคิดนามธรรมตามเดิม (ยืนยันจากแผนเดิมว่า A เป็นแนว infographic ตั้งใจให้ต่างจาก B/C); B และ C (ใช้ `pfSceneSVG` ร่วมกัน) — ฉาก MOVE เพิ่มคนยืนรอที่ชานชาลา, ฉาก MIX เพิ่มคนเดินถนนระดับพื้น, ฉาก MATCH คงกราฟิกคานเหล็กเดิม (เป็นสัญลักษณ์เชิงแนวคิด)
+  - **บั๊กที่เจอระหว่างทำและแก้แล้ว**: (1) ส่ง `x` เป็น string (`.toFixed(1)`) เข้า `crowdFigure` แล้วใช้ `x + hw` ในฟังก์ชัน — บวกเลขกับ string กลายเป็นต่อ string แทนบวกจริง ทำให้พิกัด SVG เพี้ยน (เช่น `"1526.8" + 8.3` → `"1526.88.3"`) เกิด parse error หลักพันจุดทั่วหน้า แก้ด้วยการบังคับแปลงเป็นตัวเลขที่ต้นฟังก์ชัน (2) `.life-fill{position:relative}` มาทีหลัง `.dt-p{position:absolute}` ใน stylesheet ทำให้ช่อง mosaic ที่เปลี่ยนเป็นฉากคนเสีย layout (คลาสหลังชนะ) แก้ด้วยการย้าย `position` ไปกำหนดต่อจุดใช้งานแทนที่ฐาน `.life-fill` (3) เดิมมี `document.querySelectorAll('[data-scene]')` (ไม่ scope class) ซึ่งจะดึงฉากคนใหม่ไปวาดทับด้วยกราฟิก MOVE/MIX/MATCH ผิดฉาก — แก้ด้วยการ scope เป็น `.pf-photo[data-scene]`
+  - Artifact เดิม อัปเดตแล้ว (Version 15): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+
+## 19. Motion & Interaction Audit (2026-09-25)
+
+**เหตุผล**: ผู้ใช้แจ้งว่าเจอ section 2 และ 3 บางเวอร์ชัน "ไม่ทำงาน" ระหว่างทดสอบเอง ไล่ตรวจทุกกลไก motion/interaction ในหน้าเว็บอย่างเป็นระบบ
+
+**ข้อจำกัดของการตรวจครั้งนี้**: หน้าต่างพรีวิวของเครื่องมือระหว่าง audit อยู่ในสถานะไม่ focus (`document.hidden = true`) ซึ่งเบราว์เซอร์จะ**หยุดยิง `requestAnimationFrame` และ `IntersectionObserver` ทั้งหมดโดยสมบูรณ์** (ยืนยันแล้วด้วยการสร้าง IntersectionObserver ทดสอบตรงๆ บน element ที่อยู่ในจอจริง แต่ callback ไม่ยิงเลย) — กลไก scroll-driven ส่วนใหญ่ในเว็บนี้ (parallax, pinned crossfade, icon-forming, mosaic reveal) พึ่งสองตัวนี้ จึงตรวจสดผ่าน real scroll ไม่ได้ในรอบนี้ ใช้วิธีเลี่ยง 3 ทาง:
+1. ทดสอบ interaction ที่เป็น click handler ตรงๆ (ไม่ผ่าน rAF/IO) ได้ปกติ
+2. บางฟังก์ชัน (`onHeroScroll`, `onPinScroll`) ผูกกับ `resize` event ควบคู่กับ `scroll` อยู่แล้ว (ไว้รองรับ viewport เปลี่ยนขนาด) — ใช้ `dispatchEvent(new Event('resize'))` เรียกโดยตรงได้ ไม่ผ่าน rAF
+3. `position:sticky` เป็นกลไก CSS layout ล้วนๆ ไม่ต้องพึ่ง JS/rAF — ตรวจได้ตรงๆ ผ่าน `getBoundingClientRect()` ที่ scrollY ต่างๆ
+
+**ผลตรวจ — ยืนยันว่าทำงานถูกต้อง:**
+- Header: เปิด/ปิดเมนู overlay, ขยาย submenu ✅ (click handler)
+- **Section 3 ทั้ง 3 เวอร์ชัน — กลไก `position:sticky` ทำงานถูกต้องหมด** (ตรวจผ่าน getBoundingClientRect ที่จุด start/mid/end ของแต่ละเวอร์ชัน): A (pinned card ค้างที่ top:0 ตลอด pin range), B (sticky-stack — panel ถัดไปเลื่อนขึ้นทับ panel ก่อนหน้าได้ถูกต้อง เห็น top ของแต่ละ panel เปลี่ยนตามลำดับ), C (การ์ดภาพซ้าย sticky นิ่งขณะ list ขวาเลื่อนผ่าน)
+- Section 3-A: pinned crossfade + rail active state (ตรวจผ่าน resize-bypass ที่ scroll 3 จุด — active scene และ rail ตรงกันทุกจุด) ✅
+- Hero: กลไกประตูเปิด (ตรวจผ่าน resize-bypass ที่ปิด/กลางทาง/เปิดสุด — gate opacity, door transform, content opacity เปลี่ยนถูกต้องตามลำดับ) ✅
+- Section 6: ปุ่มช่วงเวลากราฟหุ้น (1M/3M/6M/1Y) เปลี่ยนกราฟจริง ✅
+- Section 7: ปุ่มกรองเรื่องราวตาม MOVE/MIX/MATCH ✅
+- Footer: toggle MOVE/MIX/MATCH เปลี่ยน ticker จริง ✅
+- แผงเดโม + ตัวสลับเวอร์ชัน: เปิด/ปิดแผง, สลับได้ครบทุกปุ่ม — Section 2 A/B/C/D และ Section 3 A/B/C (แสดง/ซ่อน section ถูกต้องทุกตัว) ✅
+- Section 2-A บนจอแคบ (375px จำลอง): การ์ดไม่ล้นขอบจอ ✅ (แต่ยังไม่ได้ปรับ layout ให้เหมาะกับจอเล็กจริงจัง ตามที่ตกลงว่า responsive เป็น pass แยก)
+
+**สิ่งที่พบระหว่างตรวจ (เป็นพฤติกรรมที่ตั้งใจ แต่ทำให้เข้าใจผิดว่า "พัง" ได้ง่าย):**
+- ระบบจำเวอร์ชันที่เลือกไว้ผ่าน `localStorage` แยกต่อ Section 2/3 — ถ้าเคยสลับไปเวอร์ชันอื่นไว้ (เช่นระหว่างทดสอบ) แล้วโหลดหน้าใหม่ จะข้ามเวอร์ชัน A ไปโชว์เวอร์ชันที่จำไว้ทันที ไม่ใช่บั๊ก แต่ถ้าไม่รู้กลไกนี้จะดูเหมือนหน้าเว็บ "เพี้ยน" หรือ section หายไป — **ควรพิจารณา**: เพิ่มปุ่ม/ทางรีเซ็ตกลับเวอร์ชัน A ให้ชัดเจนขึ้นในแผงเดโม
+
+**ยังตรวจสดไม่ได้ในรอบนี้ (ต้องมีหน้าต่างพรีวิว focus จริงถึงจะ rAF/IO ทำงาน):**
+- Header hide-on-scroll-down / scrolled-state (โค้ดไม่เปลี่ยนตั้งแต่รอบแรกๆ ของ build)
+- ปุ่ม Back to Top โผล่ตาม scroll position
+- Section 2-A parallax cards, Section 2-C icon ก่อตัวตอน scroll เข้าจอ, Section 2-D mosaic reveal + flip ทุก 3 วิ
+- Section 3-C sticky visual สลับภาพตามกลุ่มที่ scroll ผ่าน
+- Section 4 proof opacity ตาม scroll focus, Section 5 pinned claims + parallax
+- Loader (ตอน pane ไม่ focus จะไปเข้า failsafe 4 วินาทีแทน flow ปกติ — พฤติกรรมนี้เกิดเฉพาะตอน tab ไม่ active ซึ่งผู้ใช้จริงจะไม่เจอ เพราะ tab ที่กำลังโหลดหน้าเว็บจะ active อยู่เสมอ)
+
+**ขั้นต่อไป**: รอผู้ใช้ระบุให้ชัดว่าเจอปัญหาที่ section/เวอร์ชันไหนกับขนาดจอ/เบราว์เซอร์ใด เพื่อ reproduce และแก้ตรงจุด — หรือถ้าเป็นไปได้ ให้เปิดหน้าต่างพรีวิวไว้ (focus) ระหว่างตรวจรอบหน้าเพื่อยืนยัน scroll-driven effect ที่เหลือได้ครบ

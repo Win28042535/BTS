@@ -393,10 +393,10 @@
   .eco-net circle{ fill:var(--silver); opacity:.6; }
 
   .eco-card{
-    position:absolute; z-index:2;
+    position:absolute; z-index:2; overflow:hidden;
     width:270px; border-radius:20px;
     padding:26px 24px 22px;
-    background:linear-gradient(160deg, rgba(255,255,255,.07), rgba(255,255,255,.02));
+    background:linear-gradient(160deg, rgba(255,255,255,.07), rgba(255,255,255,.02)), #161C29;
     border:1px solid rgba(255,255,255,.12);
     backdrop-filter:blur(2px);
     box-shadow:0 30px 60px -25px rgba(0,0,0,.65);
@@ -645,6 +645,39 @@
   @media (max-width:900px){
     /* 8 columns get unreadably small on phones — keep a legible min size and let it scroll horizontally instead */
     .ecoD-grid{ min-width:920px; aspect-ratio:920 / 460; }
+  }
+
+  /* ============ Lifestyle silhouette scenes (Image DNA "Human" placeholders) — sections 2 & 3 ============ */
+  /* position is set per usage (.eco-scene / .ecoB-thumb / .ecoC-pano / .dt-p) so it never fights .dt-p's own position:absolute */
+  .life-fill{ overflow:hidden; background:#1B2232; }
+  .life-fill > svg{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+  /* slow opposite drift of crowd rows: reads like people moving past the camera */
+  .ls-drift, .ls-drift-r{ transform-box:view-box; animation:lsDrift 18s ease-in-out infinite alternate; }
+  .ls-drift-r{ animation-duration:26s; animation-direction:alternate-reverse; }
+  @keyframes lsDrift{ from{ transform:translateX(-2%); } to{ transform:translateX(2%); } }
+  .life-tag{
+    position:absolute; right:12px; bottom:10px; z-index:1;
+    padding:4px 10px; border-radius:999px;
+    font-size:10.5px; font-weight:700; letter-spacing:.04em;
+    color:rgba(255,255,255,.88); background:rgba(8,12,20,.5);
+  }
+
+  .eco-scene{ position:relative; margin:-26px -24px 0; height:150px; border-radius:20px 20px 0 0; }
+  .eco-card .eco-scene + .icon-tile{ position:relative; margin-top:-26px; margin-bottom:14px; box-shadow:0 0 0 4px #161C29; }
+  .eco-card .eco-num{ z-index:2; color:rgba(255,255,255,.92); text-shadow:0 1px 8px rgba(0,0,0,.65); }
+  .eco-note{
+    display:table; margin:18px auto 0; padding:6px 12px; border-radius:999px;
+    font-size:11.5px; font-weight:700; letter-spacing:.04em;
+    color:rgba(255,255,255,.6); border:1px dashed rgba(255,255,255,.3);
+  }
+  .ecoB-scene{ position:relative; aspect-ratio:760 / 480; border-radius:18px; margin:0 0 22px; }
+  .ecoB-thumb{ position:relative; width:96px; height:96px; border-radius:16px; flex:none; }
+  .ecoC-pano{ position:relative; aspect-ratio:2000 / 480; border-radius:24px; margin:-40px 0 72px; }
+  .dt-life::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:42%; background:linear-gradient(0deg, rgba(8,12,20,.6), transparent); }
+  .dt-life .dt-cap{ z-index:1; color:rgba(255,255,255,.88); }
+
+  @media (prefers-reduced-motion:reduce){
+    .ls-drift, .ls-drift-r{ animation:none; }
   }
 
   /* ============ Section 3 — MOVE · MIX · MATCH (version A: pinned card crossfade) ============ */
@@ -1605,16 +1638,18 @@ setTimeout(function(){
 
       <article class="eco-card eco-card--people" data-speed="0.10">
         <span class="eco-num">01</span>
+        <div class="eco-scene life-fill" data-scene="platform"></div>
         <span class="icon-tile"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
         <h3>People</h3>
-        <p>ผู้โดยสารกว่า 700,000 คน/วัน เดินทางผ่านเครือข่าย BTS Skytrain</p>
+        <p>ผู้โดยสารหลากหลายวัยกว่า 700,000 คน/วัน ใช้ชีวิตประจำวันผ่านเครือข่าย BTS Skytrain</p>
       </article>
 
       <article class="eco-card eco-card--business" data-speed="0.22">
         <span class="eco-num">02</span>
+        <div class="eco-scene life-fill" data-scene="street"></div>
         <span class="icon-tile"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M2 22h20"/></svg></span>
         <h3>Business</h3>
-        <p>เชื่อมโยงพันธมิตรธุรกิจและร้านค้าตลอดแนวเส้นทางทั่วกรุงเทพฯ</p>
+        <p>เชื่อมโยงพันธมิตรธุรกิจและร้านค้าตลอดแนวเส้นทาง ให้คนเมืองใช้ชีวิตได้สะดวกขึ้นทุกวัน</p>
       </article>
 
       <article class="eco-card eco-card--data" data-speed="0.16">
@@ -1653,13 +1688,13 @@ setTimeout(function(){
         </div>
         <ul class="ecoB-rows">
           <li class="ecoB-row">
-            <svg class="dotm" data-shape="people" viewBox="0 0 132 132" aria-hidden="true"></svg>
-            <div><span class="ecoB-idx">01</span><h4>People</h4><p>ผู้โดยสารกว่า 700,000 คน/วัน เดินทางผ่านเครือข่าย BTS Skytrain</p></div>
+            <div class="life-fill ecoB-thumb" data-scene="platform"></div>
+            <div><span class="ecoB-idx">01</span><h4>People</h4><p>ผู้โดยสารหลากหลายวัยกว่า 700,000 คน/วัน ใช้ชีวิตประจำวันผ่านเครือข่าย BTS Skytrain</p></div>
             <span class="ecoB-pin" aria-hidden="true"></span>
           </li>
           <li class="ecoB-row">
-            <svg class="dotm" data-shape="building" viewBox="0 0 132 132" aria-hidden="true"></svg>
-            <div><span class="ecoB-idx">02</span><h4>Business</h4><p>พันธมิตรและร้านค้ากว่า 200 ราย ตลอดแนวเส้นทางทั่วกรุงเทพฯ</p></div>
+            <div class="life-fill ecoB-thumb" data-scene="street"></div>
+            <div><span class="ecoB-idx">02</span><h4>Business</h4><p>พันธมิตรและร้านค้ากว่า 200 ราย ตลอดแนวเส้นทาง ที่เป็นส่วนหนึ่งในชีวิตประจำวันของคนเมือง</p></div>
             <span class="ecoB-pin" aria-hidden="true"></span>
           </li>
         </ul>
@@ -1703,6 +1738,8 @@ setTimeout(function(){
           <span class="ecoC-note">ตัวเลขตัวอย่าง · รอข้อมูลจริงจากทีมธุรกิจ</span>
         </div>
       </div>
+
+      <div class="life-fill ecoC-pano" data-scene="street"></div>
 
       <ol class="ecoC-list">
         <li class="ecoC-row">
@@ -1785,8 +1822,10 @@ setTimeout(function(){
                 <path id="mvPath" d="M70 420 L70 340 Q70 310 100 310 L200 310 Q230 310 230 280 L230 200 Q230 170 260 170 L310 170 Q330 170 330 150 L330 96" fill="none" stroke="rgba(169,183,204,.3)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                 <path class="mv-route-lit" d="M70 420 L70 340 Q70 310 100 310 L200 310 Q230 310 230 280 L230 200 Q230 170 260 170 L310 170 Q330 170 330 150 L330 96" fill="none" stroke="#3FA3EC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 
-                <circle cx="150" cy="310" r="6" fill="#23324E" stroke="#FFFFFF" stroke-width="2"/>
-                <circle cx="230" cy="240" r="6" fill="#23324E" stroke="#FFFFFF" stroke-width="2"/>
+                <circle cx="150" cy="310" r="13" fill="#23324E" stroke="#FFFFFF" stroke-width="1.5"/>
+                <g transform="translate(143 303)" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="3.2" r="2" fill="#FFFFFF" stroke="none"/><path d="M7 7c-2.5 0-4 1.4-4 3.6V13"/><path d="M7 7c2.5 0 4 1.4 4 3.6V13"/></g>
+                <circle cx="230" cy="240" r="13" fill="#23324E" stroke="#FFFFFF" stroke-width="1.5"/>
+                <g transform="translate(223 233)" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="4.5" cy="3" r="1.9" fill="#FFFFFF" stroke="none"/><path d="M4.5 6.5v6.2"/><path d="M2 9h5"/><path d="M4.5 12.7 2.5 15"/><path d="M4.5 12.7l2.3 2.3"/><circle cx="10.5" cy="4" r="1.9" fill="#FFFFFF" stroke="none"/><path d="M10.5 7.5v5.7"/><path d="M8.3 9.8h4.4"/><path d="M10.5 13.2l-1.8 2"/><path d="M10.5 13.2l1.8 2"/></g>
                 <circle cx="290" cy="170" r="6" fill="#23324E" stroke="#FFFFFF" stroke-width="2"/>
 
                 <text class="mv-leg" x="84" y="384">เดิน</text>
@@ -3021,8 +3060,8 @@ setTimeout(function(){
       wifi: '<path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.859a10 10 0 0 1 14 0"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/>'
     };
     var PHOTOS = [
-      { gc:'1 / 2', gr:'1 / 2', icon:'people',   label:'People',        g1:'#0B7FC9', g2:'#003E6D' },
-      { gc:'3 / 5', gr:'1 / 2', icon:'business',  label:'Business',      g1:'#2E3F5F', g2:'#0B1426' },
+      { gc:'1 / 2', gr:'1 / 2', icon:'people',   label:'People',        g1:'#0B7FC9', g2:'#003E6D', scene:'platform' },
+      { gc:'3 / 5', gr:'1 / 2', icon:'business',  label:'Business',      g1:'#2E3F5F', g2:'#0B1426', scene:'street' },
       { gc:'6 / 8', gr:'1 / 3', icon:'data',      label:'Data',          g1:'#00599B', g2:'#062B4D' },
       { gc:'8 / 9', gr:'1 / 2', icon:'bulb',      label:'Opportunities', g1:'#4C5A72', g2:'#1B2232' },
       { gc:'2 / 3', gr:'2 / 3', icon:'move',      label:'Move',          g1:'#1C86D6', g2:'#00436F' },
@@ -3031,7 +3070,7 @@ setTimeout(function(){
       { gc:'3 / 4', gr:'3 / 4', icon:'network',   label:'Network',       g1:'#23324E', g2:'#0B1426' },
       { gc:'6 / 7', gr:'3 / 4', icon:'trend',     label:'Growth',        g1:'#0B7FC9', g2:'#053A63' },
       { gc:'7 / 9', gr:'3 / 5', icon:'business',  label:'Future City',   g1:'#12161F', g2:'#00365E' },
-      { gc:'1 / 3', gr:'4 / 5', icon:'leaf',      label:'Community',     g1:'#4C5A72', g2:'#23324E' },
+      { gc:'1 / 3', gr:'4 / 5', icon:'leaf',      label:'Community',     g1:'#4C5A72', g2:'#23324E', scene:'market' },
       { gc:'3 / 4', gr:'4 / 5', icon:'card',      label:'Finance',       g1:'#7C8CA6', g2:'#3A4A64' },
       { gc:'5 / 6', gr:'4 / 5', icon:'wifi',      label:'ICT',           g1:'#00599B', g2:'#053A63' }
     ];
@@ -3051,9 +3090,12 @@ setTimeout(function(){
     function dist(t){ var c0 = parseInt(t.gc, 10), r0 = parseInt(t.gr, 10); return Math.hypot(c0 - 1, r0 - 1); }
     var html = '';
     PHOTOS.forEach(function(t){
+      var cls = t.scene ? 'dt-p life-fill dt-life' : 'dt-p dt-ph';
+      var attrs = t.scene ? ' data-scene="' + t.scene + '"' : '';
+      var style = t.scene ? '--d:' + Math.round(dist(t) * 90) + 'ms' : '--g1:' + t.g1 + ';--g2:' + t.g2 + ';--d:' + Math.round(dist(t) * 90) + 'ms';
       html += '<div class="dt" style="grid-column:' + t.gc + ';grid-row:' + t.gr + '">' +
-        '<div class="dt-p dt-ph" style="--g1:' + t.g1 + ';--g2:' + t.g2 + ';--d:' + Math.round(dist(t) * 90) + 'ms">' +
-        '<svg class="dt-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' + ICO[t.icon] + '</svg>' +
+        '<div class="' + cls + '"' + attrs + ' style="' + style + '">' +
+        (t.scene ? '' : '<svg class="dt-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' + ICO[t.icon] + '</svg>') +
         '<span class="dt-cap">' + t.label + '</span></div></div>';
     });
     CONTENT.forEach(function(t, i){
@@ -3091,6 +3133,95 @@ setTimeout(function(){
   })();
 
   /* ---- Section 3 · B/C: placeholder "photos" drawn as SVG (swap for real images later) ---- */
+  /* ---- Shared: crowd-of-silhouettes ("Human" Image DNA placeholder) — diversity read through pose/height/props, not colour ---- */
+  var crowdSeed = 5;
+  function crowdRnd(){ crowdSeed = (crowdSeed * 16807) % 2147483647; return (crowdSeed - 1) / 2147483646; }
+  var CROWD_POSES = ['stand','walk','phone','bag','cane','stroller','kid','backpack'];
+  function crowdFigure(x, baseY, h, pose, fill){
+    x = +x; // guard against a stringified caller — "+" would otherwise concatenate, not add
+    var hw = h * .17; // shoulder half-width
+    var headR = h * .11;
+    var headY = baseY - h + headR;
+    var neckY = headY + headR * .9;
+    var legSplit = pose === 'walk' ? h * .1 : h * .03;
+    var kneeY = baseY - h * .34;
+    var s = '<g fill="' + fill + '">';
+    s += '<circle cx="' + x + '" cy="' + headY.toFixed(1) + '" r="' + headR.toFixed(1) + '"/>';
+    var torsoH = pose === 'kid' ? h * .42 : h * .5;
+    var torsoBottom = neckY + torsoH;
+    s += '<path d="M' + (x - hw) + ' ' + neckY.toFixed(1) + ' Q' + x + ' ' + (neckY - headR * .5).toFixed(1) + ' ' + (x + hw) + ' ' + neckY.toFixed(1) +
+         ' L' + (x + hw * .82) + ' ' + torsoBottom.toFixed(1) + ' Q' + x + ' ' + (torsoBottom + hw * .3).toFixed(1) + ' ' + (x - hw * .82) + ' ' + torsoBottom.toFixed(1) + ' Z"/>';
+    s += '<path d="M' + (x - hw * .55) + ' ' + torsoBottom.toFixed(1) + ' L' + (x - hw * .8 - legSplit) + ' ' + kneeY.toFixed(1) + ' L' + (x - hw * .55 - legSplit) + ' ' + baseY.toFixed(1) +
+         ' L' + (x - hw * .1 - legSplit) + ' ' + baseY.toFixed(1) + ' L' + (x - hw * .15) + ' ' + kneeY.toFixed(1) + ' Z"/>';
+    s += '<path d="M' + (x + hw * .55) + ' ' + torsoBottom.toFixed(1) + ' L' + (x + hw * .8 + legSplit) + ' ' + kneeY.toFixed(1) + ' L' + (x + hw * .55 + legSplit) + ' ' + baseY.toFixed(1) +
+         ' L' + (x + hw * .1 + legSplit) + ' ' + baseY.toFixed(1) + ' L' + (x + hw * .15) + ' ' + kneeY.toFixed(1) + ' Z"/>';
+    if(pose === 'phone'){
+      s += '<rect x="' + (x + hw * .85) + '" y="' + (neckY + torsoH * .25) + '" width="' + hw * .5 + '" height="' + h * .12 + '" rx="' + h * .015 + '" transform="rotate(-18 ' + (x + hw * .85) + ' ' + (neckY + torsoH * .25) + ')"/>';
+    } else if(pose === 'bag'){
+      s += '<rect x="' + (x - hw * 1.3) + '" y="' + (neckY + torsoH * .3) + '" width="' + hw * .5 + '" height="' + h * .18 + '" rx="' + h * .02 + '"/>';
+    } else if(pose === 'backpack'){
+      s += '<rect x="' + (x - hw * .55) + '" y="' + (neckY + h * .02) + '" width="' + hw * 1.1 + '" height="' + torsoH * .7 + '" rx="' + h * .03 + '" opacity=".7"/>';
+    } else if(pose === 'cane'){
+      s += '<line x1="' + (x + hw * .9) + '" y1="' + (neckY + torsoH * .4) + '" x2="' + (x + hw * 1.1) + '" y2="' + baseY + '" stroke="' + fill + '" stroke-width="' + (h * .025) + '"/>';
+    } else if(pose === 'stroller'){
+      s += '<rect x="' + (x + hw) + '" y="' + kneeY + '" width="' + h * .26 + '" height="' + h * .22 + '" rx="' + h * .04 + '"/>' +
+           '<circle cx="' + (x + hw + h * .04) + '" cy="' + baseY + '" r="' + h * .035 + '"/><circle cx="' + (x + hw + h * .22) + '" cy="' + baseY + '" r="' + h * .035 + '"/>';
+    }
+    return s + '</g>';
+  }
+  function crowdRow(cx, baseY, avgH, spread, count, tones, seedOffset){
+    var out = '', i;
+    for(i = 0; i < seedOffset; i++) crowdRnd();
+    for(i = 0; i < count; i++){
+      var t = count > 1 ? i / (count - 1) : .5;
+      var x = cx + (t - .5) * spread + (crowdRnd() - .5) * (spread / count) * .5;
+      var h = avgH * (.72 + crowdRnd() * .5);
+      var pose = CROWD_POSES[Math.floor(crowdRnd() * CROWD_POSES.length)];
+      var tone = tones[Math.floor(crowdRnd() * tones.length)];
+      out += crowdFigure(x.toFixed(1), baseY, h, pose, tone);
+    }
+    return out;
+  }
+  /* self-contained scene: crowd of people in an urban / BTS-platform setting */
+  function lifeSceneSVG(kind, uid){
+    var s = 11 + uid * 13;
+    function rnd(){ s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }
+    crowdSeed = 3 + uid * 17;
+    var W = 400, H = 300;
+    var out = '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><defs>';
+    var backTone = 'rgba(169,183,204,.34)', midTone = 'rgba(169,183,204,.6)', foreTone = '#E9EEF5';
+    var x;
+    if(kind === 'platform'){
+      out += '<linearGradient id="lf' + uid + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0B1426"/><stop offset="1" stop-color="#1B2A44"/></linearGradient></defs>';
+      out += '<rect width="' + W + '" height="' + H + '" fill="url(#lf' + uid + ')"/>';
+      out += '<rect y="' + (H - 26) + '" width="' + W + '" height="4" fill="rgba(255,214,110,.55)"/>';
+      out += '<rect y="' + (H - 20) + '" width="' + W + '" height="20" fill="#080C15"/>';
+      out += '<g class="ls-drift-r">' + crowdRow(W * .5, H - 22, 78, W * 1.05, 5, [backTone], 1) + '</g>';
+      out += '<g class="ls-drift">' + crowdRow(W * .5, H - 4, 118, W * 1.1, 4, [midTone, foreTone], 7) + '</g>';
+      out += '<rect x="-40" y="' + (H * .18) + '" width="120" height="' + (H * .5) + '" rx="10" fill="#DCE5F0" opacity=".9"/><rect x="-40" y="' + (H * .34) + '" width="120" height="8" fill="' + colorSet.blue + '"/>';
+    } else if(kind === 'street'){
+      out += '<linearGradient id="lf' + uid + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#14203A"/><stop offset="1" stop-color="#243657"/></linearGradient></defs>';
+      out += '<rect width="' + W + '" height="' + H + '" fill="url(#lf' + uid + ')"/>';
+      x = -20;
+      while(x < W + 20){ var bw = 30 + rnd() * 50, bh = H * (.3 + rnd() * .35); out += '<rect x="' + x.toFixed(0) + '" y="' + (H * .5 - bh).toFixed(0) + '" width="' + bw.toFixed(0) + '" height="' + (bh + H * .1).toFixed(0) + '" fill="#0E1626" opacity=".8"/>'; x += bw + 4; }
+      out += '<rect y="' + (H - 34) + '" width="' + W + '" height="34" fill="#111A2C"/>';
+      for(x = 6; x < W; x += 26) out += '<rect x="' + x + '" y="' + (H - 30) + '" width="14" height="26" fill="rgba(255,255,255,.14)"/>';
+      out += '<g class="ls-drift-r">' + crowdRow(W * .5, H - 30, 82, W * 1.1, 5, [backTone], 2) + '</g>';
+      out += '<g class="ls-drift">' + crowdRow(W * .5, H - 2, 126, W * 1.05, 4, [midTone, foreTone], 9) + '</g>';
+    } else { // market / retail
+      out += '<linearGradient id="lf' + uid + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1A1420"/><stop offset="1" stop-color="#2C2036"/></linearGradient></defs>';
+      out += '<rect width="' + W + '" height="' + H + '" fill="url(#lf' + uid + ')"/>';
+      for(x = 10; x < W; x += 46){ out += '<rect x="' + x + '" y="' + (H * .3) + '" width="34" height="' + (H * .5) + '" rx="4" fill="rgba(169,183,204,.14)"/>'; }
+      out += '<g class="ls-drift-r">' + crowdRow(W * .5, H - 18, 84, W * 1.05, 4, [backTone], 4) + '</g>';
+      out += '<g class="ls-drift">' + crowdRow(W * .5, H, 128, W * 1.1, 3, [midTone, foreTone], 11) + '</g>';
+    }
+    return out + '</svg>';
+  }
+  var colorSet = { blue:'#00599B', red:'#ED1D24', navy:'#23324E' };
+  Array.prototype.forEach.call(document.querySelectorAll('.life-fill[data-scene]'), function(el, k){
+    el.innerHTML = lifeSceneSVG(el.getAttribute('data-scene'), k);
+  });
+
   function pfSceneSVG(kind, uid){
     var s = 3 + uid * 7;
     function rnd(){ s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }
@@ -3115,6 +3246,8 @@ setTimeout(function(){
       out += '<rect x="400" y="620" width="1300" height="120" rx="48" fill="#DCE5F0"/><rect x="400" y="706" width="1300" height="12" fill="#00599B"/>';
       for(x = 500; x < 1600; x += 74) out += '<rect x="' + x + '" y="642" width="50" height="34" rx="5" fill="' + (rnd() < .5 ? '#0A2F52' : '#FFE1AA') + '"/>';
       out += '<circle cx="424" cy="700" r="7" fill="#FFF6D8"/>';
+      out += '<g class="ls-drift-r">' + crowdRow(1080, 618, 74, 900, 6, ['rgba(35,50,78,.85)'], uid * 5) + '</g>';
+      out += '<g class="ls-drift">' + crowdRow(1080, 618, 108, 760, 4, ['#0A1A30', '#23324E'], uid * 5 + 20) + '</g>';
     } else if(kind === 'mix'){
       out += '<linearGradient id="pfMxSky' + uid + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0E1522"/><stop offset=".6" stop-color="#34425C"/><stop offset="1" stop-color="#9AA9C0"/></linearGradient></defs>';
       out += '<rect width="1600" height="1000" fill="url(#pfMxSky' + uid + ')"/>';
@@ -3137,6 +3270,9 @@ setTimeout(function(){
         }
         x += w2 + 8;
       }
+      out += '<rect y="972" width="1600" height="28" fill="#0A1220"/>';
+      out += '<g class="ls-drift-r">' + crowdRow(800, 986, 66, 1500, 8, ['rgba(20,28,42,.9)'], uid * 5 + 1) + '</g>';
+      out += '<g class="ls-drift">' + crowdRow(800, 1000, 96, 1300, 5, ['#141C2A', '#3F5A86'], uid * 5 + 25) + '</g>';
     } else {
       out += '<radialGradient id="pfMtBg' + uid + '" cx=".5" cy=".45" r=".75"><stop offset="0" stop-color="#ED1D24"/><stop offset=".55" stop-color="#9A1219"/><stop offset="1" stop-color="#3A0B10"/></radialGradient>' +
              '<linearGradient id="pfMtSteel' + uid + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EEF2F8"/><stop offset=".35" stop-color="#B9C5D6"/><stop offset=".62" stop-color="#7C8CA6"/><stop offset="1" stop-color="#C6D0DE"/></linearGradient></defs>';
@@ -3149,7 +3285,7 @@ setTimeout(function(){
     }
     return out + '</svg>';
   }
-  Array.prototype.forEach.call(document.querySelectorAll('[data-scene]'), function(el, k){
+  Array.prototype.forEach.call(document.querySelectorAll('.pf-photo[data-scene]'), function(el, k){
     el.innerHTML = pfSceneSVG(el.getAttribute('data-scene'), k);
   });
 
