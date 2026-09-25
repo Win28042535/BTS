@@ -1,5 +1,2 @@
-# Licensed font files — self-hosted copies (WOFF2 subset), not redistributed publicly
-fonts/
-
 # session-specific local dev config
 .claude/

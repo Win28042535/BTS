@@ -1004,6 +1004,51 @@
     .proof-item{ opacity:1; transition:none; }
   }
 
+  /* ============ Section 4 · version B — dark stats grid + logo-arch photo mask (DNA: motionsites.ai "Arceage Stats") ============ */
+  .s4-wrap{ position:relative; }
+  .proofB{ position:relative; background:#0B0D12; color:var(--white); overflow:hidden; }
+  .proofB-inner{
+    max-width:1320px; margin:0 auto; padding:150px 24px 150px;
+    display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:64px; align-items:center;
+  }
+  .proofB-text{ opacity:0; transform:translateY(18px); transition:opacity .9s ease, transform 1s cubic-bezier(.2,.7,.2,1); }
+  .proofB.in .proofB-text{ opacity:1; transform:none; }
+  .proofB .eyebrow{ display:flex; align-items:center; gap:10px; color:var(--silver); margin-bottom:22px; }
+  .proofB-h2{ margin:0 0 18px; font-size:clamp(34px,4vw,54px); font-weight:800; line-height:1.12; letter-spacing:-.005em; }
+  .proofB-h2 em{ display:block; font-style:normal; font-weight:300; color:#BFD7F0; }
+  .proofB-lede{ margin:0 0 44px; max-width:44ch; font-size:15.5px; line-height:1.7; color:rgba(255,255,255,.5); }
+  .proofB-stats{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:34px 40px; margin:0 0 34px; padding:0; list-style:none; max-width:520px; }
+  .proofB-stat b{
+    display:block; margin-bottom:10px;
+    font-size:clamp(40px,4.4vw,60px); font-weight:300; line-height:1; letter-spacing:-.02em;
+    font-variant-numeric:tabular-nums; color:var(--white);
+  }
+  .proofB-stat b small{ font-size:.42em; font-weight:400; letter-spacing:0; margin-left:4px; color:rgba(255,255,255,.7); }
+  .proofB-stat span{ display:block; font-size:10.5px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:rgba(255,255,255,.42); }
+  .proofB-note{ display:inline-flex; padding:6px 12px; border-radius:999px; font-size:11.5px; font-weight:700; letter-spacing:.04em; color:rgba(255,255,255,.55); border:1px dashed rgba(255,255,255,.28); }
+
+  /* double arch cut from the BTS mark — the photo/"video" lives inside the logo shape */
+  .proofB-visual{
+    position:relative; aspect-ratio:1 / 1; width:100%; max-width:560px; justify-self:end;
+    -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Cpath d='M28 392V196a172 172 0 0 1 344 0v196h-74V196a98 98 0 0 0-196 0v196Z'/%3E%3Cpath d='M126 392V206a74 74 0 0 1 148 0v186h-44V208a30 30 0 0 0-60 0v184Z'/%3E%3C/svg%3E") center / contain no-repeat;
+            mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Cpath d='M28 392V196a172 172 0 0 1 344 0v196h-74V196a98 98 0 0 0-196 0v196Z'/%3E%3Cpath d='M126 392V206a74 74 0 0 1 148 0v186h-44V208a30 30 0 0 0-60 0v184Z'/%3E%3C/svg%3E") center / contain no-repeat;
+    opacity:0; transform:scale(1.04); transition:opacity 1.2s ease .25s, transform 1.6s cubic-bezier(.2,.7,.2,1) .25s;
+  }
+  .proofB.in .proofB-visual{ opacity:1; transform:none; }
+  .proofB-visual canvas{ display:block; width:100%; height:100%; }
+  .proofB-tag{ position:absolute; right:92px; bottom:40px; z-index:2; }
+
+  @media (prefers-reduced-motion:reduce){
+    .proofB-text, .proofB-visual{ transition:none; opacity:1; transform:none; }
+  }
+
+  @media (max-width:860px){
+    .proofB-inner{ grid-template-columns:minmax(0,1fr); padding:120px 20px 90px; gap:40px; }
+    .proofB-stats{ grid-template-columns:repeat(2, minmax(0,1fr)); max-width:none; gap:26px 20px; }
+    .proofB-visual{ max-width:340px; justify-self:center; }
+    .proofB-tag{ right:20px; bottom:20px; }
+  }
+
   /* ============ Section 5 — การเชื่อมต่อที่สร้างผลกระทบ (pinned photo + claims) ============ */
   .impact{ position:relative; height:440vh; background:var(--dark); }
   .im-stage{ position:sticky; top:0; height:100vh; overflow:hidden; color:var(--white); }
@@ -2079,8 +2124,9 @@ setTimeout(function(){
   </section>
   </div>
 
-  <!-- ============ Section 4 — เครือข่ายที่ขับเคลื่อนธุรกิจ ============ -->
-  <section class="proof" id="proof">
+  <!-- ============ Section 4 — เครือข่ายที่ขับเคลื่อนธุรกิจ (versions A / B, switchable) ============ -->
+  <div class="s4-wrap" id="s4Wrap">
+  <section class="proof" id="proof" data-variant="a">
     <div class="proof-inner">
       <div class="proof-head">
         <div class="eyebrow"><span class="pf-dot" style="background:var(--red)"></span>เครือข่ายที่ขับเคลื่อนธุรกิจ</div>
@@ -2113,6 +2159,28 @@ setTimeout(function(){
       </ol>
     </div>
   </section>
+
+  <!-- ---- Section 4 · version B — dark stats grid + count-up + logo-arch "video" (DNA: motionsites.ai "Arceage Stats") ---- -->
+  <section class="proofB" id="proofB" data-header="dark" data-variant="b" hidden>
+    <div class="proofB-inner">
+      <div class="proofB-text">
+        <div class="eyebrow"><span class="pf-dot" style="background:var(--red)"></span>เครือข่ายที่ขับเคลื่อนธุรกิจ</div>
+        <h2 class="proofB-h2">เครือข่ายที่ใหญ่พอ<em>ให้ทั้งเมืองไว้วางใจ</em></h2>
+        <p class="proofB-lede">กว่าสองทศวรรษที่คนกรุงเทพฯ ฝากการเดินทางในแต่ละวันไว้กับ BTS — ตัวเลขเหล่านี้คือขนาดของเครือข่าย และความเชื่อมั่นที่สะสมมาตลอดเส้นทาง</p>
+        <ul class="proofB-stats">
+          <li class="proofB-stat"><b><span class="pb-num" data-to="26" data-dec="0">26</span>+<small>ปี</small></b><span>ให้บริการคนเมือง</span></li>
+          <li class="proofB-stat"><b><span class="pb-num" data-to="200" data-dec="0">200</span>+</b><span>พันธมิตรในระบบนิเวศ</span></li>
+          <li class="proofB-stat"><b><span class="pb-num" data-to="98" data-dec="0">98</span>%</b><span>สถานีเชื่อมโครงข่าย ICT</span></li>
+          <li class="proofB-stat"><b><span class="pb-num" data-to="40" data-dec="0">40</span><small>บริษัท</small></b><span>ธุรกิจบริการในเครือ</span></li>
+          <li class="proofB-stat"><b><span class="pb-num" data-to="1.2" data-dec="1">1.2</span><small>ล้านราย</small></b><span>ผู้ใช้บริการการเงินดิจิทัล</span></li>
+        </ul>
+        <span class="proofB-note">ตัวเลขตัวอย่าง · รอข้อมูลจริงจากทีมธุรกิจ</span>
+      </div>
+      <div class="proofB-visual" aria-hidden="true"><canvas id="proofBCanvas"></canvas></div>
+    </div>
+    <span class="im-photo-tag proofB-tag">ภาพประกอบชั่วคราว · รอฟุตเทจมุมสูงเครือข่าย BTS จริง</span>
+  </section>
+  </div>
 
   <!-- ============ Section 5 — การเชื่อมต่อที่สร้างผลกระทบ ============ -->
   <section class="impact" id="impact" data-header="dark">
@@ -2475,6 +2543,13 @@ setTimeout(function(){
         <button type="button" data-v="a" aria-pressed="true">A · Pinned card</button>
         <button type="button" data-v="b" aria-pressed="false">B · Sticky stack</button>
         <button type="button" data-v="c" aria-pressed="false">C · 2 คอลัมน์</button>
+      </div>
+    </div>
+    <div>
+      <span class="demo-group-label">Section 4 — เครือข่ายที่ขับเคลื่อนธุรกิจ</span>
+      <div class="seg" data-target="s4Wrap" role="group" aria-label="เลือกเวอร์ชันของ Section 4">
+        <button type="button" data-v="a" aria-pressed="true">A · Cascade</button>
+        <button type="button" data-v="b" aria-pressed="false">B · Stats grid</button>
       </div>
     </div>
     <p class="demo-note">เลือกแล้วหน้าจะเลื่อนไปยัง section นั้นให้อัตโนมัติ · ระบบจำตัวเลือกล่าสุดไว้ในเบราว์เซอร์นี้</p>
@@ -3332,6 +3407,173 @@ setTimeout(function(){
   }
   initSwitcher(document.getElementById('s2Wrap'), 'bts-s2-variant');
   initSwitcher(document.getElementById('s3Wrap'), 'bts-s3-variant');
+  initSwitcher(document.getElementById('s4Wrap'), 'bts-s4-variant');
+
+  /* ---- Section 4 · B: count-up stats + animated "scale & credibility" city inside the logo arch ---- */
+  (function(){
+    var sec = document.getElementById('proofB');
+    var cv = document.getElementById('proofBCanvas');
+    if(!sec || !cv) return;
+    var nums = sec.querySelectorAll('.pb-num');
+    var ctx = null, W = 0, H = 0, city = null, lines = [], stations = [], ix = 0, iy = 0;
+    var rafId = 0, t0 = 0, counted = false;
+
+    function fmt(v, dec){ return dec ? v.toFixed(dec) : Math.round(v).toLocaleString('en-US'); }
+    function countUp(){
+      Array.prototype.forEach.call(nums, function(el, i){
+        var to = parseFloat(el.getAttribute('data-to')), dec = +el.getAttribute('data-dec') || 0;
+        var start = performance.now() + i * 140, dur = 1600;
+        el.textContent = fmt(0, dec);
+        (function step(now){
+          var p = Math.max(0, Math.min(1, (now - start) / dur));
+          el.textContent = fmt(to * (1 - Math.pow(1 - p, 3)), dec);
+          if(p < 1) requestAnimationFrame(step);
+        })(performance.now());
+      });
+    }
+
+    function bez(p0, p1, p2, p3, t){
+      var u = 1 - t;
+      return [u*u*u*p0[0] + 3*u*u*t*p1[0] + 3*u*t*t*p2[0] + t*t*t*p3[0], u*u*u*p0[1] + 3*u*u*t*p1[1] + 3*u*t*t*p2[1] + t*t*t*p3[1]];
+    }
+    function build(){
+      W = cv.clientWidth; H = cv.clientHeight;
+      if(!W || !H) return false;
+      var dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+      ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      city = document.createElement('canvas'); city.width = cv.width; city.height = cv.height;
+      var c = city.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var s = 41; function rnd(){ s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }
+      var x, y, i;
+
+      // dusk sky + ground seen from above
+      var hz = H * .34;
+      var sky = c.createLinearGradient(0, 0, 0, hz + H * .05);
+      sky.addColorStop(0, '#050B18'); sky.addColorStop(.7, '#12305A'); sky.addColorStop(1, '#2D5585');
+      c.fillStyle = sky; c.fillRect(0, 0, W, H);
+      var gr = c.createLinearGradient(0, hz, 0, H); gr.addColorStop(0, '#0C1628'); gr.addColorStop(1, '#04070E');
+      c.fillStyle = gr; c.fillRect(0, hz, W, H - hz);
+
+      // far skyline on the horizon
+      x = 0;
+      while(x < W){
+        var bw = W * (.01 + rnd() * .025), bh = H * (.03 + rnd() * .12);
+        c.fillStyle = '#0A1426'; c.fillRect(x, hz - bh, bw, bh + 2);
+        for(var wy = hz - bh + 3; wy < hz - 2; wy += 4) for(var wx = x + 1.5; wx < x + bw - 1.5; wx += 3)
+          if(rnd() < .22){ c.fillStyle = rnd() < .7 ? 'rgba(255,214,150,.75)' : 'rgba(170,210,255,.8)'; c.fillRect(wx, wy, 1.2, 1.4); }
+        x += bw + W * .002;
+      }
+
+      // dense rows of rooftops receding to the horizon — thousands of lit windows read as "scale"
+      var rows = 26;
+      for(var r = 0; r < rows; r++){
+        var k = r / (rows - 1), sc = .25 + k * 1.6;
+        y = hz + Math.pow(k, 1.7) * (H - hz) * 1.02;
+        x = -rnd() * 20 * sc;
+        while(x < W){
+          var w = (10 + rnd() * 26) * sc, h = (6 + rnd() * 30) * sc;
+          c.fillStyle = 'rgb(' + Math.round(10 + k * 8) + ',' + Math.round(18 + k * 10) + ',' + Math.round(34 + k * 12) + ')';
+          c.fillRect(x, y - h, w, h);
+          c.fillStyle = 'rgba(169,183,204,' + (.06 + k * .06).toFixed(3) + ')'; c.fillRect(x, y - h, w, Math.max(1, sc * .9));
+          var ws = Math.max(2, 3.2 * sc);
+          for(var yy = y - h + ws; yy < y - ws * .6; yy += ws * 1.7) for(var xx = x + ws * .6; xx < x + w - ws; xx += ws * 1.5)
+            if(rnd() < .28){ c.fillStyle = rnd() < .72 ? 'rgba(255,210,140,' + (.35 + rnd() * .5).toFixed(2) + ')' : 'rgba(150,200,255,' + (.35 + rnd() * .5).toFixed(2) + ')'; c.fillRect(xx, yy, ws * .55, ws * .7); }
+          x += w + (2 + rnd() * 8) * sc;
+        }
+      }
+
+      // two elevated lines sweeping through the city (Sukhumvit / Silom feel)
+      var defs = [
+        [[-.05, .92], [.35, .55], [.65, .62], [1.05, .38]],
+        [[-.05, .5], [.3, .62], [.62, .86], [1.05, 1.02]]
+      ];
+      lines = defs.map(function(d){
+        var P = d.map(function(p){ return [p[0] * W, p[1] * H]; }), pts = [];
+        for(i = 0; i <= 140; i++) pts.push(bez(P[0], P[1], P[2], P[3], i / 140));
+        return pts;
+      });
+      stations = [];
+      lines.forEach(function(pts){
+        var lw = H * .022;
+        for(i = 6; i < pts.length; i += 11){
+          var p = pts[i], depth = Math.max(.3, (p[1] - hz) / (H - hz));
+          c.fillStyle = '#060C18'; c.fillRect(p[0] - lw * .22, p[1], lw * .44, H * .12 * depth);
+        }
+        c.lineCap = 'round'; c.lineJoin = 'round';
+        c.beginPath(); pts.forEach(function(p, j){ j ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1]); });
+        c.strokeStyle = '#08101E'; c.lineWidth = lw; c.stroke();
+        c.strokeStyle = 'rgba(169,183,204,.5)'; c.lineWidth = Math.max(1, H * .003); c.stroke();
+        for(i = 14; i < pts.length - 6; i += 22) stations.push(pts[i]);
+      });
+      // interchange = closest pair of points between the two lines
+      var best = Infinity;
+      lines[0].forEach(function(a){ lines[1].forEach(function(b){ var d = Math.hypot(a[0] - b[0], a[1] - b[1]); if(d < best){ best = d; ix = (a[0] + b[0]) / 2; iy = (a[1] + b[1]) / 2; } }); });
+      return true;
+    }
+
+    function drawTrain(pts, head, len){
+      var n = pts.length - 1, i1 = Math.floor(head * n), i0 = Math.max(0, Math.floor((head - len) * n));
+      if(i1 - i0 < 2) return;
+      ctx.beginPath();
+      for(var i = i0; i <= i1; i++) i === i0 ? ctx.moveTo(pts[i][0], pts[i][1]) : ctx.lineTo(pts[i][0], pts[i][1]);
+      ctx.strokeStyle = 'rgba(143,208,255,.14)'; ctx.lineWidth = H * .034; ctx.stroke();
+      ctx.strokeStyle = '#E6ECF3'; ctx.lineWidth = H * .013; ctx.stroke();
+      ctx.strokeStyle = '#00599B'; ctx.lineWidth = H * .004; ctx.stroke();
+      ctx.fillStyle = '#FFE3B0';
+      for(i = i0 + 1; i < i1; i += 2) ctx.fillRect(pts[i][0] - 1, pts[i][1] - H * .006, 2, 2);
+      var hp = pts[i1], g = ctx.createRadialGradient(hp[0], hp[1], 0, hp[0], hp[1], H * .05);
+      g.addColorStop(0, 'rgba(255,246,216,.9)'); g.addColorStop(1, 'rgba(255,246,216,0)');
+      ctx.fillStyle = g; ctx.fillRect(hp[0] - H * .05, hp[1] - H * .05, H * .1, H * .1);
+    }
+
+    function frame(now){
+      if(!ctx) return;
+      var t = (now - t0) / 1000;
+      ctx.save();
+      var z = 1.04 + .03 * Math.sin(t * .12);
+      ctx.translate(W / 2, H / 2); ctx.scale(z, z); ctx.translate(-W / 2, -H / 2);
+      ctx.drawImage(city, 0, 0, W, H);
+      stations.forEach(function(p, k){
+        var a = .45 + .35 * Math.sin(t * 1.6 + k);
+        var g = ctx.createRadialGradient(p[0], p[1], 0, p[0], p[1], H * .035);
+        g.addColorStop(0, 'rgba(143,208,255,' + a.toFixed(3) + ')'); g.addColorStop(1, 'rgba(143,208,255,0)');
+        ctx.fillStyle = g; ctx.fillRect(p[0] - H * .035, p[1] - H * .035, H * .07, H * .07);
+        ctx.fillStyle = '#FFFFFF'; ctx.beginPath(); ctx.arc(p[0], p[1], Math.max(1.5, H * .005), 0, 6.2832); ctx.fill();
+      });
+      lines.forEach(function(pts, li){
+        for(var j = 0; j < 2; j++) drawTrain(pts, ((t * (li ? .045 : .06)) + j * .5 + li * .23) % 1, .16);
+      });
+      var ph = (t % 2.6) / 2.6;
+      ctx.strokeStyle = 'rgba(237,29,36,' + (.65 * (1 - ph)).toFixed(3) + ')'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(ix, iy, H * .02 + ph * H * .18, 0, 6.2832); ctx.stroke();
+      ctx.fillStyle = '#ED1D24'; ctx.beginPath(); ctx.arc(ix, iy, Math.max(2.5, H * .009), 0, 6.2832); ctx.fill();
+      ctx.restore();
+    }
+    function loop(now){ rafId = requestAnimationFrame(loop); frame(now); }
+    function start(){
+      if(!ctx && !build()) return;
+      if(reduceMotion){ frame(performance.now()); return; }
+      if(!rafId){ t0 = performance.now(); rafId = requestAnimationFrame(loop); }
+    }
+    function stop(){ if(rafId){ cancelAnimationFrame(rafId); rafId = 0; } }
+
+    function enter(){
+      sec.classList.add('in');
+      start();
+      if(!counted && !reduceMotion){ counted = true; countUp(); }
+    }
+    function leave(){ sec.classList.remove('in'); stop(); counted = false; }
+
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(function(entries){
+        entries.forEach(function(e){ if(e.isIntersecting && e.intersectionRatio >= .2) enter(); else if(!e.isIntersecting) leave(); });
+      }, { threshold:[0, .2] }).observe(sec);
+    } else {
+      enter();
+    }
+    window.addEventListener('resize', function(){ if(ctx){ ctx = null; if(rafId || reduceMotion) start(); } });
+  })();
 
   /* ---- Demo settings panel: open/close + back-to-top ---- */
   var demoFab = document.getElementById('demoFab');
