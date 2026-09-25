@@ -1540,24 +1540,10 @@
   }
   .loader.out{ opacity:0; }
   .ld-inner{
-    width:100%; max-width:1320px; margin:0 auto; padding:0 24px;
-    display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.5fr) minmax(0,1fr); gap:32px; align-items:center;
+    width:100%; max-width:640px; margin:0 auto; padding:0 24px;
+    display:flex; flex-direction:column; align-items:center;
   }
-  .ld-brand{ display:flex; flex-direction:column; line-height:1.5; margin-bottom:56px; }
-  .ld-brand b{ font-size:22px; font-weight:700; letter-spacing:0em; }
-  .ld-brand span{ margin-top:6px; font-size:10px; letter-spacing:0em; text-transform:uppercase; color:rgba(255,255,255,.5); }
-  .ld-label{ display:block; margin-bottom:14px; font-size:10.5px; font-weight:400; letter-spacing:0em; text-transform:uppercase; color:rgba(255,255,255,.4); }
-  .ld-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px; }
-  .ld-list li{
-    font-size:16px; color:rgba(255,255,255,.8);
-    opacity:0; transform:translateY(10px);
-    transition:opacity .3s ease, transform .4s cubic-bezier(.2,.7,.2,1);
-  }
-  .ld-list li.in{ opacity:1; transform:none; }
-  .ld-list b{ font-weight:700; letter-spacing:0em; margin-right:8px; color:var(--white); }
-  .ld-right{ text-align:right; }
-  .ld-right .ld-list{ align-items:flex-end; }
-  .ld-pct{ font-size:112px; font-weight:400; line-height:1.5; margin-bottom:40px; font-variant-numeric:tabular-nums; }
+  .ld-pct{ margin-top:32px; font-size:112px; font-weight:400; line-height:1.5; text-align:center; font-variant-numeric:tabular-nums; }
   .ld-pct small{ font-size:.34em; font-weight:400; color:rgba(255,255,255,.5); margin-left:4px; }
 
   .ld-map{ position:relative; width:100%; max-width:520px; margin:0 auto; aspect-ratio:420 / 320; }
@@ -1588,7 +1574,6 @@
   .ld-iris.open{ width:300vmax; height:300vmax; }
 
   @media (prefers-reduced-motion:reduce){
-    .ld-list li{ opacity:1; transform:none; transition:none; }
     .ld-ring{ animation:none; opacity:.35; transform:translate(-50%,-50%); }
   }
 </style>
@@ -1608,37 +1593,11 @@ setTimeout(function(){
 <div class="ld-iris l1" aria-hidden="true"></div>
 <div class="loader" id="loader" role="status" aria-label="กำลังโหลด BTS Group">
   <div class="ld-inner">
-    <div class="ld-col ld-left">
-      <div class="ld-brand"><b>BTS GROUP</b><span>Connected Future</span></div>
-      <span class="ld-label">Our network</span>
-      <ul class="ld-list">
-        <li data-at=".04">BTS SkyTrain</li>
-        <li data-at=".13">รถไฟฟ้าสายสีชมพู</li>
-        <li data-at=".22">รถไฟฟ้าสายสีเหลือง</li>
-        <li data-at=".31">VGI</li>
-        <li data-at=".40">Super Turtle</li>
-        <li data-at=".49">ROCTEC Global</li>
-        <li data-at=".58">Thanulux</li>
-        <li data-at=".67">Rabbit Holdings</li>
-      </ul>
+    <div class="ld-map">
+      <span class="ld-ring r1"></span><span class="ld-ring r2"></span><span class="ld-ring r3"></span><span class="ld-ring r4"></span>
+      <svg id="ldMap" viewBox="0 0 420 320" aria-hidden="true"></svg>
     </div>
-
-    <div class="ld-col ld-center">
-      <div class="ld-map">
-        <span class="ld-ring r1"></span><span class="ld-ring r2"></span><span class="ld-ring r3"></span><span class="ld-ring r4"></span>
-        <svg id="ldMap" viewBox="0 0 420 320" aria-hidden="true"></svg>
-      </div>
-    </div>
-
-    <div class="ld-col ld-right">
-      <div class="ld-pct"><span id="ldPct">0</span><small>%</small></div>
-      <span class="ld-label">Platforms</span>
-      <ul class="ld-list">
-        <li data-at=".2"><b>MOVE</b> การเดินทาง door-to-door</li>
-        <li data-at=".4"><b>MIX</b> ข้อมูลและประสบการณ์</li>
-        <li data-at=".6"><b>MATCH</b> ความสามารถและโอกาส</li>
-      </ul>
-    </div>
+    <div class="ld-pct"><span id="ldPct">0</span><small>%</small></div>
   </div>
 </div>
 
@@ -4337,12 +4296,11 @@ setTimeout(function(){
     }
   })();
 
-  /* ---- Loader: count, stagger lists, then 3-layer iris reveal ---- */
+  /* ---- Loader: count up, then 3-layer iris reveal ---- */
   (function(){
     var loader = document.getElementById('loader');
     if(!loader) return;
     var pct = document.getElementById('ldPct');
-    var items = loader.querySelectorAll('.ld-list li');
     var irises = document.querySelectorAll('.ld-iris');
     var D = reduceMotion ? 1 : 850;
     var t0 = performance.now();
@@ -4352,9 +4310,6 @@ setTimeout(function(){
     function frame(now){
       var p = Math.min(1, (now - t0) / D);
       pct.textContent = Math.round(ease(p) * 100);
-      Array.prototype.forEach.call(items, function(li){
-        if(p >= parseFloat(li.getAttribute('data-at'))) li.classList.add('in');
-      });
       if(p < 1){ requestAnimationFrame(frame); return; }
       finish();
     }

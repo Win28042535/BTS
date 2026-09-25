@@ -626,3 +626,11 @@ Typography เฉพาะ footer: label เล็ก uppercase ใช้ **mono
 - ตรวจแล้ว: กระจายค่าหลัง sweep = `8,10,14,16,20,24,32,999` ตรงตามแผน, brace/tag ยังสมดุล, ไม่มี console error
 
 - Artifact เดิม อัปเดตแล้ว (Version 28): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
+
+## 28. Loader — ถอดคอลัมน์ซ้าย + MOVE/MIX/MATCH ทิ้ง (2026-09-25)
+
+ถอด `.ld-col.ld-left` ทั้งก้อน (wordmark "BTS GROUP" + label "Our network" + ลิสต์ 8 บริษัทในเครือ) และถอดลิสต์ MOVE/MIX/MATCH + label "Platforms" ออกจาก `.ld-col.ld-right` — เหลือแค่ **แผนที่ dotted กลางจอ + ตัวนับ % progress ใต้แผนที่** (จัดกึ่งกลางแนวตั้งแทน grid 3 คอลัมน์เดิม)
+
+**Technical**: เปลี่ยน `.ld-inner` จาก `display:grid` 3 คอลัมน์ เป็น `display:flex; flex-direction:column; align-items:center` แคบลงเหลือ `max-width:640px`, ลบ CSS ที่ไม่ใช้แล้วทั้งหมด (`.ld-brand`, `.ld-label`, `.ld-list` และลูก, `.ld-right`) และลบ JS ส่วน stagger-list (`items`/`forEach` ที่ toggle class `.in` ตาม `data-at`) ออกจากฟังก์ชัน loader เพราะไม่มี list เหลือให้ stagger แล้ว — ตรวจแล้วว่า brace/tag ยังสมดุล ไม่มี reference ค้างถึง class ที่ลบไป และโหลดในเบราว์เซอร์ไม่มี console error
+
+- Artifact เดิม อัปเดตแล้ว (Version 29): https://claude.ai/artifact/SA1qEi8p8yaPUeQeXmham7
