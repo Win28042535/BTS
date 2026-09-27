@@ -210,7 +210,7 @@
     display:flex; flex-direction:column; justify-content:flex-end;
     padding-bottom:88px;
   }
-  .hero-video{ position:absolute; inset:0; width:100%; height:100%; display:block; transform-origin:50% 55%; will-change:transform; }
+  .hero-video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 30%; display:block; transform-origin:50% 55%; will-change:transform; }
   .hero-vshade{
     position:absolute; inset:0; z-index:1; pointer-events:none;
     background:
@@ -560,6 +560,16 @@
   .ecoB-row p{ margin:0; max-width:46ch; font-size:16px; line-height:1.5; opacity:.66; }
   .ecoB-pin{ width:10px; height:10px; border-radius:50%; background:currentColor; opacity:.35; }
 
+  /* both grids here are real overflow bugs, not just cramped: at phone widths the headline's longest word
+     (e.g. "CONNECTIONS.") and the row title ("People" etc.) don't wrap and spill past their own column into
+     the next one (scrollWidth vs clientWidth confirms it, ~35-140px of overlap depending on the element).
+     Stack both 2-column grids, same breakpoint as the rest of the page's mobile-only fixes; tablet (768px+)
+     already renders these fine as 2 columns. */
+  @media (max-width:720px){
+    .ecoB-intro{ grid-template-columns:1fr; gap:24px; }
+    .ecoB-body{ grid-template-columns:1fr; }
+  }
+
   /* ============ Section 2 · version C — continuous list on navy, icons form from scattered dots ============ */
   .ecoC{
     position:relative; color:var(--white);
@@ -583,6 +593,19 @@
   .ecoC-row h3{ margin:0; font-size:clamp(24px,2.8vw,36px); font-weight:700; line-height:1.5; }
   .ecoC-row h3 span{ display:block; margin-top:8px; font-size:.36em; font-weight:400; letter-spacing:0em; color:rgba(255,255,255,.5); }
   .ecoC-row p{ margin:0; max-width:48ch; font-size:16px; line-height:1.5; color:rgba(255,255,255,.66); }
+
+  /* same family of bug as .ecoB above: .ecoC-head's headline overflows its column by ~80px at phone widths,
+     and .ecoC-row's fixed 120px icon column + 56px gaps leaves only ~95px for the 4fr+5fr title/description
+     columns combined — the title text alone overflows that by ~35px. Stack the headline, and reflow each row
+     to icon+title on one line with the description dropping to a full-width line under it. */
+  @media (max-width:720px){
+    .ecoC-head{ grid-template-columns:1fr; gap:24px; }
+    .ecoC-row{
+      grid-template-columns:56px minmax(0,1fr); grid-template-rows:auto auto;
+      column-gap:20px; row-gap:14px;
+    }
+    .ecoC-row p{ grid-column:1 / -1; max-width:none; }
+  }
 
   @media (prefers-reduced-motion:reduce){
     .dotm.form circle{ opacity:1; transform:none; transition:none; }
@@ -756,7 +779,7 @@
   .pf-rail li.active small{ color:rgba(41,43,44,.72); }
   .pf-rail li:focus-visible{ outline:2px solid var(--blue); outline-offset:6px; border-radius:8px; }
 
-  .pf-center{ width:min(400px, 42vh); display:flex; flex-direction:column; }
+  .pf-center{ width:min(400px, 42vh, 100%); display:flex; flex-direction:column; }
 
   .pf-card{
     position:relative;
@@ -879,6 +902,23 @@
   .pf-count-of{ font-size:12px; font-weight:400; letter-spacing:0em; color:rgba(35,50,78,.4); margin-top:10px; }
   .pf-count-hint{ font-size:12px; color:rgba(41,43,44,.45); margin-top:28px; display:flex; align-items:center; justify-content:flex-end; gap:8px; }
 
+  /* below ~1024px the 3-column grid doesn't have room for the fixed-width rail/count columns alongside the card
+     (the "01" counter starts overlapping the card around 768-900px) — stack instead and drop the pin, same
+     approach as Hero/Section 2-A: MOVE stays shown by default, rail becomes a plain clickable list */
+  @media (max-width:1024px){
+    .pf-intro{ grid-template-columns:1fr; gap:28px; }
+    .pf-pin{ height:auto; }
+    .pf-stage{
+      position:static; height:auto;
+      grid-template-columns:1fr; justify-items:center;
+      padding:0 24px 60px; gap:28px;
+    }
+    .pf-rail{ justify-self:center; }
+    .pf-rail li{ grid-template-columns:auto; }
+    .pf-rail .bar{ display:none; }
+    .pf-count{ display:none; }
+  }
+
   @media (prefers-reduced-motion:reduce){
     .mx-orbit, .mx-sat-in, .mx-hub::after{ animation:none; }
     .pf-scene, .pf-cap, .pf-count-num span, .mt-beam, .mt-plate, .mv-route-lit{ transition:none; }
@@ -906,6 +946,16 @@
   .pfB-sub{ margin:0 0 30px; font-size:12px; font-weight:400; letter-spacing:0em; color:rgba(255,255,255,.55); }
   .pf-link.on-dark{ color:var(--white); border-bottom-color:rgba(255,255,255,.35); }
   .pf-link.on-dark:hover{ border-color:var(--white); }
+
+  /* not an overflow bug: the horizontal scrim is tuned for desktop, where .pfB-inner's text column sits in
+     roughly the left half of a 1320px+ stage, leaving the fade-to-transparent right edge (opacity .08 at
+     100%) over image area with no text on top of it. On phones .pfB-sub/.pfB-body routinely reach ~85-90%
+     across the viewport (confirmed: .pfB-sub's right edge sits at 87% of a 375px viewport), landing on that
+     near-transparent zone — the bright photo underneath (e.g. MOVE's train windows) shows through and makes
+     the text hard to read. Flatten the scrim to a uniform dark overlay at phone widths instead. */
+  @media (max-width:720px){
+    .pfB-scrim{ background:rgba(8,12,20,.85); }
+  }
 
   /* ============ Section 3 · version C — sticky visual + service list (DNA: unitedcarriers.com home "Our Services") ============ */
   .pfC{
@@ -956,6 +1006,21 @@
   .pfC-row h4{ margin:0 0 8px; font-size:clamp(24px,1.6vw,36px); font-weight:700; line-height:1.5; }
   .pfC-row p{ margin:0; max-width:46ch; font-size:16px; line-height:1.5; color:rgba(255,255,255,.64); }
   .pfC-ghost{ display:block; width:100%; height:auto; margin-top:136px; }
+
+  /* same overflow-by-narrow-column bug as Section 2-B/2-C: at phone widths .pfC-head's headline overflows its
+     column by ~20px, and .pfC-body's 5fr/7fr split leaves the list column so narrow that .pfC-row's own
+     76px-icon layout squeezes its text to 36px — the row title overflows that by ~58px, past the viewport
+     edge (confirmed via scrollWidth, ~47px of real page-level horizontal scroll). Stack both grids and drop
+     the visual's sticky positioning (no scrolling list beside it to track once stacked); .pfC-row itself
+     doesn't need touching — once the list column is full-width, its own 76px/1fr split has plenty of room. */
+  @media (max-width:720px){
+    .pfC-head{ grid-template-columns:1fr; gap:24px; }
+    /* minmax(0,1fr), not a bare 1fr: .pfC-card's aspect-ratio+definite height give it a large intrinsic
+       width (~472px here) that a bare 1fr track won't shrink below, blowing the whole row out past the
+       viewport (the same class of grid-blowout bug fixed on .ir-fin dl in Section 6) */
+    .pfC-body{ grid-template-columns:minmax(0,1fr); gap:40px; }
+    .pfC-visual{ position:static; top:auto; }
+  }
 
   @media (prefers-reduced-motion:reduce){
     .pfC-scene, .pfC-cap{ transition:none; }
@@ -1014,6 +1079,12 @@
     color:var(--blue);
   }
   .proof-item p{ margin:0; max-width:38ch; font-size:16px; line-height:1.5; color:rgba(41,43,44,.58); }
+
+  /* the 5fr/7fr grid squeezes .proof-head to ~116px at phone widths (headline nearly unreadable) — stack instead, same breakpoint as Section 3-A */
+  @media (max-width:1024px){
+    .proof-inner{ grid-template-columns:1fr; }
+    .proof-head{ position:static; margin-bottom:40px; }
+  }
 
   @media (prefers-reduced-motion:reduce){
     .proof-item{ opacity:1; transition:none; }
@@ -1116,6 +1187,14 @@
     .netmap-stat:nth-child(3){ border-left:0; }
   }
 
+  /* the map's text scales with the SVG's rendered width (it's drawn against a fixed 420-unit viewBox) — below
+     ~720px that shrinks labels to ~5-7px and they stop being legible. Keep a legible min-width and let the
+     map itself scroll horizontally instead, same fallback already used for the Section 2-D mosaic. */
+  @media (max-width:720px){
+    .netmap-svg-wrap{ aspect-ratio:auto; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-left:0; padding-right:0; }
+    .netmap-svg-wrap svg{ width:600px; max-width:none; aspect-ratio:420 / 320; height:auto; display:block; margin:0 auto; }
+  }
+
   /* ============ Section 5 — การเชื่อมต่อที่สร้างผลกระทบ (pinned photo + claims) ============ */
   .impact{ position:relative; height:440vh; background:var(--dark); }
   .im-stage{ position:sticky; top:0; height:100vh; overflow:hidden; color:var(--white); }
@@ -1172,6 +1251,23 @@
   .im-steps li{ font-size:12px; font-weight:400; letter-spacing:0em; text-transform:uppercase; color:rgba(255,255,255,.35); transition:color .35s ease; display:flex; align-items:center; gap:8px; }
   .im-steps li::before{ content:""; width:6px; height:6px; border-radius:50%; background:currentColor; }
   .im-steps li.on{ color:var(--white); }
+
+  /* the 1fr/1fr grid squeezes both the headline and the claim text to ~139px at phone widths — and unlike
+     Section 3-A there's no click-to-switch nav here, so disabling the pin means showing all 4 claims at
+     once (stacked) rather than losing 3 of them permanently to a scroll mechanic that no longer runs */
+  @media (max-width:1024px){
+    .impact{ height:auto; }
+    .im-stage{ position:static; height:auto; overflow:visible; }
+    .im-photo, .im-scrim{ height:70vh; } /* were sized against the now-auto-height stage, which has no definite height for a % or inset:0 box to resolve against */
+    .im-inner{
+      height:auto; display:flex; flex-direction:column; gap:32px;
+      padding:60px 24px 40px;
+    }
+    .im-claims{ position:static; min-height:0; }
+    .im-claim{ position:static; opacity:1; transform:none; margin-bottom:28px; }
+    .im-claim:last-child{ margin-bottom:0; }
+    .im-steps{ display:none; }
+  }
 
   @media (prefers-reduced-motion:reduce){
     .im-claim, .im-icon circle, .im-steps li{ transition:none; }
@@ -1311,7 +1407,7 @@
   .ir-fin-head{ display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-bottom:20px; }
   .ir-fin-head b{ font-size:16px; font-weight:700; color:var(--navy); }
   .ir-fin-head span{ font-size:12px; color:rgba(41,43,44,.5); }
-  .ir-fin dl{ margin:0; display:grid; grid-template-columns:1fr 1fr; gap:16px 16px; }
+  .ir-fin dl{ margin:0; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:16px 16px; }
   .ir-fin dt{ font-size:12px; color:rgba(41,43,44,.55); margin-bottom:6px; }
   .ir-fin dd{ margin:0; font-size:28px; font-weight:400; line-height:1.5; color:var(--navy); font-variant-numeric:tabular-nums; }
   .ir-fin dd small{ font-size:12px; font-weight:400; color:rgba(35,50,78,.5); margin-left:4px; }
@@ -1333,6 +1429,13 @@
   .ir-links b{ display:block; font-size:16px; font-weight:400; color:var(--navy); }
   .ir-links small{ display:block; font-size:12px; color:rgba(41,43,44,.52); margin-top:2px; }
   .ir-links .go{ color:rgba(35,50,78,.45); }
+
+  /* the 7fr/5fr grid squeezes .ir-fin to ~124px at phone widths — narrow enough that its dl content
+     blew past the card edge entirely (see the minmax(0,1fr) fix above); stack instead, same breakpoint
+     already used for Hero/Section 2-A mobile-only fixes (tablet at 768px+ renders this fine as-is) */
+  @media (max-width:720px){
+    .ir-grid{ grid-template-columns:1fr; }
+  }
 
   /* ============ Section 7 — เรื่องราวจากเครือข่ายของเรา ============ */
   .stories{ background:var(--cream); border-top:1px solid rgba(35,50,78,.1); }
@@ -1387,6 +1490,16 @@
   .st-item a:focus-visible{ outline:2px solid var(--blue); outline-offset:6px; border-radius:20px; }
   .st-foot{ display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; margin-top:56px; padding-top:26px; border-top:1px solid rgba(35,50,78,.14); }
   .st-empty{ grid-column:1 / -1; font-size:16px; color:rgba(41,43,44,.55); }
+
+  /* the 3-column grid (plus a feature card spanning 2 of them) squeezes regular cards to ~90px at phone
+     widths — headlines wrap one word per line. Tablet is fine as-is (feature card's span already reads
+     as an effective 2-column layout there). Stack to one column, same breakpoint as Section 2-A's cards;
+     .st-item.feature's grid-column:span 2 must be reset here too, otherwise the auto-placement algorithm
+     grows implicit columns to satisfy the span instead of collapsing to one column. */
+  @media (max-width:720px){
+    .st-grid{ grid-template-columns:1fr; }
+    .st-item.feature{ grid-column:span 1; grid-row:span 1; }
+  }
 
   /* closing band — Where will we connect next? (DNA: 21st.dev "cta69" — giant monochrome marquee + centered seal CTA) */
   .next{
@@ -1532,6 +1645,19 @@
     display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
     padding:22px 0 28px;
     font-size:12px; color:rgba(255,255,255,.42);
+  }
+
+  /* .ft-main (nav/contact/office, 3 cols), .ft-office (address/map, 2 cols) and .ft-legal (6 equal cols)
+     never overflow at phone widths (every track already uses minmax(0,Nfr)) but get too narrow to read —
+     e.g. the office address column drops to ~85px and wraps one or two words per line. Tablet (768px+)
+     already reads fine as-is, so stack only below the same ≤720px cutoff used elsewhere on the page. */
+  @media (max-width:720px){
+    .ft-main{ grid-template-columns:1fr; }
+    .ft-main > div{ padding-right:0; }
+    .ft-main > div + div{ padding-left:0; padding-top:32px; margin-top:32px; border-left:0; border-top:1px solid rgba(255,255,255,.12); }
+    .ft-office{ grid-template-columns:1fr; }
+    .ft-legal{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+    .ft-legal a:nth-child(2n){ border-right:0; }
   }
 
   /* ============ Loader (global, home) ============ */
@@ -1727,8 +1853,8 @@ setTimeout(function(){
 <main>
   <section class="hero" id="hero" data-header="dark">
    <div class="hero-pin">
-    <!-- "video" behind the doors: animated canvas placeholder until real footage arrives -->
-    <canvas class="hero-video" id="heroCanvas" aria-hidden="true"></canvas>
+    <!-- real CG still behind the doors, until real video footage arrives -->
+    <img class="hero-video" id="heroCanvas" src="img/hero-banner-poster.jpg" alt="" aria-hidden="true">
     <div class="hero-vshade"></div>
 
     <div class="hero-content" id="heroContent">
@@ -1770,7 +1896,7 @@ setTimeout(function(){
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
     </div>
     <div class="hero-progress" aria-hidden="true"><i id="heroBar"></i></div>
-    <span class="im-photo-tag hero-tag">ภาพประกอบชั่วคราว · ประตู BTS + วิดีโอ รอฟุตเทจจริง</span>
+    <span class="im-photo-tag hero-tag">ประตู BTS ภาพประกอบ · พื้นหลัง CG รอวิดีโอจริง</span>
    </div>
   </section>
 
@@ -2942,162 +3068,23 @@ setTimeout(function(){
     return o + '</svg>';
   }
 
-  /* ---- Hero: "video" placeholder — animated dusk city + BTS train, 3-beat loop synced to the phrases ---- */
+  /* ---- Hero: background is now a real CG still (img#heroCanvas); just cycle the phrases on a timer ---- */
   var heroSection = document.getElementById('hero');
   var heroCanvas = document.getElementById('heroCanvas');
   var heroPhraseEls = document.querySelectorAll('#heroPhrases span');
   var HERO_BEAT = 4200;
-  var hCtx = null, hW = 0, hH = 0, hStatic = null, hTrackY = 0, hNodes = [], hLinks = [];
-  function buildHeroScene(){
-    var dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-    hW = heroCanvas.clientWidth; hH = heroCanvas.clientHeight;
-    if(!hW || !hH) return;
-    heroCanvas.width = Math.round(hW * dpr); heroCanvas.height = Math.round(hH * dpr);
-    hCtx = heroCanvas.getContext('2d'); hCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    hStatic = document.createElement('canvas'); hStatic.width = heroCanvas.width; hStatic.height = heroCanvas.height;
-    var c = hStatic.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0);
-    var seed = 19; function rnd(){ seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
-    var x, wx, wy, i;
 
-    var sky = c.createLinearGradient(0, 0, 0, hH);
-    sky.addColorStop(0, '#060D1C'); sky.addColorStop(.42, '#10254A'); sky.addColorStop(.58, '#2A4470'); sky.addColorStop(.7, '#16223A');
-    c.fillStyle = sky; c.fillRect(0, 0, hW, hH);
-    for(i = 0; i < 90; i++){ c.fillStyle = 'rgba(255,255,255,' + (.2 + rnd() * .5).toFixed(2) + ')'; c.fillRect(rnd() * hW, rnd() * hH * .38, 1.2, 1.2); }
-
-    var horizon = hH * .6;
-    x = -10;
-    while(x < hW){
-      var bw = 40 + rnd() * 70, bh = hH * (.08 + rnd() * .2);
-      c.fillStyle = '#132038'; c.fillRect(x, horizon - bh, bw, bh + hH);
-      for(wy = horizon - bh + 8; wy < horizon - 4; wy += 10) for(wx = x + 5; wx < x + bw - 5; wx += 8) if(rnd() < .12){ c.fillStyle = 'rgba(160,190,230,.35)'; c.fillRect(wx, wy, 3, 4); }
-      x += bw + 3;
-    }
-    hNodes = []; x = -20;
-    while(x < hW + 20){
-      var nw = 70 + rnd() * 120, nh = hH * (.16 + rnd() * .32), top = horizon + 30 - nh;
-      c.fillStyle = '#0B1426'; c.fillRect(x, top, nw, hH);
-      for(wy = top + 14; wy < horizon + 24; wy += 16) for(wx = x + 9; wx < x + nw - 8; wx += 13) if(rnd() < .3){
-        c.fillStyle = rnd() < .75 ? 'rgba(255,214,150,' + (.35 + rnd() * .5).toFixed(2) + ')' : 'rgba(143,208,255,.6)';
-        c.fillRect(wx, wy, 5, 7);
-      }
-      if(nw > 100 && top < horizon - hH * .08) hNodes.push([x + nw / 2, top - 2]);
-      x += nw + 6;
-    }
-    hLinks = [];
-    for(i = 0; i < hNodes.length; i++){
-      if(i + 1 < hNodes.length) hLinks.push([i, i + 1]);
-      if(i + 2 < hNodes.length && i % 2 === 0) hLinks.push([i, i + 2]);
-    }
-
-    hTrackY = hH * .66;
-    c.fillStyle = '#050A14'; c.fillRect(0, hTrackY + 14, hW, hH);
-    for(x = 30; x < hW; x += 200){ c.fillStyle = '#0B1426'; c.fillRect(x, hTrackY + 14, 26, hH * .16); }
-    c.fillStyle = '#101A2C'; c.fillRect(0, hTrackY, hW, 16);
-    c.fillStyle = 'rgba(169,183,204,.45)'; c.fillRect(0, hTrackY - 1, hW, 1.5);
+  var heroBeat = -1;
+  function cycleHeroPhrase(){
+    heroBeat = (heroBeat + 1) % heroPhraseEls.length;
+    Array.prototype.forEach.call(heroPhraseEls, function(el, k){ el.classList.toggle('on', k === heroBeat); });
   }
-
-  function heroFrame(t){
-    if(!hCtx || !hStatic) return;
-    var c = hCtx, beat = Math.floor(t / HERO_BEAT) % 3, bt = (t % HERO_BEAT) / HERO_BEAT;
-    var into = Math.min(1, bt / .2), fadeOld = Math.max(0, 1 - bt / .15);
-    var wLinks = beat === 1 ? into : beat === 2 ? 1 : fadeOld;
-    var wDawn = beat === 2 ? into : beat === 0 ? fadeOld : 0;
-    var i, k;
-
-    c.drawImage(hStatic, 0, 0, hW, hH);
-
-    // beat 3 — creating possibilities: dawn breaks over the skyline
-    if(wDawn > 0){
-      var g = c.createLinearGradient(0, hH * .2, 0, hH * .66);
-      g.addColorStop(0, 'rgba(255,170,110,0)'); g.addColorStop(1, 'rgba(255,150,90,' + (.4 * wDawn).toFixed(3) + ')');
-      c.fillStyle = g; c.fillRect(0, 0, hW, hH * .66);
-      var sun = c.createRadialGradient(hW * .72, hH * .6, 0, hW * .72, hH * .6, hW * .35);
-      sun.addColorStop(0, 'rgba(255,200,140,' + (.5 * wDawn).toFixed(3) + ')'); sun.addColorStop(1, 'rgba(255,200,140,0)');
-      c.fillStyle = sun; c.fillRect(0, 0, hW, hH);
-    }
-
-    // beat 2 — connecting businesses: rooftops link up with the silver line-dot motif
-    if(wLinks > 0){
-      c.lineWidth = 1.2;
-      for(k = 0; k < hLinks.length; k++){
-        var a = hNodes[hLinks[k][0]], b = hNodes[hLinks[k][1]];
-        var grow = beat === 1 ? Math.max(0, Math.min(1, (bt - k * .025) / .35)) : 1;
-        c.strokeStyle = 'rgba(169,210,255,' + (.55 * wLinks).toFixed(3) + ')';
-        c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(a[0] + (b[0] - a[0]) * grow, a[1] + (b[1] - a[1]) * grow); c.stroke();
-      }
-      for(k = 0; k < hNodes.length; k++){
-        var n = hNodes[k], pulse = .5 + .5 * Math.sin(t / 420 + k);
-        c.fillStyle = 'rgba(255,255,255,' + (.9 * wLinks).toFixed(3) + ')';
-        c.beginPath(); c.arc(n[0], n[1], 3, 0, 6.2832); c.fill();
-        c.strokeStyle = 'rgba(143,208,255,' + (.35 * wLinks * (1 - pulse * .5)).toFixed(3) + ')';
-        c.beginPath(); c.arc(n[0], n[1], 6 + pulse * 6, 0, 6.2832); c.stroke();
-        if(wDawn > 0){
-          var fr = ((t / 1400) + k * .27) % 1;
-          c.strokeStyle = 'rgba(255,220,170,' + (.5 * wDawn * (1 - fr)).toFixed(3) + ')';
-          c.beginPath(); c.arc(n[0], n[1], 8 + fr * 46, 0, 6.2832); c.stroke();
-        }
-      }
-    }
-
-    // beat 1 (always running) — moving people: a BTS train crosses the viaduct
-    var trainLen = Math.max(hW * .7, 640), carH = 34;
-    var cycle = hW + trainLen + hW * .35;
-    var tx = hW - ((t * (cycle / 6200)) % cycle);
-    var streak = c.createLinearGradient(tx + trainLen, 0, tx + trainLen + 260, 0);
-    streak.addColorStop(0, 'rgba(143,208,255,.28)'); streak.addColorStop(1, 'rgba(143,208,255,0)');
-    c.fillStyle = streak; c.fillRect(tx + trainLen, hTrackY - carH + 4, 260, carH - 8);
-    c.fillStyle = '#E6ECF3';
-    if(c.roundRect){ c.beginPath(); c.roundRect(tx, hTrackY - carH, trainLen, carH, 12); c.fill(); }
-    else c.fillRect(tx, hTrackY - carH, trainLen, carH);
-    c.fillStyle = '#00599B'; c.fillRect(tx + 8, hTrackY - 12, trainLen - 8, 5);
-    c.fillStyle = '#ED1D24'; c.fillRect(tx + 8, hTrackY - 6, trainLen - 8, 2);
-    for(i = 0, k = 0; tx + 30 + i < tx + trainLen - 20; i += 26, k++){
-      c.fillStyle = (k % 7 === 3) ? '#0A2F52' : '#FFE3B0';
-      c.fillRect(tx + 30 + i, hTrackY - carH + 7, 16, 11);
-    }
-    c.fillStyle = '#0B1426';
-    for(i = 180; i < trainLen; i += 180) c.fillRect(tx + i, hTrackY - carH, 3, carH);
-    var lamp = c.createRadialGradient(tx + 4, hTrackY - 10, 0, tx + 4, hTrackY - 10, 60);
-    lamp.addColorStop(0, 'rgba(255,246,216,.9)'); lamp.addColorStop(1, 'rgba(255,246,216,0)');
-    c.fillStyle = lamp; c.fillRect(tx - 60, hTrackY - 70, 120, 120);
-
-    // street light trails
-    var lanes = [[.84, 1, '255,90,80'], [.88, 1, '255,125,95'], [.92, -1, '255,244,220'], [.96, -1, '220,236,255']];
-    c.save(); c.globalCompositeOperation = 'lighter';
-    for(i = 0; i < lanes.length; i++){
-      var ly = hH * lanes[i][0], dir = lanes[i][1], span = hW + 400, sp = span / (2600 + i * 500);
-      for(k = 0; k < 7; k++){
-        var len = 120 + ((k * 73 + i * 41) % 140);
-        var off = ((t * sp) + k * span / 7 + i * 90) % span - 200;
-        var x0 = dir > 0 ? off : hW - off;
-        var tg = c.createLinearGradient(x0, 0, x0 - dir * len, 0);
-        tg.addColorStop(0, 'rgba(' + lanes[i][2] + ',.9)'); tg.addColorStop(1, 'rgba(' + lanes[i][2] + ',0)');
-        c.fillStyle = tg; c.fillRect(Math.min(x0, x0 - dir * len), ly - 1.5, len, 3);
-      }
-    }
-    c.restore();
-  }
-
-  var heroT0 = performance.now(), heroBeat = -1;
-  function heroLoop(now){
-    requestAnimationFrame(heroLoop);
-    if(document.hidden || heroSection.getBoundingClientRect().bottom <= 0) return;
-    var t = now - heroT0;
-    heroFrame(t);
-    var b = Math.floor(t / HERO_BEAT) % 3;
-    if(b !== heroBeat){
-      heroBeat = b;
-      Array.prototype.forEach.call(heroPhraseEls, function(el, k){ el.classList.toggle('on', k === b); });
-    }
-  }
-  buildHeroScene();
   if(reduceMotion){
-    heroFrame(HERO_BEAT * 1.5);
     Array.prototype.forEach.call(heroPhraseEls, function(el){ el.classList.add('on'); });
   } else {
-    requestAnimationFrame(heroLoop);
+    cycleHeroPhrase();
+    setInterval(cycleHeroPhrase, HERO_BEAT);
   }
-  window.addEventListener('resize', function(){ buildHeroScene(); if(reduceMotion) heroFrame(HERO_BEAT * 1.5); });
 
   /* ---- Hero: doors slide apart with scroll (pinned); gate title blurs out, content lands on the video ---- */
   var doorL = document.getElementById('doorL'), doorR = document.getElementById('doorR');
@@ -3177,6 +3164,7 @@ setTimeout(function(){
   var nums = document.querySelectorAll('.pf-count-num span');
   var rails = document.querySelectorAll('#pfRail li');
   var active = 0;
+  var pfStaticMQ = window.matchMedia('(max-width: 1024px)'); // pin/grid disabled below this width — see the matching CSS breakpoint
 
   Array.prototype.forEach.call(document.querySelectorAll('.mt-rivets'), function(g){
     var html = '';
@@ -3196,7 +3184,7 @@ setTimeout(function(){
   }
 
   function onPinScroll(){
-    if(!pin) return;
+    if(!pin || pfStaticMQ.matches) return;
     var r = pin.getBoundingClientRect();
     var total = r.height - window.innerHeight;
     var p = Math.max(0, Math.min(1, -r.top / total));
@@ -3210,6 +3198,7 @@ setTimeout(function(){
   Array.prototype.forEach.call(rails, function(el){
     function go(){
       var i = parseInt(el.getAttribute('data-i'), 10);
+      if(pfStaticMQ.matches){ setActive(i); return; } // no pin/scroll-jack at this width — just switch directly
       var top = pin.getBoundingClientRect().top + window.scrollY;
       var total = pin.offsetHeight - window.innerHeight;
       window.scrollTo({ top: top + total * (i / 3 + 0.04), behavior: reduceMotion ? 'auto' : 'smooth' });
@@ -3941,8 +3930,9 @@ setTimeout(function(){
   var imClaims = document.querySelectorAll('.im-claim');
   var imSteps = document.querySelectorAll('#imSteps li');
   var imActive = 0;
+  var imStaticMQ = window.matchMedia('(max-width: 1024px)'); // pin disabled below this width — all 4 claims show at once instead (see matching CSS)
   function onImpactScroll(){
-    if(!impact) return;
+    if(!impact || imStaticMQ.matches) return;
     var r = impact.getBoundingClientRect();
     var total = r.height - window.innerHeight;
     var p = Math.max(0, Math.min(1, -r.top / total));
