@@ -1853,8 +1853,8 @@ setTimeout(function(){
 <main>
   <section class="hero" id="hero" data-header="dark">
    <div class="hero-pin">
-    <!-- real CG still behind the doors, until real video footage arrives -->
-    <img class="hero-video" id="heroCanvas" src="img/hero-banner-poster.jpg" alt="" aria-hidden="true">
+    <!-- plays once the doors finish opening (see tryStartHeroVideo); poster is the mockup until a real source is dropped in -->
+    <video class="hero-video" id="heroCanvas" poster="img/hero-banner-poster.jpg" muted playsinline preload="auto" aria-hidden="true"></video>
     <div class="hero-vshade"></div>
 
     <div class="hero-content" id="heroContent">
@@ -1896,7 +1896,7 @@ setTimeout(function(){
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
     </div>
     <div class="hero-progress" aria-hidden="true"><i id="heroBar"></i></div>
-    <span class="im-photo-tag hero-tag">ประตู BTS ภาพประกอบ · พื้นหลัง CG รอวิดีโอจริง</span>
+    <span class="im-photo-tag hero-tag">ประตู BTS ภาพประกอบ · วิดีโอพื้นหลังเล่นอัตโนมัติเมื่อประตูเปิด (ตอนนี้เป็นภาพนิ่ง mockup รอไฟล์จริง)</span>
    </div>
   </section>
 
@@ -3118,10 +3118,28 @@ setTimeout(function(){
     heroContent.style.opacity = show.toFixed(3);
     heroContent.style.transform = 'translateY(' + ((1 - show) * 28).toFixed(1) + 'px)';
     heroContent.style.visibility = show > 0 ? 'visible' : 'hidden';
+    if(open >= .98) tryStartHeroVideo();
   }
   window.addEventListener('scroll', function(){ requestAnimationFrame(onHeroScroll); }, {passive:true});
   window.addEventListener('resize', onHeroScroll);
   onHeroScroll();
+
+  /* ---- Hero: play the video once the doors finish opening; pause once the whole hero has scrolled out of view
+         (no real <source> yet, so play() is a no-op until one is added — the poster just sits there, as intended) ---- */
+  var heroVideoStarted = false;
+  function tryStartHeroVideo(){
+    if(heroVideoStarted) return;
+    heroVideoStarted = true;
+    heroCanvas.play().catch(function(){});
+  }
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ if(heroVideoStarted) heroCanvas.play().catch(function(){}); }
+        else { heroCanvas.pause(); }
+      });
+    }, { threshold:0 }).observe(heroSection);
+  }
 
   /* ---- Section 3: intro rises in as it enters (A and B share .pf-intro; C has its own header) ---- */
   (function(){
