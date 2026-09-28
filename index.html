@@ -779,7 +779,12 @@
   .pf-rail li.active small{ color:rgba(41,43,44,.72); }
   .pf-rail li:focus-visible{ outline:2px solid var(--blue); outline-offset:6px; border-radius:8px; }
 
-  .pf-center{ width:min(400px, 42vh, 100%); display:flex; flex-direction:column; }
+  /* no "100%" term here: .pf-center sits in .pf-stage's `auto` grid column at this width (>1024px, see the
+     ≤1024px override below), and a percentage inside min() on an item in an auto-sized track resolves
+     against an indefinite size — the browser treats it as 0, which poisons the whole min() to 0 and makes
+     the card (and the MOVE/MIX/MATCH scene inside it) invisible. Confirmed via computed style (width:0px)
+     and elementFromPoint (hits .pf-stage, not the card) at every desktop width tested, e.g. 1133-2880px. */
+  .pf-center{ width:min(400px, 42vh); display:flex; flex-direction:column; }
 
   .pf-card{
     position:relative;
@@ -917,6 +922,10 @@
     .pf-rail li{ grid-template-columns:auto; }
     .pf-rail .bar{ display:none; }
     .pf-count{ display:none; }
+    /* .pf-stage's column is a definite 1fr here (not the auto track used above 1024px), so a percentage
+       is safe again — restore the 100% cap so the card shrinks to fit narrow phones instead of overflowing
+       at min(400px,42vh)'s value (e.g. 42vh can exceed a 375px-wide column on a tall phone) */
+    .pf-center{ width:min(400px, 42vh, 100%); }
   }
 
   @media (prefers-reduced-motion:reduce){
