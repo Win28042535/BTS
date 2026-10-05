@@ -1075,23 +1075,12 @@
     .pfD-ping{ animation:none; opacity:0; }
   }
 
-  /* ============ Section 3 · version F — INTERSECTION (aerial frames that grow; MATCH goes full screen) ============ */
+  /* ============ Section 3 · version F — INTERSECTION (full-bleed aerial story; MATCH is the climax by type, camera and colour) ============ */
   .pfF{ position:relative; background:var(--cream); color:var(--charcoal); }
-  .pfF-pin{ position:relative; height:520vh; }
-  /* full-bleed (not max-width) so the MATCH frame can grow to the whole viewport; JS sets the frame's box */
-  .pfF-stage{ position:sticky; top:0; height:100vh; overflow:hidden; }
-  .pfF-side{
-    position:absolute; top:0; bottom:0; left:max(24px, calc((100% - 1320px) / 2 + 24px));
-    width:min(290px, 24vw);
-    padding-top:var(--header-h);
-    display:flex; flex-direction:column; justify-content:center; gap:44px;
-  }
-  .pfF-frame{
-    position:absolute; left:0; top:0; width:0; height:0; z-index:2;
-    overflow:hidden; border-radius:24px; background:#0B111C;
-    box-shadow:0 50px 80px -40px rgba(35,50,78,.55);
-    will-change:left, top, width, height;
-  }
+  .pfF-pin{ position:relative; height:560vh; }
+  .pfF-stage{ position:sticky; top:0; height:100vh; overflow:hidden; background:#0B111C; }
+  /* every phase is full-bleed — MOVE and MIX no longer sit in a card */
+  .pfF-frame{ position:absolute; inset:0; z-index:2; overflow:hidden; background:#0B111C; }
   .pfF-scene{ position:absolute; inset:0; opacity:0; transform-origin:50% 50%; }
   .pfF-scene img, .pfF-ov{ position:absolute; inset:0; width:100%; height:100%; display:block; }
   .pfF-scene img{ object-fit:cover; }
@@ -1099,21 +1088,22 @@
   .pfF-ov .dots{ fill:none; stroke-linecap:round; stroke-dasharray:.001 .06; animation:pfFdots 2.6s linear infinite; }
   @keyframes pfFdots{ to{ stroke-dashoffset:-.061; } }
   .pfF-ov .dots.out{ animation-direction:reverse; }
-  /* MOVE — scroll-scrubbed video + the four ways of travelling passing over it */
+
+  /* MOVE — scroll-scrubbed video + the four ways of travelling passing over it (bottom-right, clear of the caption) */
   .pfF-vid{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
-  .pfF-move::after{ content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(0deg, rgba(6,9,15,.72) 0%, rgba(6,9,15,.2) 38%, transparent 60%); }
   .pfF-modes{
-    position:absolute; left:28px; right:28px; bottom:26px; z-index:1;
+    position:absolute; z-index:1; right:112px; bottom:52px; width:min(460px, 34%);
     list-style:none; margin:0; padding:0;
-    display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:20px;
+    display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:26px 28px;
     color:var(--white);
   }
   .pfF-modes li{ display:flex; flex-direction:column; gap:3px; opacity:0; }
-  .pfF-modes .cv-ico{ width:34px; height:34px; margin-bottom:8px; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.28); }
+  .pfF-modes .cv-ico{ width:36px; height:36px; margin-bottom:8px; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); }
   .pfF-modes .cv-ico svg{ width:16px; height:16px; }
   .pfF-modes .m-cat{ font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#8FD0FF; }
-  .pfF-modes b{ font-size:18px; font-weight:700; }
-  .pfF-modes small{ font-size:12px; line-height:1.45; color:rgba(255,255,255,.72); }
+  .pfF-modes b{ font-size:20px; font-weight:700; }
+  .pfF-modes small{ font-size:12.5px; line-height:1.45; color:rgba(255,255,255,.78); }
+
   .pfF-clouds{ position:absolute; left:0; right:0; top:0; height:260%; z-index:3; pointer-events:none; visibility:hidden; will-change:transform; }
   .pfF-clouds img{ position:absolute; height:auto; display:block; }
   .pfF-cloud-core{
@@ -1122,18 +1112,38 @@
     -webkit-mask-image:linear-gradient(180deg, transparent, #000 10%, #000 90%, transparent);
     mask-image:linear-gradient(180deg, transparent, #000 10%, #000 90%, transparent);
   }
+  /* daylight imagery under white type: darken bottom-left (captions), right edge (modes) and top (rail) */
   .pfF-scrim{
-    position:absolute; inset:0; pointer-events:none; opacity:0;
+    position:absolute; inset:0; pointer-events:none;
     background:
-      linear-gradient(0deg, rgba(6,9,15,.82) 0%, rgba(6,9,15,.35) 34%, transparent 58%),
-      linear-gradient(90deg, rgba(6,9,15,.55) 0%, transparent 46%);
+      linear-gradient(180deg, rgba(6,9,15,.55) 0%, transparent 24%),
+      linear-gradient(0deg, rgba(6,9,15,.8) 0%, rgba(6,9,15,.3) 36%, transparent 60%),
+      linear-gradient(90deg, rgba(6,9,15,.55) 0%, transparent 48%),
+      linear-gradient(270deg, rgba(6,9,15,.4) 0%, transparent 42%);
   }
   .pfF-labs{ position:absolute; inset:0; pointer-events:none; }
   .pfF-labs .cv-lab, .pfF-labs .cv-out{ transition:none; }
+
+  /* rail: horizontal progress over the image, under the header */
+  .pfF-rail{
+    position:absolute; z-index:4; top:calc(var(--header-h) + 20px);
+    left:max(24px, calc((100% - 1320px) / 2 + 24px)); width:min(560px, calc(100% - 48px));
+    flex-direction:row; justify-content:space-between; gap:16px; padding:0 0 14px;
+  }
+  .pfF-rail::before, .pfF-rail::after{ top:auto; bottom:0; left:0; height:2px; width:auto; }
+  .pfF-rail::before{ right:0; background:rgba(255,255,255,.25); }
+  .pfF-rail::after{ width:calc(100% * var(--p)); height:2px; background:var(--white); }
+  .pfF-rail li::before{ display:none; }
+  .pfF-rail b{ color:rgba(255,255,255,.5); }
+  .pfF-rail small{ color:rgba(255,255,255,.5); }
+  .pfF-rail li.active b{ color:var(--white); }
+  .pfF-rail li.active small{ color:rgba(255,255,255,.85); }
+  .pfF-rail li:focus-visible{ outline-color:var(--white); }
+
   .pfF-over{
     position:absolute; z-index:4;
-    left:max(24px, calc((100% - 1320px) / 2 + 24px)); bottom:48px;
-    width:min(560px, calc(100% - 48px));
+    left:max(24px, calc((100% - 1320px) / 2 + 24px)); bottom:52px;
+    width:min(680px, calc(100% - 48px));
     color:var(--white); pointer-events:none;
   }
   .pfF-oc{
@@ -1143,35 +1153,35 @@
   }
   .pfF-oc.on{ opacity:1; transform:none; pointer-events:auto; }
   .pfF-oc .eyebrow{ display:flex; align-items:center; gap:8px; color:rgba(255,255,255,.85); margin-bottom:14px; }
-  /* climax type — clearly bigger than the MOVE/MIX captions */
-  .pfF-oc h3{ margin:0 0 14px; font-size:clamp(40px,4.6vw,76px); font-weight:700; line-height:1.2; }
-  .pfF-oc p{ margin:0 0 18px; font-size:17px; line-height:1.5; color:rgba(255,255,255,.75); max-width:46ch; }
+  /* climax type: MATCH/NEW headlines ≈1.6–1.8× the MOVE/MIX ones */
+  .pfF-oc h3{ margin:0 0 14px; font-size:clamp(44px,4.6vw,76px); font-weight:700; line-height:1.15; }
+  .pfF-oc.sm h3{ font-size:clamp(26px,2.8vw,46px); line-height:1.3; }
+  .pfF-oc p{ margin:0 0 18px; font-size:17px; line-height:1.5; color:rgba(255,255,255,.78); max-width:46ch; }
   .pfF-oc .pfF-sum{
     display:inline-block; margin:0; padding:8px 16px; border-radius:999px;
     font-size:14px; font-weight:700; color:var(--white);
     background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2);
     -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
   }
-  .pfF-frame .pfF-ph{ right:92px; bottom:28px; z-index:4; } /* clear of the floating settings / back-to-top buttons */
+  .pfF-frame .pfF-ph{ right:92px; bottom:28px; z-index:5; } /* clear of the floating settings / back-to-top buttons */
 
   @media (max-width:1024px){
     .pfF .pf-intro{ grid-template-columns:1fr; gap:28px; padding-bottom:40px; }
-    .pfF-pin{ height:480vh; }
-    .pfF-side{ position:static; display:block; width:auto; padding:0; }
-    .pfF-rail{ position:absolute; top:calc(var(--header-h) + 8px); left:16px; right:16px; width:auto; max-width:none; margin:0 auto; }
-    .pfF-caps{ position:absolute; left:16px; right:16px; bottom:16px; width:auto; max-width:480px; margin:0 auto; height:150px; }
+    .pfF-pin{ height:500vh; }
+    .pfF-rail{ top:calc(var(--header-h) + 8px); left:16px; right:16px; width:auto; max-width:none; padding-bottom:12px; }
     .pfF-over{ left:16px; right:16px; width:auto; bottom:28px; }
-    .pfF-oc h3{ font-size:34px; }
+    .pfF-oc h3{ font-size:38px; }
+    .pfF-oc.sm h3{ font-size:24px; }
     .pfF-oc p{ font-size:15px; margin-bottom:12px; }
     .pfF-oc .pfF-sum{ font-size:12px; padding:6px 12px; border-radius:14px; }
-    .pfF-modes{ left:14px; right:14px; bottom:14px; grid-template-columns:repeat(2, minmax(0,1fr)); gap:12px 14px; }
-    .pfF-modes .cv-ico{ width:26px; height:26px; margin-bottom:4px; }
+    /* phones: the modes become dark pills under the rail — readable over the bright train roof */
+    .pfF-modes{ left:16px; right:16px; width:auto; top:calc(var(--header-h) + 52px); bottom:auto; gap:8px; }
+    .pfF-modes li{ justify-self:start; flex-direction:row; align-items:center; gap:7px; padding:3px 12px 3px 3px; border-radius:999px; background:rgba(18,22,31,.72); border:1px solid rgba(169,183,204,.22); }
+    .pfF-modes .cv-ico{ width:26px; height:26px; margin:0; }
     .pfF-modes .cv-ico svg{ width:13px; height:13px; }
-    .pfF-modes b{ font-size:14px; }
-    .pfF-modes small{ display:none; }
-    .pfF-frame .pfF-ph{ right:auto; left:12px; top:12px; bottom:auto; font-size:9.5px; padding:4px 9px; white-space:nowrap; }
-    /* full-screen on a phone has no free corner (chips top, caption bottom, buttons right); the notice was already shown on MOVE/MIX */
-    .pfF-frame.is-full .pfF-ph{ display:none; }
+    .pfF-modes b{ font-size:13px; }
+    .pfF-modes .m-cat, .pfF-modes small{ display:none; }
+    .pfF-frame .pfF-ph{ right:auto; left:16px; top:calc(var(--header-h) + 44px); bottom:auto; font-size:9.5px; padding:4px 9px; white-space:nowrap; }
   }
   @media (prefers-reduced-motion:reduce){
     .pfF-ov .dots{ animation:none; }
@@ -2679,9 +2689,9 @@ setTimeout(function(){
     </div>
   </section>
 
-  <!-- ---- Section 3 · version F — INTERSECTION: same story as D told with aerial "photos", where scale is the
-       narrative — MOVE is a small frame, MIX a bigger one, and MATCH bursts to full screen as the climax.
-       The aerial scenes are procedural placeholders rasterised in JS (swap each <img> for a real aerial photo). ---- -->
+  <!-- ---- Section 3 · version F — INTERSECTION: same story as D told full-bleed on daylight aerial imagery.
+       MOVE is the live site's drone shot; MIX/MATCH are procedural placeholders rasterised in JS (swap each <img>
+       for a real aerial photo). MATCH is the climax through type size, a pull-back camera and the only red. ---- -->
   <section class="pfF" id="platformsF" data-variant="f" hidden>
     <div class="pf-intro">
       <div>
@@ -2693,28 +2703,12 @@ setTimeout(function(){
 
     <div class="pfF-pin" id="pfFPin">
       <div class="pfF-stage" id="pfFStage">
-        <div class="pfF-side" id="pfFSide">
-          <ol class="pfD-rail pfF-rail" id="pfFRail" style="--p:0">
-            <li class="active" tabindex="0" data-i="0"><b>MOVE</b><small>Door-to-door</small></li>
-            <li tabindex="0" data-i="1"><b>MIX</b><small>สถานี · การเชื่อมต่อ</small></li>
-            <li tabindex="0" data-i="2"><b>MATCH</b><small>จุดตัด</small></li>
-            <li tabindex="0" data-i="3"><b>NEW</b><small>ความเป็นไปได้ใหม่</small></li>
-          </ol>
-          <div class="pfD-caps pfF-caps">
-            <div class="pfD-cap on" data-i="0">
-              <div class="eyebrow"><span class="pf-dot" style="background:#3FA3EC"></span>01 · MOVE</div>
-              <h3>เชื่อมผู้คนกับพื้นที่</h3>
-              <p>ผู้บุกเบิกรถไฟฟ้าบีทีเอสกว่า 20 ปี วันนี้กำลังขยายสู่การเดินทางแบบ door-to-door ทั้งทางราง ถนน น้ำ และอากาศ</p>
-              <a class="pf-link" href="https://www.btsgroup.co.th/th/our-business/move">ดูธุรกิจ MOVE <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-            </div>
-            <div class="pfD-cap" data-i="1">
-              <div class="eyebrow"><span class="pf-dot" style="background:#8FD0FF"></span>02 · MIX</div>
-              <h3>สถานีที่เชื่อมทุกอย่างเข้าหากัน</h3>
-              <p>Data · Media · Digital · Experience แตกแขนงจากสถานีไปถึงทุกจุดหมายรอบตัว</p>
-              <a class="pf-link" href="https://www.btsgroup.co.th/th/our-business/mix">ดูธุรกิจ MIX <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-            </div>
-          </div>
-        </div>
+        <ol class="pfD-rail pfF-rail" id="pfFRail" style="--p:0" data-header="dark">
+          <li class="active" tabindex="0" data-i="0"><b>MOVE</b><small>Door-to-door</small></li>
+          <li tabindex="0" data-i="1"><b>MIX</b><small>สถานี · การเชื่อมต่อ</small></li>
+          <li tabindex="0" data-i="2"><b>MATCH</b><small>จุดตัด</small></li>
+          <li tabindex="0" data-i="3"><b>NEW</b><small>ความเป็นไปได้ใหม่</small></li>
+        </ol>
 
         <div class="pfF-frame" id="pfFFrame" data-header="dark">
           <!-- MOVE: real drone shot of the line (same footage as the live site), scrubbed by scroll in reverse —
@@ -2747,6 +2741,18 @@ setTimeout(function(){
             <img src="img/cloud-bottom.avif" alt="" style="left:60%;bottom:12%;width:58%;transform:scaleY(-1)">
           </div>
           <div class="pfF-over">
+            <div class="pfF-oc sm on" data-i="0">
+              <div class="eyebrow"><span class="pf-dot" style="background:#3FA3EC"></span>01 · MOVE</div>
+              <h3>เชื่อมผู้คนกับพื้นที่</h3>
+              <p>ผู้บุกเบิกรถไฟฟ้าบีทีเอสกว่า 20 ปี วันนี้กำลังขยายสู่การเดินทางแบบ door-to-door ทั้งทางราง ถนน น้ำ และอากาศ</p>
+              <a class="pf-link on-dark" href="https://www.btsgroup.co.th/th/our-business/move">ดูธุรกิจ MOVE <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+            </div>
+            <div class="pfF-oc sm" data-i="1">
+              <div class="eyebrow"><span class="pf-dot" style="background:#8FD0FF"></span>02 · MIX</div>
+              <h3>สถานีที่เชื่อม<br>ทุกอย่างเข้าหากัน</h3>
+              <p>Data · Media · Digital · Experience แตกแขนงจากสถานีไปถึงทุกจุดหมายรอบตัว</p>
+              <a class="pf-link on-dark" href="https://www.btsgroup.co.th/th/our-business/mix">ดูธุรกิจ MIX <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+            </div>
             <div class="pfF-oc" data-i="2">
               <div class="eyebrow"><span class="pf-dot" style="background:var(--red)"></span>03 · MATCH</div>
               <h3>ทุกอย่าง<br>มาบรรจบที่นี่</h3>
@@ -3885,13 +3891,10 @@ setTimeout(function(){
     var stage = document.getElementById('pfFStage');
     var frame = document.getElementById('pfFFrame');
     if(!pinF || !stage || !frame) return;
-    var side = document.getElementById('pfFSide');
     var labsF = document.getElementById('pfFLabs');
     var railF = document.getElementById('pfFRail');
     var railItemsF = railF.querySelectorAll('li');
-    var capsF = document.querySelectorAll('#platformsF .pfD-cap');
     var ocs = frame.querySelectorAll('.pfF-oc');
-    var scrim = frame.querySelector('.pfF-scrim');
     var scenes = frame.querySelectorAll('.pfF-scene');
     var vid = frame.querySelector('.pfF-vid');
     var modes = frame.querySelectorAll('.pfF-modes li');
@@ -3899,32 +3902,33 @@ setTimeout(function(){
     var phTag = frame.querySelector('.pfF-ph');
     var VW = 1600, VH = 1000;
     var PHASES = [0, .25, .5, .78], JUMP = [.12, .4, .7, .93];
-    var built = false, phase = -1, lastP = 0;
+    var built = false, phase = -1, capPhase = -1, lastP = 0;
 
     function seg(p, a, b){ return Math.max(0, Math.min(1, (p - a) / (b - a))); }
     function ease(t){ return t * t * (3 - 2 * t); }
     function lerp(a, b, t){ return a + (b - a) * t; }
     function rng(seed){ return function(){ seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 
-    /* ---------- aerial placeholder generator (night city, top-down) ---------- */
+    /* ---------- aerial placeholder generator (daylight city, top-down — matches the MOVE drone footage) ---------- */
     function pts(a){ return a.map(function(q){ return q[0].toFixed(1) + ',' + q[1].toFixed(1); }).join(' '); }
     function off(a, b, d){ // a straight segment offset sideways by d
       var dx = b[0] - a[0], dy = b[1] - a[1], L = Math.sqrt(dx * dx + dy * dy), nx = -dy / L * d, ny = dx / L * d;
       return [[a[0] + nx, a[1] + ny], [b[0] + nx, b[1] + ny]];
     }
     function line(a, b, st){ return '<line x1="' + a[0] + '" y1="' + a[1] + '" x2="' + b[0] + '" y2="' + b[1] + '" ' + st + '/>'; }
+    var SHADOW = '#2A3038'; // sun from the top-left, so shadows fall down-right
 
     function city(R, opt){
-      var s = '<rect width="1600" height="1000" fill="#0A0F18"/>';
-      var tones = ['#161E2C', '#1A2332', '#1E2839', '#222D40', '#18202F', '#1C2A36'];
+      var s = '<rect width="1600" height="1000" fill="#7E857F"/>';
+      var tones = ['#DAD6CE', '#C9C5BC', '#E6E3DC', '#BEC3C7', '#B9B2A6', '#D2CDC2', '#A8B3BB', '#CFC3B0'];
       for(var y = -10; y < 1000; y += 56){
         for(var x = -10; x < 1600; x += 56){
           var r = R();
           if(r < opt.park){
-            s += '<rect x="' + (x + 3) + '" y="' + (y + 3) + '" width="50" height="50" fill="#0F211D"/>';
+            s += '<rect x="' + (x + 3) + '" y="' + (y + 3) + '" width="50" height="50" fill="#6F8E5A"/>';
             for(var k = 0; k < 7; k++){
               var tx = x + 8 + R() * 40, ty = y + 8 + R() * 40, tr = 3 + R() * 5;
-              s += '<circle cx="' + (tx + 2) + '" cy="' + (ty + 3) + '" r="' + tr + '" fill="#060B0A" opacity=".6"/><circle cx="' + tx + '" cy="' + ty + '" r="' + tr + '" fill="' + (R() < .5 ? '#163126' : '#1B3A2E') + '"/>';
+              s += '<circle cx="' + (tx + 2) + '" cy="' + (ty + 3) + '" r="' + tr + '" fill="#2D3B2B" opacity=".45"/><circle cx="' + tx + '" cy="' + ty + '" r="' + tr + '" fill="' + (R() < .5 ? '#3F6C36' : '#558443') + '"/>';
             }
             continue;
           }
@@ -3932,74 +3936,75 @@ setTimeout(function(){
           for(var b = 0; b < n; b++){
             var w = n === 2 ? 22 + R() * 4 : 40 + R() * 10, h = 36 + R() * 14;
             var bx = x + 4 + (n === 2 ? b * 26 : R() * (50 - w)), by = y + 4 + R() * (50 - h);
-            var sh = tall ? 16 : 6 + R() * 5;
-            s += '<rect x="' + (bx + sh * .7) + '" y="' + (by + sh) + '" width="' + w + '" height="' + h + '" fill="#03060A" opacity=".6"/>';
-            s += '<rect x="' + bx + '" y="' + by + '" width="' + w + '" height="' + h + '" rx="1.5" fill="' + (tall ? '#2A364B' : tones[Math.floor(R() * tones.length)]) + '" stroke="rgba(255,255,255,.05)"/>';
+            var sh = tall ? 18 : 6 + R() * 5;
+            s += '<rect x="' + (bx + sh * .7) + '" y="' + (by + sh) + '" width="' + w + '" height="' + h + '" fill="' + SHADOW + '" opacity=".42"/>';
+            s += '<rect x="' + bx + '" y="' + by + '" width="' + w + '" height="' + h + '" rx="1.5" fill="' + (tall ? '#EEF0F1' : tones[Math.floor(R() * tones.length)]) + '" stroke="rgba(0,0,0,.08)"/>';
             var d = Math.floor(R() * 3);
-            for(var q = 0; q < d; q++) s += '<rect x="' + (bx + 3 + R() * (w - 12)) + '" y="' + (by + 3 + R() * (h - 12)) + '" width="' + (4 + R() * 6) + '" height="' + (4 + R() * 6) + '" fill="#2F3B52"/>';
-            if(tall) s += '<circle cx="' + (bx + w / 2) + '" cy="' + (by + h / 2) + '" r="8" fill="none" stroke="#56647C" stroke-width="1.2"/>';
-            if(R() < .3) s += '<rect x="' + (bx + R() * (w - 4)) + '" y="' + (by + R() * (h - 4)) + '" width="3" height="3" fill="#FFD58A" opacity="' + (.5 + R() * .4).toFixed(2) + '"/>';
+            for(var q = 0; q < d; q++) s += '<rect x="' + (bx + 3 + R() * (w - 12)) + '" y="' + (by + 3 + R() * (h - 12)) + '" width="' + (4 + R() * 6) + '" height="' + (4 + R() * 6) + '" fill="#9DA2A5"/>';
+            if(tall) s += '<circle cx="' + (bx + w / 2) + '" cy="' + (by + h / 2) + '" r="8" fill="none" stroke="#8C9399" stroke-width="1.4"/>';
+            if(R() < .18) s += '<circle cx="' + (bx + 6 + R() * (w - 12)) + '" cy="' + (by + 6 + R() * (h - 12)) + '" r="3" fill="#5D7C92"/>'; // water tanks
+            if(R() < .12) s += '<circle cx="' + (bx + R() * w) + '" cy="' + (by + h + 2) + '" r="' + (4 + R() * 4) + '" fill="#4C7A3E"/>'; // street trees
           }
         }
       }
       return s;
     }
-    function canal(d){ return '<path d="' + d + '" fill="none" stroke="#0B1A28" stroke-width="44"/><path d="' + d + '" fill="none" stroke="#163049" stroke-width="2" opacity=".7" transform="translate(0 -12)"/>'; }
+    function cars(R, a, b, offset, colors){
+      var l = off(a, b, offset), da = (8 + R() * 3) + ' ' + (22 + R() * 40) + ' ' + (8 + R() * 3) + ' ' + (40 + R() * 70);
+      return line(l[0], l[1], 'stroke="' + colors[Math.floor(R() * colors.length)] + '" stroke-width="5.5" stroke-dasharray="' + da + '" stroke-dashoffset="' + (R() * 200) + '"');
+    }
+    var CAR = ['#F4F4F2', '#2E3440', '#C7372F', '#E8C35A', '#8A9298', '#E8C35A']; // Bangkok taxis are yellow/green
     function road(R, a, b, w){
-      var s = line(a, b, 'stroke="#343A45" stroke-width="' + (w + 5) + '"') + line(a, b, 'stroke="#22272F" stroke-width="' + w + '"');
+      var s = line(a, b, 'stroke="#BDC0C1" stroke-width="' + (w + 6) + '"') + line(a, b, 'stroke="#5A5E63" stroke-width="' + w + '"');
       if(w >= 40){
         var m = off(a, b, 0);
-        s += line(m[0], m[1], 'stroke="#C9A85A" stroke-width="1.4" opacity=".55"');
-        [-w / 4, w / 4].forEach(function(o){ var l = off(a, b, o); s += line(l[0], l[1], 'stroke="#C8CED8" stroke-width="1.2" stroke-dasharray="14 20" opacity=".35"'); });
+        s += line(m[0], m[1], 'stroke="#E8C35A" stroke-width="1.6" opacity=".85"');
+        [-w / 4, w / 4].forEach(function(o){ var l = off(a, b, o); s += line(l[0], l[1], 'stroke="#F2F2F2" stroke-width="1.3" stroke-dasharray="14 20" opacity=".7"'); });
       }
-      // traffic light trails: warm heads one way, red tails the other
-      [[-w * .3, '#FFF1CF'], [w * .3, '#FF4B45']].forEach(function(lane){
-        var l = off(a, b, lane[0]), da = (4 + R() * 8) + ' ' + (30 + R() * 50) + ' ' + (2 + R() * 4) + ' ' + (60 + R() * 90);
-        s += line(l[0], l[1], 'stroke="' + lane[1] + '" stroke-width="6" opacity=".12" stroke-dasharray="' + da + '" stroke-dashoffset="' + (R() * 200) + '"');
-        s += line(l[0], l[1], 'stroke="' + lane[1] + '" stroke-width="2.2" opacity=".85" stroke-dasharray="' + da + '" stroke-dashoffset="' + (R() * 200) + '"');
-      });
+      s += cars(R, a, b, -w * .3, CAR) + cars(R, a, b, w * .3, CAR);
+      if(w >= 40) s += cars(R, a, b, -w * .12, CAR) + cars(R, a, b, w * .12, CAR);
       return s;
     }
-    function curveRoad(d, w){ return '<path d="' + d + '" fill="none" stroke="#343A45" stroke-width="' + (w + 5) + '"/><path d="' + d + '" fill="none" stroke="#22272F" stroke-width="' + w + '"/><path d="' + d + '" fill="none" stroke="#FFF1CF" stroke-width="2" stroke-dasharray="5 46 3 80" opacity=".7"/>'; }
+    function curveRoad(d, w){ return '<path d="' + d + '" fill="none" stroke="#BDC0C1" stroke-width="' + (w + 6) + '"/><path d="' + d + '" fill="none" stroke="#5A5E63" stroke-width="' + w + '"/><path d="' + d + '" fill="none" stroke="#F4F4F2" stroke-width="5" stroke-dasharray="9 60 9 90"/>'; }
     function rail(a, b){
       var sh = off(a, b, 0);
-      var s = '<g transform="translate(16 18)">' + line(sh[0], sh[1], 'stroke="#02040A" stroke-width="36" opacity=".55"') + '</g>';
-      s += line(a, b, 'stroke="#2A3242" stroke-width="34"') + line(a, b, 'stroke="#465267" stroke-width="29"') + line(a, b, 'stroke="#323B4C" stroke-width="5"');
-      [-8, 8].forEach(function(o){ var l = off(a, b, o); s += line(l[0], l[1], 'stroke="#A3AEC0" stroke-width="1.6"'); });
+      var s = '<g transform="translate(18 20)">' + line(sh[0], sh[1], 'stroke="' + SHADOW + '" stroke-width="36" opacity=".38"') + '</g>';
+      s += line(a, b, 'stroke="#9A9FA3" stroke-width="34"') + line(a, b, 'stroke="#CDD0D2" stroke-width="29"') + line(a, b, 'stroke="#8E9397" stroke-width="5"');
+      [-8, 8].forEach(function(o){ var l = off(a, b, o); s += line(l[0], l[1], 'stroke="#6A7075" stroke-width="1.8"'); });
       return s;
     }
     function train(a, b, t, cars){
       var ang = Math.atan2(b[1] - a[1], b[0] - a[0]) * 180 / Math.PI;
       var cx = a[0] + (b[0] - a[0]) * t, cy = a[1] + (b[1] - a[1]) * t, s = '<g transform="translate(' + cx + ' ' + cy + ') rotate(' + ang + ')">';
-      s += '<rect x="' + (-cars * 35) + '" y="-14" width="' + (cars * 70) + '" height="28" rx="10" fill="#8FD0FF" opacity=".12"/>';
+      s += '<rect x="' + (-cars * 35 + 5) + '" y="-5" width="' + (cars * 70) + '" height="22" rx="8" fill="' + SHADOW + '" opacity=".3"/>';
       for(var i = 0; i < cars; i++){
         var x = -cars * 35 + i * 70 + 2;
-        s += '<rect x="' + x + '" y="-9" width="66" height="18" rx="' + (i === 0 || i === cars - 1 ? 7 : 2) + '" fill="#DCE4EE"/><rect x="' + (x + 4) + '" y="-1.5" width="58" height="3" fill="#00599B"/><rect x="' + (x + 10) + '" y="-6" width="10" height="3" fill="#B8C3D2"/><rect x="' + (x + 44) + '" y="-6" width="10" height="3" fill="#B8C3D2"/>';
+        s += '<rect x="' + x + '" y="-9" width="66" height="18" rx="' + (i === 0 || i === cars - 1 ? 7 : 2) + '" fill="#F3F5F7" stroke="#B9C1CA" stroke-width=".8"/><rect x="' + (x + 4) + '" y="-1.5" width="58" height="3" fill="#00599B"/><rect x="' + (x + 4) + '" y="5" width="58" height="1.6" fill="#ED1D24"/><rect x="' + (x + 10) + '" y="-6" width="10" height="3" fill="#C3CBD4"/><rect x="' + (x + 44) + '" y="-6" width="10" height="3" fill="#C3CBD4"/>';
       }
       return s + '</g>';
     }
     function station(c, ang, len, wid){
       var s = '<g transform="translate(' + c[0] + ' ' + c[1] + ') rotate(' + ang + ')">';
-      s += '<rect x="' + (-len / 2 + 14) + '" y="' + (-wid / 2 + 16) + '" width="' + len + '" height="' + wid + '" rx="12" fill="#02040A" opacity=".55"/>';
-      s += '<rect x="' + (-len / 2) + '" y="' + (-wid / 2) + '" width="' + len + '" height="' + wid + '" rx="12" fill="#56657B" stroke="#8C9BB1" stroke-width="1.5"/>';
-      for(var x = -len / 2 + 14; x < len / 2 - 8; x += 13) s += '<line x1="' + x + '" y1="' + (-wid / 2 + 4) + '" x2="' + x + '" y2="' + (wid / 2 - 4) + '" stroke="#6D7D95" stroke-width="1.2"/>';
-      s += '<rect x="' + (-len / 2 + 20) + '" y="-5" width="' + (len - 40) + '" height="10" rx="5" fill="#9CC3E6" opacity=".45"/>';
+      s += '<rect x="' + (-len / 2 + 16) + '" y="' + (-wid / 2 + 18) + '" width="' + len + '" height="' + wid + '" rx="12" fill="' + SHADOW + '" opacity=".4"/>';
+      s += '<rect x="' + (-len / 2) + '" y="' + (-wid / 2) + '" width="' + len + '" height="' + wid + '" rx="12" fill="#BFCCD8" stroke="#8FA3B8" stroke-width="1.5"/>';
+      for(var x = -len / 2 + 14; x < len / 2 - 8; x += 13) s += '<line x1="' + x + '" y1="' + (-wid / 2 + 4) + '" x2="' + x + '" y2="' + (wid / 2 - 4) + '" stroke="#A3B4C6" stroke-width="1.2"/>';
+      s += '<rect x="' + (-len / 2 + 20) + '" y="-5" width="' + (len - 40) + '" height="10" rx="5" fill="#7FB3DD" opacity=".7"/>';
       return s + '</g>';
     }
-    function skywalk(p){ return '<polyline points="' + pts(p) + '" fill="none" stroke="#02040A" stroke-width="18" opacity=".5" transform="translate(8 10)"/><polyline points="' + pts(p) + '" fill="none" stroke="#56667D" stroke-width="14" stroke-linejoin="round"/><polyline points="' + pts(p) + '" fill="none" stroke="#A7CDEE" stroke-width="4" opacity=".45" stroke-linejoin="round"/>'; }
+    function skywalk(p){ return '<polyline points="' + pts(p) + '" fill="none" stroke="' + SHADOW + '" stroke-width="18" opacity=".32" transform="translate(9 11)"/><polyline points="' + pts(p) + '" fill="none" stroke="#C6CBCF" stroke-width="14" stroke-linejoin="round"/><polyline points="' + pts(p) + '" fill="none" stroke="#7FB3DD" stroke-width="4" opacity=".75" stroke-linejoin="round"/>'; }
     function mall(R, x, y, w, h){
-      var s = '<rect x="' + (x + 18) + '" y="' + (y + 22) + '" width="' + w + '" height="' + h + '" fill="#02040A" opacity=".6"/>';
-      s += '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="6" fill="#283246" stroke="#3E4B62" stroke-width="2"/>';
-      s += '<rect x="' + (x + 16) + '" y="' + (y + 16) + '" width="' + (w - 32) + '" height="' + (h - 32) + '" rx="4" fill="#202A3B"/>';
-      for(var i = x + 28; i < x + w - 28; i += 18) s += '<line x1="' + i + '" y1="' + (y + 24) + '" x2="' + i + '" y2="' + (y + h * .45) + '" stroke="#36435A" stroke-width="1"/>';
-      for(var k = 0; k < 6; k++) s += '<rect x="' + (x + 24 + R() * (w - 60)) + '" y="' + (y + h * .55 + R() * (h * .3)) + '" width="' + (8 + R() * 14) + '" height="' + (8 + R() * 10) + '" fill="#3A4760"/>';
-      s += '<circle cx="' + (x + w * .7) + '" cy="' + (y + h * .3) + '" r="' + Math.min(w, h) * .12 + '" fill="#9CC3E6" opacity=".22"/>';
+      var s = '<rect x="' + (x + 20) + '" y="' + (y + 24) + '" width="' + w + '" height="' + h + '" fill="' + SHADOW + '" opacity=".42"/>';
+      s += '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="6" fill="#DCD8D0" stroke="#A9A598" stroke-width="2"/>';
+      s += '<rect x="' + (x + 16) + '" y="' + (y + 16) + '" width="' + (w - 32) + '" height="' + (h - 32) + '" rx="4" fill="#CFCABF"/>';
+      for(var i = x + 28; i < x + w - 28; i += 18) s += '<line x1="' + i + '" y1="' + (y + 24) + '" x2="' + i + '" y2="' + (y + h * .45) + '" stroke="#B8B3A8" stroke-width="1.2"/>';
+      for(var k = 0; k < 6; k++) s += '<rect x="' + (x + 24 + R() * (w - 60)) + '" y="' + (y + h * .55 + R() * (h * .3)) + '" width="' + (8 + R() * 14) + '" height="' + (8 + R() * 10) + '" fill="#A1A6A9"/>';
+      s += '<circle cx="' + (x + w * .7) + '" cy="' + (y + h * .3) + '" r="' + Math.min(w, h) * .12 + '" fill="#7FB3DD" opacity=".65"/>';
       return s;
     }
-    function finish(){ // night grade + vignette, like a long-exposure aerial
-      return '<defs><radialGradient id="vg" cx="50%" cy="50%" r="75%"><stop offset=".45" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".62"/></radialGradient>'
-        + '<radialGradient id="lt" cx="50%" cy="50%" r="55%"><stop offset="0" stop-color="#3F7EC0" stop-opacity=".16"/><stop offset="1" stop-color="#3F7EC0" stop-opacity="0"/></radialGradient></defs>'
-        + '<rect width="1600" height="1000" fill="url(#lt)"/><rect width="1600" height="1000" fill="#0A2A55" opacity=".1"/><rect width="1600" height="1000" fill="url(#vg)"/>';
+    function finish(){ // daylight grade: warm sun from the top-left, a little haze, soft vignette — like the drone shot
+      return '<defs><radialGradient id="vg" cx="50%" cy="50%" r="75%"><stop offset=".5" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#1A2230" stop-opacity=".4"/></radialGradient>'
+        + '<radialGradient id="sun" cx="15%" cy="0%" r="90%"><stop offset="0" stop-color="#FFE3B3" stop-opacity=".28"/><stop offset="1" stop-color="#FFE3B3" stop-opacity="0"/></radialGradient></defs>'
+        + '<rect width="1600" height="1000" fill="url(#sun)"/><rect width="1600" height="1000" fill="#DCE6EE" opacity=".08"/><rect width="1600" height="1000" fill="url(#vg)"/>';
     }
 
     // MIX — a station on the line, skywalks branching into malls and buildings
@@ -4025,16 +4030,17 @@ setTimeout(function(){
     function sceneMatch(){
       var R = rng(37), s = city(R, { park:.04 });
       s += road(R, [-80, 220], [1680, 220], 26) + road(R, [-80, 790], [1680, 790], 26) + road(R, [380, -40], [380, 1040], 26) + road(R, [1220, -40], [1220, 1040], 26);
-      s += '<circle cx="800" cy="500" r="178" fill="none" stroke="#343A45" stroke-width="50"/><circle cx="800" cy="500" r="178" fill="none" stroke="#22272F" stroke-width="44"/>'
-        + '<circle cx="800" cy="500" r="178" fill="none" stroke="#FFF1CF" stroke-width="2" stroke-dasharray="4 40 2 70" opacity=".75"/><circle cx="800" cy="500" r="178" fill="none" stroke="#FF4B45" stroke-width="2" stroke-dasharray="3 60 5 50" opacity=".7" transform="rotate(40 800 500)"/>';
+      s += '<circle cx="800" cy="500" r="150" fill="#6F8E5A"/>'
+        + '<circle cx="800" cy="500" r="178" fill="none" stroke="#BDC0C1" stroke-width="50"/><circle cx="800" cy="500" r="178" fill="none" stroke="#5A5E63" stroke-width="44"/>'
+        + '<circle cx="800" cy="500" r="186" fill="none" stroke="#F4F4F2" stroke-width="5.5" stroke-dasharray="9 40 9 70"/><circle cx="800" cy="500" r="170" fill="none" stroke="#E8C35A" stroke-width="5.5" stroke-dasharray="9 60 9 50" transform="rotate(40 800 500)"/>';
       s += curveRoad('M 620 -40 Q 640 300 980 330 T 1680 360', 30) + curveRoad('M -80 700 Q 500 650 620 680 T 980 1040', 30);
       s += road(R, [800, -80], [800, 1080], 72) + road(R, RA[0], RA[1], 58) + road(R, RB[0], RB[1], 50) + road(R, RC[0], RC[1], 50);
       s += rail(RA[0], RA[1]) + rail(RB[0], RB[1]) + rail(RC[0], RC[1]);
       s += station([1000, 500], 0, 220, 64) + station([600, 500], 0, 220, 64);
       s += station([800 + 150 * .707, 500 + 150 * .707], 45.5, 180, 60) + station([800 - 150 * .766, 500 + 150 * .643], 139.7, 180, 60);
-      s += '<rect x="708" y="408" width="200" height="200" rx="34" fill="#02040A" opacity=".6"/><rect x="690" y="390" width="220" height="220" rx="34" fill="#5B6A80" stroke="#9AA9BF" stroke-width="2"/>';
-      for(var i = 0; i < 16; i++) s += '<line x1="800" y1="500" x2="' + (800 + Math.cos(i * Math.PI / 8) * 106) + '" y2="' + (500 + Math.sin(i * Math.PI / 8) * 106) + '" stroke="#71819A" stroke-width="1.2"/>';
-      s += '<circle cx="800" cy="500" r="56" fill="#9CC3E6" opacity=".55"/><circle cx="800" cy="500" r="56" fill="none" stroke="#C9E2F7" stroke-width="2"/>';
+      s += '<rect x="712" y="414" width="200" height="200" rx="34" fill="' + SHADOW + '" opacity=".42"/><rect x="690" y="390" width="220" height="220" rx="34" fill="#C3D0DC" stroke="#8FA3B8" stroke-width="2"/>';
+      for(var i = 0; i < 16; i++) s += '<line x1="800" y1="500" x2="' + (800 + Math.cos(i * Math.PI / 8) * 106) + '" y2="' + (500 + Math.sin(i * Math.PI / 8) * 106) + '" stroke="#A3B4C6" stroke-width="1.2"/>';
+      s += '<circle cx="800" cy="500" r="56" fill="#7FB3DD" opacity=".8"/><circle cx="800" cy="500" r="56" fill="none" stroke="#FFFFFF" stroke-width="2"/>';
       s += train(RA[0], RA[1], .28, 4) + train(RB[0], RB[1], .75, 4) + train(RC[0], RC[1], .2, 4);
       return s + finish();
     }
@@ -4059,12 +4065,14 @@ setTimeout(function(){
     }
 
     /* ---------- live overlay: routes over the image ---------- */
+    // on daylight imagery a white glow disappears — routes are a soft halo + white casing + a saturated core
+    var CORE = { '#3FA3EC':'#00599B', '#8FD0FF':'#1C86D6', '#C6D0DE':'#23324E' };
     function route(p, cls, col, outward){
       var d = 'M' + pts(p).split(' ').join(' L');
       return '<g class="' + cls + '">'
-        + '<path class="rt" pathLength="1" d="' + d + '" stroke="' + col + '" stroke-width="16" opacity=".1"/>'
-        + '<path class="rt" pathLength="1" d="' + d + '" stroke="' + col + '" stroke-width="7" opacity=".3"/>'
-        + '<path class="rt" pathLength="1" d="' + d + '" stroke="#FFFFFF" stroke-width="2.4"/>'
+        + '<path class="rt" pathLength="1" d="' + d + '" stroke="' + col + '" stroke-width="20" opacity=".22"/>'
+        + '<path class="rt" pathLength="1" d="' + d + '" stroke="#FFFFFF" stroke-width="8" opacity=".95"/>'
+        + '<path class="rt" pathLength="1" d="' + d + '" stroke="' + (CORE[col] || col) + '" stroke-width="3.6"/>'
         + '<path class="dots' + (outward ? ' out' : '') + '" pathLength="1" d="' + d + '" stroke="#FFFFFF" stroke-width="5" opacity="0"/>'
         + '</g>';
     }
@@ -4087,14 +4095,15 @@ setTimeout(function(){
       // MATCH — five approaches converge on C at the same moment (p≈.72)…
       var IN = [
         { p:[RA[0], C], c:[['MOVE', 'train', .35]] },
-        { p:[RB[0], C], c:[['MIX', 'layers', .35]] },
-        { p:[[800, -80], C], c:[['Business', 'briefcase', .3], ['Property', 'house', .46], ['Technology', 'cpu', .62]] },
-        { p:[RC[0], C], c:[['Hotel', 'bed', .3], ['Finance', 'wallet', .5]] },
+        { p:[RB[0], C], c:[['MIX', 'layers', .5]] },
+        // 4th value: spot on phones, further down the route so the chip clears the rail under the header
+        { p:[[800, -80], C], c:[['Business', 'briefcase', .3, .46], ['Property', 'house', .46, .6], ['Technology', 'cpu', .62, .74]] },
+        { p:[RC[0], C], c:[['Hotel', 'bed', .3, .45], ['Finance', 'wallet', .5, .62]] },
         { p:[RC[1], C], c:[] }
       ];
       IN.forEach(function(r, k){
         add(2, route(r.p, 'r', k < 2 ? '#3FA3EC' : '#C6D0DE'), function(p){ return seg(p, .6 + k * .012, .72); },
-          r.c.map(function(c){ return chip(2, lin(r.p[0], r.p[1], c[2]), c[0], c[1], c[2]); }));
+          r.c.map(function(c){ return chip(2, lin(r.p[0], r.p[1], c[2]), c[0], c[1], c[2], false, '', c[3] ? lin(r.p[0], r.p[1], c[3]) : null); }));
       });
       // …then New Possibility leaves along the three remaining directions
       var OUT = [
@@ -4111,8 +4120,8 @@ setTimeout(function(){
         var svg = scene.querySelector('.pfF-ov');
         if(!svg) return; // MOVE has no overlay
         var extra = sc === 2
-          ? '<circle class="fw" cx="800" cy="500" r="20" fill="none" stroke="#8FD0FF" stroke-width="2" opacity="0"/>'
-            + '<circle class="fb" cx="800" cy="500" r="12" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0"/>'
+          ? '<circle class="fw" cx="800" cy="500" r="20" fill="none" stroke="#FFFFFF" stroke-width="3" opacity="0"/>'
+            + '<circle class="fb" cx="800" cy="500" r="12" fill="none" stroke="#FFFFFF" stroke-width="4" opacity="0"/>'
             + '<circle class="pfD-ping fp" cx="800" cy="500" r="16" fill="none" stroke="#ED1D24" stroke-width="2"/>'
             + '<circle class="pfD-ping p2 fp" cx="800" cy="500" r="16" fill="none" stroke="#ED1D24" stroke-width="2"/>'
             + '<circle class="fh" cx="800" cy="500" r="90" fill="url(#fHalo)"/>'
@@ -4164,51 +4173,16 @@ setTimeout(function(){
       update(lastP);
     }
 
-    /* ---------- frame geometry per state ---------- */
-    function boxes(){
-      var W = stage.clientWidth, H = stage.clientHeight, hh = 88, B = {};
-      if(W > 1024){
-        var cl = Math.max(24, (W - 1320) / 2 + 24), cw = W - 2 * cl, ty = hh + 24, th = H - ty - 32;
-        var sideW = Math.min(290, W * .24) + 48, ax = cl + sideW, aw = cw - sideW;
-        var mw = Math.min(aw * .8, th * 16 / 9), mh = mw * 9 / 16; // the footage is 16:9
-        var xw = Math.min(aw, th * 1.6), xh = Math.min(th, xw / 1.45);
-        B.move = { l: ax + (aw - mw) / 2, t: ty + (th - mh) / 2, w: mw, h: mh, r: 24 };
-        B.mix = { l: ax + (aw - xw) / 2, t: ty + (th - xh) / 2, w: xw, h: xh, r: 24 };
-      } else {
-        var ty2 = hh + 52, th2 = H - ty2 - 176, cw2 = W - 32;
-        var mw2 = cw2 * .86, mh2 = Math.min(th2 * .8, mw2 * 1.15); // train runs down the middle, so a portrait crop still works
-        var xh2 = Math.min(th2, cw2 / .82), xw2 = Math.min(cw2, xh2 * .82);
-        B.move = { l: (W - mw2) / 2, t: ty2 + (th2 - mh2) / 2, w: mw2, h: mh2, r: 20 };
-        B.mix = { l: (W - xw2) / 2, t: ty2 + (th2 - xh2) / 2, w: xw2, h: xh2, r: 20 };
-      }
-      B.full = { l: 0, t: 0, w: W, h: H, r: 0 };
-      return B;
-    }
-    var KEYS = [[0, 'move'], [.17, 'move'], [.3, 'mix'], [.47, 'mix'], [.62, 'full'], [1, 'full']];
-    function boxAt(p, B){
-      for(var i = 0; i < KEYS.length - 1; i++){
-        var a = KEYS[i], b = KEYS[i + 1];
-        if(p <= b[0]){
-          var t = ease(seg(p, a[0], b[0])), A = B[a[1]], Z = B[b[1]];
-          return { l: lerp(A.l, Z.l, t), t: lerp(A.t, Z.t, t), w: lerp(A.w, Z.w, t), h: lerp(A.h, Z.h, t), r: lerp(A.r, Z.r, t) };
-        }
-      }
-      return B.full;
-    }
-
     function update(p){
       lastP = p;
-      var B = boxes(), bx = boxAt(p, B);
-      frame.style.left = bx.l + 'px'; frame.style.top = bx.t + 'px';
-      frame.style.width = bx.w + 'px'; frame.style.height = bx.h + 'px';
-      frame.style.borderRadius = bx.r + 'px';
+      // the frame is full-bleed in every phase now, so the stage size is the frame size
+      var bx = { w: stage.clientWidth, h: stage.clientHeight };
 
-      side.style.opacity = (1 - seg(p, .47, .53)).toFixed(3); // gone before the growing frame reaches the captions
-
-      // scene crossfades + slow zoom-out (MATCH pulls back while the frame grows: "now you see the whole city")
-      // MOVE → MIX is a hard swap hidden behind the cloud bank (fully covered at p=.25); MIX → MATCH crossfades
+      // MOVE → MIX is a hard swap hidden behind the cloud bank (fully covered at p=.25); MIX → MATCH crossfades.
+      // Camera: MOVE descends (the footage itself), MIX pushes in, MATCH pulls back to show the whole interchange —
+      // with every phase full-bleed, that pull-back (plus the type size and the only red) is what makes MATCH the climax
       var op = [p < .25 ? 1 : 0, (p >= .25 ? 1 : 0) * (1 - seg(p, .5, .58)), seg(p, .5, .58)];
-      var z = [1, 1.08 - .08 * seg(p, .25, .5), 1.22 - .22 * ease(seg(p, .5, .92))];
+      var z = [1, 1 + .1 * ease(seg(p, .25, .52)), 1.24 - .24 * ease(seg(p, .5, .92))];
 
       // MOVE footage runs in reverse: far above the line → just over the roof, the train coming toward us
       if(vid.duration){
@@ -4223,9 +4197,9 @@ setTimeout(function(){
       var ct = seg(p, .19, .31);
       clouds.style.visibility = ct > 0 && ct < 1 ? 'visible' : 'hidden';
       clouds.style.transform = 'translateY(' + (bx.h - 3.6 * bx.h * ct).toFixed(1) + 'px)';
-      phTag.style.visibility = p < .25 ? 'hidden' : ''; // MOVE is real footage — no placeholder notice there
+      // MOVE is real footage — no placeholder notice there; on phones MATCH's top chips need that corner too
+      phTag.style.visibility = p < .25 || (bx.w <= 1024 && p >= .5) ? 'hidden' : '';
       Array.prototype.forEach.call(scenes, function(el, k){ el.style.opacity = op[k].toFixed(3); el.style.transform = 'scale(' + z[k].toFixed(4) + ')'; el.style.visibility = op[k] > 0 ? '' : 'hidden'; });
-      scrim.style.opacity = seg(p, .6, .68).toFixed(3);
 
       if(built){
         OV.forEach(function(list){
@@ -4242,7 +4216,7 @@ setTimeout(function(){
         var mv = frame.querySelector('.pfF-scene[data-i="2"] .pfF-ov');
         var landed = p >= .71;
         mv.querySelector('.fc').setAttribute('r', (6 + 6 * seg(p, .62, .72)).toFixed(2));
-        mv.querySelector('.fc').setAttribute('fill', landed ? '#ED1D24' : '#8FD0FF');
+        mv.querySelector('.fc').setAttribute('fill', landed ? '#ED1D24' : '#00599B');
         mv.querySelector('.fh').setAttribute('opacity', landed ? 1 : 0);
         Array.prototype.forEach.call(mv.querySelectorAll('.fp'), function(el){ el.style.visibility = landed && !reduceMotion ? 'visible' : 'hidden'; });
         var b = seg(p, .72, .82), w = seg(p, .78, .97);
@@ -4252,7 +4226,7 @@ setTimeout(function(){
         mv.querySelector('.fw').setAttribute('opacity', w > 0 && w < 1 ? ((1 - w) * .5).toFixed(3) : 0);
 
         // chips follow the cover-crop + zoom of their scene, clamped inside the frame
-        var fw = bx.w, fh = bx.h, narrow = B.full.w <= 1024;
+        var fw = bx.w, fh = bx.h, narrow = fw <= 1024;
         CHIPS.forEach(function(c){
           var s = Math.max(fw / VW, fh / VH) * z[c.sc], pt = narrow && c.ptMob ? c.ptMob : c.pt;
           var x = fw / 2 + (pt[0] - VW / 2) * s, y = fh / 2 + (pt[1] - VH / 2) * s;
@@ -4266,12 +4240,11 @@ setTimeout(function(){
       railF.style.setProperty('--p', p.toFixed(4));
       Array.prototype.forEach.call(railItemsF, function(el, k){ el.classList.toggle('done', p >= PHASES[k] + .01 || (k === 0 && p > .01)); });
       var ph = p >= PHASES[3] ? 3 : p >= PHASES[2] ? 2 : p >= PHASES[1] ? 1 : 0;
-      var full = p >= .62;
-      if(ph !== phase || full !== frame.classList.contains('is-full')){
-        phase = ph;
-        frame.classList.toggle('is-full', full);
-        Array.prototype.forEach.call(capsF, function(el, k){ el.classList.toggle('on', k === Math.min(ph, 1)); });
-        Array.prototype.forEach.call(ocs, function(el){ el.classList.toggle('on', full && +el.getAttribute('data-i') === ph); });
+      // captions follow the picture, not the rail: MATCH's headline waits until its scene has faded in
+      var cph = p >= PHASES[3] ? 3 : p >= .58 ? 2 : p >= PHASES[1] ? 1 : 0;
+      if(ph !== phase || cph !== capPhase){
+        phase = ph; capPhase = cph;
+        Array.prototype.forEach.call(ocs, function(el){ el.classList.toggle('on', +el.getAttribute('data-i') === cph); });
         Array.prototype.forEach.call(railItemsF, function(el, k){ el.classList.toggle('active', k === ph); });
       }
     }
