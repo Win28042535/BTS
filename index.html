@@ -116,6 +116,15 @@
     color:var(--white);
   }
   .site-header.is-scrolled .menu-toggle{ color:var(--navy); }
+  /* transparent header over a bright section (the daylight hero): dark type, no background */
+  .site-header.on-light .header-utility{ color:rgba(35,50,78,.62); border-bottom-color:rgba(35,50,78,.12); }
+  .site-header.on-light .u-tick{ color:var(--navy); }
+  .site-header.on-light .brand-word b{ color:var(--navy); }
+  .site-header.on-light .brand-word span{ color:rgba(35,50,78,.55); }
+  .site-header.on-light .menu-toggle{ color:var(--navy); }
+  .site-header.on-light .brand-mark{ color:var(--navy); }
+  .u-tick .up{ color:#7EE2A8; }
+  .site-header.is-scrolled .u-tick .up, .site-header.on-light .u-tick .up{ color:#2E8B57; }
   .dot-cluster{ position:relative; width:26px; height:22px; flex:none; }
   .dot-cluster i{
     position:absolute; width:5px; height:5px; border-radius:50%;
@@ -205,23 +214,23 @@
   /* ============ Hero — scroll-locked door reveal (DNA: 21st.dev "Scroll-Locked Video Hero") ============ */
   /* the extra height is the scroll room for the doors to open; kept short on purpose */
   .hero{ position:relative; height:190vh; background:var(--dark); }
-  .hero-pin{
-    position:sticky; top:0; height:100vh; overflow:hidden;
-    display:flex; flex-direction:column; justify-content:flex-end;
-    padding-bottom:88px;
-  }
-  .hero-video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 30%; display:block; transform-origin:50% 55%; will-change:transform; }
+  .hero-pin{ position:sticky; top:0; height:100vh; overflow:hidden; background:#CFE2F2; }
+  /* daylight scene (SVG built in JS) — xMidYMax slice keeps the train + towers bottom-right at any aspect ratio */
+  .hero-scene{ position:absolute; inset:0; transform-origin:50% 60%; will-change:transform; }
+  .hero-scene svg{ display:block; width:100%; height:100%; }
+  @keyframes heroDrift{ from{ transform:translateX(0); } to{ transform:translateX(-160px); } }
+  @keyframes heroDrift2{ from{ transform:translateX(0); } to{ transform:translateX(120px); } }
+  .hero-scene .hs-cloudA{ animation:heroDrift 60s ease-in-out infinite alternate; }
+  .hero-scene .hs-cloudB{ animation:heroDrift2 75s ease-in-out infinite alternate; }
+  @keyframes heroGlint{ 0%,100%{ opacity:.75; } 50%{ opacity:1; } }
+  .hero-scene .hs-sun{ animation:heroGlint 6s ease-in-out infinite; }
+  .hero-video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; transform-origin:50% 60%; }
+  /* light touch only: a soft cool veil behind the headline so white type holds on a bright sky */
   .hero-vshade{
     position:absolute; inset:0; z-index:1; pointer-events:none;
-    background:
-      linear-gradient(0deg, rgba(8,12,20,.9) 0%, rgba(8,12,20,.45) 42%, rgba(8,12,20,.12) 100%),
-      linear-gradient(90deg, rgba(8,12,20,.84) 0%, rgba(8,12,20,.6) 36%, transparent 66%);
+    background:radial-gradient(48% 30% at 50% 48%, rgba(40,78,128,.22), rgba(40,78,128,0) 72%);
   }
-  .hero-content .hero-h1, .hero-phrases{ text-shadow:0 2px 18px rgba(0,0,0,.55); }
   .hero-content{ will-change:opacity, transform; }
-  .hero-phrases{ display:flex; flex-wrap:wrap; gap:6px 16px; margin:0 0 36px; font-size:clamp(16px,1.2vw,18px); font-weight:400; }
-  .hero-phrases span{ color:rgba(255,255,255,.34); transition:color .6s ease; }
-  .hero-phrases span.on{ color:var(--white); }
 
   .hero-doors{ position:absolute; inset:0; z-index:4; pointer-events:none; }
   .door{ position:absolute; top:0; bottom:0; width:50.2%; will-change:transform; }
@@ -280,59 +289,103 @@
     50%{ opacity:1; r:3.6; }
   }
 
+  @keyframes bob{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(5px);} }
+
+  /* centred headline, as in the reference: light weight white, "forward," in a blue→red gradient */
   .hero-content{
-    position:relative; z-index:2;
-    max-width:1320px; width:100%; margin:0 auto;
-    padding:0 24px;
+    position:absolute; z-index:2; left:0; right:0; top:41%;
+    transform:translateY(-50%);
+    padding:0 24px; text-align:center;
   }
-  .hero-eyebrow{ color:var(--silver); margin-bottom:18px; display:flex; align-items:center; gap:8px; }
-  .hero-eyebrow .dot{ width:7px; height:7px; border-radius:50%; background:var(--red); }
   .hero-h1{
     font-family:var(--font-display);
-    font-weight:700;
-    font-size:clamp(40px,6.6vw,80px);
-    line-height:1.5;
-    letter-spacing:0em;
+    font-weight:400;
+    font-size:clamp(38px,4.9vw,76px);
+    line-height:1.3;
+    letter-spacing:-.01em;
     color:var(--white);
-    margin:0 0 20px;
-    text-wrap:balance;
-    max-width:16ch;
+    margin:0 auto;
+    max-width:18ch;
+    text-shadow:0 2px 24px rgba(28,58,98,.35), 0 1px 2px rgba(28,58,98,.25);
   }
-  .hero-actions{ display:flex; flex-wrap:wrap; gap:16px; margin-bottom:56px; }
-  .btn-ghost-play{
-    display:inline-flex; align-items:center; gap:8px;
-    background:none; border:0; color:var(--white); cursor:pointer;
-    font-size:16px; font-weight:400; letter-spacing:0em;
+  .hero-grad{
+    font-weight:700;
+    background:linear-gradient(90deg, #2F5FB3 0%, #5B57C4 45%, #B5445E 80%, #ED1D24 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    text-shadow:none; filter:drop-shadow(0 2px 14px rgba(255,255,255,.45));
   }
-  .btn-ghost-play .circ{
-    width:38px; height:38px; border-radius:50%; border:1.5px solid rgba(255,255,255,.5);
-    display:flex; align-items:center; justify-content:center; transition:background .25s ease, border-color .25s ease;
-  }
-  .btn-ghost-play:hover .circ{ background:rgba(255,255,255,.12); border-color:var(--white); }
 
-  .hero-foot{
-    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;
-    border-top:1px solid rgba(255,255,255,.14);
-    padding-top:22px;
+  /* bottom dock: glass capsule with the share price + a white Quick Menu pill */
+  .hero-dock{
+    position:absolute; z-index:6; left:50%; bottom:max(28px, env(safe-area-inset-bottom));
+    transform:translateX(-50%);
+    display:flex; align-items:center; gap:12px;
+    padding:6px 6px 6px 20px; border-radius:999px;
+    background:rgba(52,84,124,.32); border:1px solid rgba(255,255,255,.45); /* tinted glass: white type must hold over the white haze */
+    box-shadow:0 10px 40px -10px rgba(28,58,98,.35);
+    -webkit-backdrop-filter:blur(14px) saturate(1.2); backdrop-filter:blur(14px) saturate(1.2);
+    white-space:nowrap;
   }
-  .hero-scrollhint{
-    display:flex; align-items:center; gap:8px;
-    font-size:11px; letter-spacing:0em; text-transform:uppercase; color:rgba(255,255,255,.55);
+  .hd-tick{ display:flex; align-items:center; gap:10px; color:var(--white); font-size:17px; font-variant-numeric:tabular-nums; text-shadow:0 1px 8px rgba(28,58,98,.35); }
+  .hd-tick b{ font-weight:700; letter-spacing:.04em; }
+  .hd-px{ font-weight:400; }
+  .hd-chg{ padding:3px 10px; border-radius:999px; font-size:14px; font-weight:700; color:var(--white); text-shadow:none; }
+  .hd-chg.up{ background:#3BAA6B; }
+  .hd-chg.down{ background:#D9474D; }
+  .qm{ position:relative; }
+  .qm-btn{
+    display:flex; align-items:center; gap:10px;
+    padding:11px 20px; border:0; border-radius:999px; cursor:pointer;
+    background:var(--white); color:#0E1626; font-size:16px; font-weight:700;
+    box-shadow:0 2px 10px rgba(28,58,98,.15);
+    transition:transform .2s ease, box-shadow .2s ease;
   }
-  .hero-scrollhint svg{ animation:bob 1.8s ease-in-out infinite; }
-  @keyframes bob{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(5px);} }
-  .hero-taglist{ display:flex; gap:16px; flex-wrap:wrap; }
-  .hero-taglist span{ font-size:11px; letter-spacing:0em; text-transform:uppercase; color:rgba(255,255,255,.4); }
-  .hero-taglist b{ color:rgba(255,255,255,.85); font-weight:400; }
+  .qm-btn:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(28,58,98,.22); }
+  .qm-btn:focus-visible{ outline:2px solid var(--blue); outline-offset:3px; }
+  .qm-chev{ transition:transform .3s ease; }
+  .qm-btn[aria-expanded="true"] .qm-chev{ transform:rotate(180deg); }
+  .qm-panel{
+    position:absolute; right:-6px; bottom:calc(100% + 16px);
+    width:min(440px, calc(100vw - 32px));
+    display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:6px;
+    padding:10px; border-radius:22px;
+    background:rgba(255,255,255,.96); border:1px solid rgba(35,50,78,.08);
+    box-shadow:0 24px 60px -16px rgba(20,40,70,.45);
+    -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+    transform-origin:85% 100%; animation:qmIn .28s cubic-bezier(.2,.8,.2,1);
+  }
+  .qm-panel[hidden]{ display:none; }
+  @keyframes qmIn{ from{ opacity:0; transform:translateY(10px) scale(.96); } to{ opacity:1; transform:none; } }
+  .qm-panel a{
+    display:flex; flex-direction:column; align-items:flex-start; gap:2px;
+    padding:12px; border-radius:14px; color:var(--navy); white-space:normal;
+    transition:background .2s ease;
+  }
+  .qm-panel a:hover, .qm-panel a:focus-visible{ background:rgba(0,89,155,.07); outline:none; }
+  .qm-ico{ width:36px; height:36px; margin-bottom:8px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:rgba(0,89,155,.1); color:var(--blue); }
+  .qm-ico svg{ width:18px; height:18px; }
+  .qm-panel b{ font-size:14px; font-weight:700; line-height:1.35; }
+  .qm-panel small{ font-size:11.5px; color:rgba(41,43,44,.55); }
+
+  .hero .hero-tag{ bottom:auto; top:calc(var(--header-h) + 30px); right:24px; color:rgba(35,50,78,.6); border-color:rgba(35,50,78,.3); }
 
   @media (max-width:720px){
     .header-utility{ padding:8px 16px; font-size:10px; }
     .header-utility .u-mid{ display:none; }
     .header-main{ padding:12px 16px; }
-    .hero-pin{ padding-bottom:64px; }
-    .hero .hero-tag{ bottom:auto; top:104px; right:16px; }
-    .hero-content{ padding:0 16px; }
-    .hero-foot{ flex-direction:column; align-items:flex-start; }
+    .hero-content{ padding:0 16px; top:36%; }
+    .hero-h1{ font-size:clamp(28px,8vw,34px); max-width:none; text-wrap:balance; }
+    .hero-dock{ gap:8px; padding:5px 5px 5px 14px; bottom:20px; }
+    .hd-tick{ font-size:14px; gap:7px; }
+    .hd-chg{ font-size:12px; padding:2px 8px; }
+    .qm-btn{ padding:9px 14px; font-size:14px; gap:7px; }
+    /* panel centres on the whole dock (not the button) so it never runs off a narrow screen */
+    .qm{ position:static; }
+    .qm-panel{
+      right:auto; left:50%; transform-origin:50% 100%;
+      width:min(340px, calc(100vw - 32px)); margin-left:calc(min(340px, 100vw - 32px) / -2);
+      grid-template-columns:repeat(2, minmax(0,1fr));
+    }
   }
 
   /* ============ Section 2 — One Group, Many Connections ============ */
@@ -1588,6 +1641,7 @@
   .ir-price b{ font-size:60px; font-weight:400; line-height:1.5; font-variant-numeric:tabular-nums; }
   .ir-price small{ font-size:16px; color:rgba(255,255,255,.55); }
   .ir-chg{ font-size:16px; font-weight:400; color:#FF9A9E; font-variant-numeric:tabular-nums; }
+  .ir-chg.up{ color:#7EE2A8; }
   .ir-asof{ font-size:12px; color:rgba(255,255,255,.45); margin-top:10px; }
 
   .ir-range{ display:flex; gap:4px; padding:4px; border-radius:999px; background:rgba(255,255,255,.08); }
@@ -1961,7 +2015,7 @@ setTimeout(function(){
 <header class="site-header" id="siteHeader">
   <div class="header-utility">
     <div class="u-left">
-      <span class="u-tick">BTS 2.00 <span class="down">▼0.99%</span></span>
+      <span class="u-tick">BTS 2.02 <span class="up">▲1.00%</span></span>
       <span class="u-sep">|</span>
       <span class="u-mid">นักลงทุนสัมพันธ์</span>
     </div>
@@ -2076,29 +2130,35 @@ setTimeout(function(){
 <main>
   <section class="hero" id="hero" data-header="dark">
    <div class="hero-pin">
-    <!-- plays once the doors finish opening (see tryStartHeroVideo); poster is the mockup until a real source is dropped in -->
-    <video class="hero-video" id="heroCanvas" poster="img/hero-banner-poster.jpg" muted playsinline preload="auto" aria-hidden="true"></video>
+    <!-- daylight city (drawn placeholder, built in JS — see heroSceneSVG): sky, river + bridge, skyline, twin towers,
+         the BTS line on its viaduct, trees, white haze. To use real footage instead, give the <video> a daylight source
+         and remove its `hidden`; the scene stays underneath as its poster. -->
+    <div class="hero-scene" id="heroScene" aria-hidden="true"></div>
+    <video class="hero-video" id="heroCanvas" muted playsinline preload="none" aria-hidden="true" hidden></video>
     <div class="hero-vshade"></div>
 
     <div class="hero-content" id="heroContent">
-      <div class="hero-eyebrow"><span class="dot"></span><span class="eyebrow">The Connected Future</span></div>
-      <h1 class="hero-h1">เชื่อมต่อ<br>ความเป็นไปได้</h1>
-      <p class="hero-phrases" id="heroPhrases"><span class="on">Moving people.</span><span>Connecting businesses.</span><span>Creating possibilities.</span></p>
-      <div class="hero-actions">
-        <a class="btn btn-solid" href="#s2Wrap">สำรวจ BTS Group</a>
-        <button class="btn-ghost-play" type="button" aria-label="View Full VDO">
-          <span class="circ"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg></span>
-          View Full VDO
+      <h1 class="hero-h1" lang="en">Moving the city <span class="hero-grad">forward,</span><br>one journey at a time.</h1>
+    </div>
+
+    <!-- bottom dock: share price + Quick Menu (opens upward) -->
+    <div class="hero-dock" id="heroDock">
+      <a class="hd-tick" href="#investors" aria-label="ราคาหุ้น BTS 2.02 บาท เพิ่มขึ้น 1.00%">
+        <b lang="en">BTS</b><span class="hd-px">2.02</span><span class="hd-chg up">▲ 1.00%</span>
+      </a>
+      <div class="qm">
+        <button class="qm-btn" id="qmBtn" type="button" aria-expanded="false" aria-controls="qmPanel">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/><path d="M14 17.5h7"/><path d="M17.5 14v7"/></svg>
+          <span lang="en">Quick Menu</span>
+          <svg class="qm-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>
         </button>
-      </div>
-      <div class="hero-foot">
-        <div class="hero-scrollhint">
-          เลื่อนลงเพื่อสำรวจ
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-        </div>
-        <div class="hero-taglist">
-          <span><b>MOVE</b> · MIX · MATCH</span>
-          <span>One Group. Many Connections.</span>
+        <div class="qm-panel" id="qmPanel" role="menu" aria-label="Quick Menu" hidden>
+          <a role="menuitem" href="#investors"><span class="qm-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span><b>ราคาหลักทรัพย์</b><small>Stock price</small></a>
+          <a role="menuitem" href="#investors"><span class="qm-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg></span><b>รายงานประจำปี</b><small>Annual report</small></a>
+          <a role="menuitem" href="#stories"><span class="qm-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg></span><b>ข่าวสารองค์กร</b><small>Newsroom</small></a>
+          <a role="menuitem" href="#s3Wrap"><span class="qm-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg></span><b>ธุรกิจของเรา</b><small>Move · Mix · Match</small></a>
+          <a role="menuitem" href="#impact"><span class="qm-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></span><b>ความยั่งยืน</b><small>Sustainability</small></a>
+          <a role="menuitem" href="#footer"><span class="qm-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span><b>ติดต่อเรา</b><small>Contact</small></a>
         </div>
       </div>
     </div>
@@ -2119,7 +2179,7 @@ setTimeout(function(){
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
     </div>
     <div class="hero-progress" aria-hidden="true"><i id="heroBar"></i></div>
-    <span class="im-photo-tag hero-tag">ประตู BTS ภาพประกอบ · วิดีโอพื้นหลังเล่นอัตโนมัติเมื่อประตูเปิด (ตอนนี้เป็นภาพนิ่ง mockup รอไฟล์จริง)</span>
+    <span class="im-photo-tag hero-tag">ภาพประกอบโทนกลางวัน · แทนที่ด้วยวิดีโอ/ภาพจริงได้ภายหลัง</span>
    </div>
   </section>
 
@@ -2925,7 +2985,7 @@ setTimeout(function(){
           <div class="ir-stock-top">
             <div>
               <div class="ir-sym">BTS · SET</div>
-              <div class="ir-price"><b>2.00</b><small>บาท</small><span class="ir-chg">▼ −0.02 (−0.99%)</span></div>
+              <div class="ir-price"><b>2.02</b><small>บาท</small><span class="ir-chg up">▲ +0.02 (+1.00%)</span></div>
               <div class="ir-asof">ข้อมูล ณ 24 ก.ย. 2569 · 16:30 น. (ตัวอย่าง)</div>
             </div>
             <div class="ir-range" role="group" aria-label="ช่วงเวลาของกราฟ">
@@ -2942,8 +3002,8 @@ setTimeout(function(){
           </div>
 
           <dl class="ir-stats">
-            <div><dt>ราคาเปิด</dt><dd>2.02</dd></div>
-            <div><dt>ต่ำสุด–สูงสุด</dt><dd>1.98–2.04</dd></div>
+            <div><dt>ราคาเปิด</dt><dd>2.00</dd></div>
+            <div><dt>ต่ำสุด–สูงสุด</dt><dd>1.99–2.04</dd></div>
             <div><dt>ปริมาณ (หุ้น)</dt><dd>48.6 ล้าน</dd></div>
             <div><dt>มูลค่าตลาด</dt><dd>26,300 ลบ.</dd></div>
           </dl>
@@ -3221,7 +3281,9 @@ setTimeout(function(){
     var y = window.scrollY || 0;
     var probe = document.elementFromPoint(window.innerWidth / 2, header.offsetHeight + 2);
     var onDark = !!(probe && probe.closest('[data-header="dark"]'));
-    header.classList.toggle('is-scrolled', y > 40 && !onDark);
+    var onLight = !!(probe && probe.closest('[data-header="light"]'));
+    header.classList.toggle('is-scrolled', y > 40 && !onDark && !onLight);
+    header.classList.toggle('on-light', onLight);
     if(y > lastY && y > header.offsetHeight){
       header.classList.add('is-hidden');
     } else {
@@ -3375,29 +3437,163 @@ setTimeout(function(){
     return o + '</svg>';
   }
 
-  /* ---- Hero: background is now a real CG still (img#heroCanvas); just cycle the phrases on a timer ---- */
+  /* ---- Hero: daylight city scene (drawn placeholder in the tone of the reference — sky, haze, river + bridge,
+         skyline, twin towers, the BTS line on its viaduct, trees). Seeded, so it's identical every load. ---- */
   var heroSection = document.getElementById('hero');
   var heroCanvas = document.getElementById('heroCanvas');
-  var heroPhraseEls = document.querySelectorAll('#heroPhrases span');
-  var HERO_BEAT = 4200;
+  var heroScene = document.getElementById('heroScene');
 
-  var heroBeat = -1;
-  function cycleHeroPhrase(){
-    heroBeat = (heroBeat + 1) % heroPhraseEls.length;
-    Array.prototype.forEach.call(heroPhraseEls, function(el, k){ el.classList.toggle('on', k === heroBeat); });
+  function heroSceneSVG(){
+    var seed = 7;
+    function R(){ seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+    function f(n){ return n.toFixed(1); }
+    var W = 1920, H = 1080, s = '';
+    s += '<defs>'
+      + '<linearGradient id="hsSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9DC2E6"/><stop offset=".45" stop-color="#C3DBEF"/><stop offset=".72" stop-color="#E4EEF6"/><stop offset="1" stop-color="#F2F5F4"/></linearGradient>'
+      + '<radialGradient id="hsSun" cx="1580" cy="660" r="520" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFF6DE"/><stop offset=".18" stop-color="#FFE6B0" stop-opacity=".85"/><stop offset=".5" stop-color="#FFE2B5" stop-opacity=".25"/><stop offset="1" stop-color="#FFE2B5" stop-opacity="0"/></radialGradient>'
+      + '<linearGradient id="hsRiver" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C9DCEA"/><stop offset="1" stop-color="#9FBFD6"/></linearGradient>'
+      + '<linearGradient id="hsGlassL" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3E78B8"/><stop offset=".45" stop-color="#8FC0EA"/><stop offset=".55" stop-color="#5D95CF"/><stop offset="1" stop-color="#2D5E99"/></linearGradient>'
+      + '<linearGradient id="hsGlassR" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2F64A3"/><stop offset=".5" stop-color="#7FB2E2"/><stop offset="1" stop-color="#3B73B2"/></linearGradient>'
+      + '<linearGradient id="hsTrain" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#E8EDF3"/><stop offset="1" stop-color="#B9C4D2"/></linearGradient>'
+      + '<linearGradient id="hsHaze" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F4F7F9" stop-opacity="0"/><stop offset=".55" stop-color="#F4F7F9" stop-opacity=".55"/><stop offset="1" stop-color="#F7F9FA" stop-opacity=".97"/></linearGradient>'
+      + '<filter id="hsBlur" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="14"/></filter>'
+      + '<filter id="hsSoft"><feGaussianBlur stdDeviation="1.4"/></filter>'
+      + '</defs>';
+    // sky + sun
+    s += '<rect width="' + W + '" height="' + H + '" fill="url(#hsSky)"/>';
+    s += '<rect class="hs-sun" width="' + W + '" height="' + H + '" fill="url(#hsSun)"/>';
+    // clouds: soft blurred puffs in two drifting layers
+    function cloud(cx, cy, sc){
+      var o = '';
+      for(var i = 0; i < 9; i++){
+        var x = cx + (R() - .5) * 260 * sc, y = cy + (R() - .5) * 46 * sc, rx = (60 + R() * 90) * sc;
+        o += '<ellipse cx="' + f(x) + '" cy="' + f(y) + '" rx="' + f(rx) + '" ry="' + f(rx * .45) + '" fill="#FFFFFF" opacity="' + (.55 + R() * .35).toFixed(2) + '"/>';
+      }
+      return o;
+    }
+    s += '<g class="hs-cloudA" filter="url(#hsBlur)">' + cloud(260, 300, 1.2) + cloud(840, 220, .9) + cloud(1380, 330, 1) + cloud(120, 560, 1.1) + '</g>';
+    s += '<g class="hs-cloudB" filter="url(#hsBlur)">' + cloud(560, 420, .8) + cloud(1120, 470, .9) + cloud(1760, 210, 1.1) + cloud(380, 620, .9) + cloud(900, 640, .8) + '</g>';
+    // far skyline (aerial perspective: pale, low contrast)
+    var far = '';
+    for(var x = -20; x < W; x += 14 + R() * 26){
+      var bw = 16 + R() * 34, bh = 30 + R() * (x > 500 && x < 1500 ? 150 : 80);
+      far += '<rect x="' + f(x) + '" y="' + f(772 - bh) + '" width="' + f(bw) + '" height="' + f(bh + 10) + '" fill="#A9BFD3"/>';
+    }
+    s += '<g opacity=".7">' + far + '</g>';
+    // river + cable-stayed bridge (left)
+    s += '<path d="M0 790 L980 782 C1080 790 1140 820 1180 860 L0 900 Z" fill="url(#hsRiver)"/>';
+    for(var k = 0; k < 26; k++){ var rx0 = R() * 1000, ry0 = 800 + R() * 80; s += '<rect x="' + f(rx0) + '" y="' + f(ry0) + '" width="' + f(30 + R() * 90) + '" height="1.6" fill="#FFFFFF" opacity="' + (.35 + R() * .4).toFixed(2) + '"/>'; }
+    var px = 410, top = 470, deck = 786;
+    s += '<g stroke="#8FA4B8" stroke-width="1.2" fill="none" opacity=".9">';
+    for(k = 1; k <= 11; k++){ s += '<line x1="' + px + '" y1="' + (top + 30 + k * 6) + '" x2="' + (px - k * 34) + '" y2="' + deck + '"/><line x1="' + px + '" y1="' + (top + 30 + k * 6) + '" x2="' + (px + k * 34) + '" y2="' + deck + '"/>'; }
+    s += '</g>';
+    s += '<path d="M' + (px - 7) + ' ' + deck + ' L' + (px - 3) + ' ' + top + ' L' + (px + 3) + ' ' + top + ' L' + (px + 7) + ' ' + deck + ' Z" fill="#7F96AC"/>';
+    s += '<rect x="-10" y="' + (deck - 4) + '" width="900" height="8" fill="#8EA2B6"/>';
+    // a temple-like spire beyond the bridge, for a hint of Bangkok
+    s += '<path d="M282 780 L298 732 L302 700 L306 732 L322 780 Z" fill="#C4B59E" opacity=".55"/>';
+    // mid skyline: taller glass towers with window bands, lit from the right
+    function tower(x, w, h, col, light){
+      var y = 790 - h, o = '<rect x="' + f(x) + '" y="' + f(y) + '" width="' + f(w) + '" height="' + f(h) + '" fill="' + col + '"/>';
+      o += '<rect x="' + f(x + w * .62) + '" y="' + f(y) + '" width="' + f(w * .38) + '" height="' + f(h) + '" fill="' + light + '" opacity=".55"/>';
+      for(var yy = y + 8; yy < 788; yy += 9) o += '<rect x="' + f(x + 3) + '" y="' + f(yy) + '" width="' + f(w - 6) + '" height="2" fill="#FFFFFF" opacity=".22"/>';
+      return o;
+    }
+    var mids = '';
+    [[620,48,250],[700,36,200],[760,58,320],[860,40,230],[950,64,290],[1060,44,360],[1150,56,280],[1240,38,210],[1300,62,330],[1400,46,260],[1480,54,300],[1560,40,240]].forEach(function(t, i){
+      mids += tower(t[0], t[1], t[2], ['#7E9DBE', '#8AA8C7', '#6F92B6', '#94AFCB'][i % 4], '#DDEBF7');
+    });
+    s += '<g opacity=".88">' + mids + '</g>';
+    // twin towers with a sky bridge (right) — the hero's landmark, like the reference
+    function twin(x, w, col){
+      var y = 380, o = '<path d="M' + x + ' 900 L' + x + ' ' + (y + 40) + ' Q' + (x + w / 2) + ' ' + (y - 20) + ' ' + (x + w) + ' ' + (y + 40) + ' L' + (x + w) + ' 900 Z" fill="url(#' + col + ')"/>';
+      for(var xx = x + 14; xx < x + w; xx += 16) o += '<line x1="' + xx + '" y1="' + (y + 30) + '" x2="' + xx + '" y2="900" stroke="#FFFFFF" stroke-opacity=".18" stroke-width="1.5"/>';
+      for(var yy = y + 60; yy < 900; yy += 22) o += '<line x1="' + x + '" y1="' + yy + '" x2="' + (x + w) + '" y2="' + yy + '" stroke="#1F4C80" stroke-opacity=".25" stroke-width="1"/>';
+      return o;
+    }
+    s += twin(1590, 165, 'hsGlassL') + twin(1765, 180, 'hsGlassR');
+    s += '<rect x="1690" y="440" width="140" height="64" rx="6" fill="#E9EEF4" stroke="#B8C6D6" stroke-width="2"/>';
+    s += '<path d="M1742 486 q18 -28 36 0" fill="none" stroke="#ED1D24" stroke-width="7" stroke-linecap="round"/><path d="M1748 478 q12 -18 24 0" fill="none" stroke="#00599B" stroke-width="5" stroke-linecap="round"/>';
+    // the BTS viaduct sweeping in from the middle to the bottom-right, with piers
+    var vA = [1060, 800], vB = [1770, 905]; // ends inside the frame so the nose stays visible at 16:10 too
+    for(k = 0; k <= 12; k++){
+      var t = k / 12, vx = vA[0] + (vB[0] - vA[0]) * t, vy = vA[1] + (vB[1] - vA[1]) * t, pw = 6 + t * 26;
+      s += '<rect x="' + f(vx - pw / 2) + '" y="' + f(vy + 8) + '" width="' + f(pw) + '" height="' + f(1080 - vy) + '" fill="#C8D0D8"/><rect x="' + f(vx + pw * .1) + '" y="' + f(vy + 8) + '" width="' + f(pw * .4) + '" height="' + f(1080 - vy) + '" fill="#A7B2BE"/>';
+    }
+    s += '<path d="M' + vA[0] + ' ' + (vA[1] - 4) + ' L' + vB[0] + ' ' + (vB[1] - 26) + ' L' + vB[0] + ' ' + (vB[1] + 26) + ' L' + vA[0] + ' ' + (vA[1] + 6) + ' Z" fill="#DCE2E8"/>';
+    s += '<path d="M' + vA[0] + ' ' + (vA[1] + 6) + ' L' + vB[0] + ' ' + (vB[1] + 26) + ' L' + vB[0] + ' ' + (vB[1] + 46) + ' L' + vA[0] + ' ' + (vA[1] + 10) + ' Z" fill="#AEB8C3"/>';
+    // the train: cars in perspective along the viaduct, nose at the right, BTS blue/red livery
+    var tr = '<g class="hs-train">';
+    var cars = 7, tA = 0.08, tB = 1.0;
+    for(k = cars - 1; k >= 0; k--){
+      var a = tA + (tB - tA) * (k / cars), b = tA + (tB - tA) * ((k + 1) / cars) - .006;
+      function P(t, up){ var x = vA[0] + (vB[0] - vA[0]) * t, y = vA[1] + (vB[1] - vA[1]) * t, h = 18 + t * 150; return [x, y - 6 - (up ? h : 0)]; }
+      var a0 = P(a, 0), a1 = P(a, 1), b0 = P(b, 0), b1 = P(b, 1);
+      tr += '<path d="M' + f(a0[0]) + ' ' + f(a0[1]) + ' L' + f(a1[0]) + ' ' + f(a1[1]) + ' L' + f(b1[0]) + ' ' + f(b1[1]) + ' L' + f(b0[0]) + ' ' + f(b0[1]) + ' Z" fill="url(#hsTrain)" stroke="#9BA8B8" stroke-width="1"/>';
+      function L(fr){ return [a0[0] + (a1[0] - a0[0]) * fr, a0[1] + (a1[1] - a0[1]) * fr, b0[0] + (b1[0] - b0[0]) * fr, b0[1] + (b1[1] - b0[1]) * fr]; }
+      var w1 = L(.42), w2 = L(.78), st = L(.18), st2 = L(.27);
+      tr += '<path d="M' + f(w1[0]) + ' ' + f(w1[1]) + ' L' + f(w2[0]) + ' ' + f(w2[1]) + ' L' + f(w2[2]) + ' ' + f(w2[3]) + ' L' + f(w1[2]) + ' ' + f(w1[3]) + ' Z" fill="#2B3C55" opacity=".85"/>';
+      tr += '<path d="M' + f(st[0]) + ' ' + f(st[1]) + ' L' + f(st2[0]) + ' ' + f(st2[1]) + ' L' + f(st2[2]) + ' ' + f(st2[3]) + ' L' + f(st[2]) + ' ' + f(st[3]) + ' Z" fill="#00599B"/>';
+      var rs = L(.1), rs2 = L(.15);
+      tr += '<path d="M' + f(rs[0]) + ' ' + f(rs[1]) + ' L' + f(rs2[0]) + ' ' + f(rs2[1]) + ' L' + f(rs2[2]) + ' ' + f(rs2[3]) + ' L' + f(rs[2]) + ' ' + f(rs[3]) + ' Z" fill="#ED1D24"/>';
+    }
+    // nose
+    var n0 = [vB[0] - 14, vB[1] - 6], nh = 168;
+    tr += '<path d="M' + (n0[0] - 70) + ' ' + (n0[1] - nh) + ' Q' + (n0[0] + 20) + ' ' + (n0[1] - nh - 6) + ' ' + (n0[0] + 40) + ' ' + (n0[1] - nh * .55) + ' L' + (n0[0] + 46) + ' ' + (n0[1] - 10) + ' L' + (n0[0] - 70) + ' ' + n0[1] + ' Z" fill="#F4F6F9" stroke="#9BA8B8"/>';
+    tr += '<path d="M' + (n0[0] - 52) + ' ' + (n0[1] - nh + 18) + ' Q' + (n0[0] + 8) + ' ' + (n0[1] - nh + 14) + ' ' + (n0[0] + 26) + ' ' + (n0[1] - nh * .58) + ' L' + (n0[0] + 28) + ' ' + (n0[1] - nh * .38) + ' L' + (n0[0] - 52) + ' ' + (n0[1] - nh * .36) + ' Z" fill="#1E2A3C"/>';
+    tr += '<path d="M' + (n0[0] - 70) + ' ' + (n0[1] - nh * .3) + ' L' + (n0[0] + 44) + ' ' + (n0[1] - nh * .26) + '" stroke="#ED1D24" stroke-width="7"/>';
+    tr += '<path d="M' + (n0[0] - 70) + ' ' + (n0[1] - nh * .2) + ' L' + (n0[0] + 45) + ' ' + (n0[1] - nh * .17) + '" stroke="#00599B" stroke-width="9"/>';
+    tr += '</g>';
+    s += tr;
+    // foreground trees: clumps of greens lit from the right
+    var trees = '';
+    // each crown = shadowed base + several lit lobes, so the band reads as canopy rather than dots
+    for(k = 0; k < 110; k++){
+      var tx = R() * W, edge = tx < 1050 ? 850 : 900 + (tx - 1050) * .1;
+      var ty = edge + R() * (H - edge), tr2 = (22 + R() * 30) * (.7 + ty / H * .6);
+      trees += '<circle cx="' + f(tx + 4) + '" cy="' + f(ty + 8) + '" r="' + f(tr2) + '" fill="#2F5228" opacity=".55"/>';
+      trees += '<circle cx="' + f(tx) + '" cy="' + f(ty) + '" r="' + f(tr2) + '" fill="' + ['#3F6E33', '#4B7C3B', '#567F3C'][Math.floor(R() * 3)] + '"/>';
+      for(var lb = 0; lb < 4; lb++){
+        var la = -2.4 + R() * 1.8, ld = tr2 * (.25 + R() * .45), lr = tr2 * (.35 + R() * .3);
+        trees += '<circle cx="' + f(tx + Math.cos(la) * ld) + '" cy="' + f(ty + Math.sin(la) * ld) + '" r="' + f(lr) + '" fill="' + ['#6E9E4E', '#7FAF58', '#94C066', '#A9CF78'][Math.floor(R() * 4)] + '" opacity=".9"/>';
+      }
+    }
+    s += '<g filter="url(#hsSoft)">' + trees + '</g>';
+    // white haze rising from the bottom (as in the reference) + a light overall veil
+    s += '<rect y="640" width="' + W + '" height="440" fill="url(#hsHaze)"/>';
+    s += '<rect width="' + W + '" height="' + H + '" fill="#FFFFFF" opacity=".08"/>';
+    return '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">' + s + '</svg>';
   }
-  if(reduceMotion){
-    Array.prototype.forEach.call(heroPhraseEls, function(el){ el.classList.add('on'); });
-  } else {
-    cycleHeroPhrase();
-    setInterval(cycleHeroPhrase, HERO_BEAT);
+  heroScene.innerHTML = heroSceneSVG();
+  var heroTrain = heroScene.querySelector('.hs-train');
+  // on tall/portrait screens a centred crop loses the train and the towers — anchor the crop to the right there
+  function fitHeroScene(){
+    var svg = heroScene.firstChild, tall = window.innerWidth / window.innerHeight < 1.2;
+    svg.setAttribute('preserveAspectRatio', (tall ? 'xMaxYMax' : 'xMidYMax') + ' slice');
   }
+  fitHeroScene();
+  window.addEventListener('resize', fitHeroScene);
+
+  /* ---- Hero: Quick Menu (opens upward from the bottom dock) ---- */
+  (function(){
+    var btn = document.getElementById('qmBtn'), panel = document.getElementById('qmPanel');
+    if(!btn || !panel) return;
+    function set(open){
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      panel.hidden = !open;
+      if(open){ var first = panel.querySelector('a'); if(first) first.focus({ preventScroll:true }); }
+    }
+    btn.addEventListener('click', function(e){ e.stopPropagation(); set(panel.hidden); });
+    panel.addEventListener('click', function(e){ if(e.target.closest('a')) set(false); });
+    document.addEventListener('click', function(e){ if(!panel.hidden && !e.target.closest('.qm')) set(false); });
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && !panel.hidden){ set(false); btn.focus(); } });
+  })();
 
   /* ---- Hero: doors slide apart with scroll (pinned); gate title blurs out, content lands on the video ---- */
   var doorL = document.getElementById('doorL'), doorR = document.getElementById('doorR');
   var heroGate = document.getElementById('heroGate'), heroCue = document.getElementById('heroCue');
   var heroBar = document.getElementById('heroBar'), heroFlare = document.getElementById('heroFlare');
   var heroContent = document.getElementById('heroContent');
+  var heroDock = document.getElementById('heroDock');
   var heroSmallMQ = window.matchMedia('(max-width: 720px)');
   doorL.innerHTML = doorSVG('l');
   doorR.innerHTML = doorSVG('r');
@@ -3420,11 +3616,20 @@ setTimeout(function(){
     heroFlare.style.opacity = (open > 0 && open < 1) ? (Math.sin(Math.PI * open) * .85).toFixed(3) : '0';
     heroBar.style.transform = 'scaleX(' + p.toFixed(3) + ')';
     heroBar.parentNode.style.opacity = p >= 1 ? '0' : '1';
-    heroCanvas.style.transform = 'scale(' + (1.14 - open * .14).toFixed(3) + ')';
+    var zoom = 'scale(' + (1.14 - open * .14).toFixed(3) + ')';
+    heroScene.style.transform = zoom; heroCanvas.style.transform = zoom;
+    // the train glides in along its viaduct as the doors part
+    if(heroTrain) heroTrain.setAttribute('transform', 'translate(' + (-(1 - open) * 260).toFixed(1) + ' ' + (-(1 - open) * 28).toFixed(1) + ')');
     var show = clamp01((p - .78) / .22);
     heroContent.style.opacity = show.toFixed(3);
-    heroContent.style.transform = 'translateY(' + ((1 - show) * 28).toFixed(1) + 'px)';
+    heroContent.style.transform = 'translateY(calc(-50% + ' + ((1 - show) * 28).toFixed(1) + 'px))';
     heroContent.style.visibility = show > 0 ? 'visible' : 'hidden';
+    heroDock.style.opacity = show.toFixed(3);
+    heroDock.style.transform = 'translate(-50%, ' + ((1 - show) * 20).toFixed(1) + 'px)';
+    heroDock.style.visibility = show > 0 ? 'visible' : 'hidden';
+    // once the doors are mostly open the hero is a bright daylight scene: the header switches to dark type
+    var light = open > .9 ? 'light' : 'dark'; // only once the doors have cleared the header's corners
+    if(heroSection.getAttribute('data-header') !== light){ heroSection.setAttribute('data-header', light); onScroll(); }
     if(open >= .98) tryStartHeroVideo();
   }
   window.addEventListener('scroll', function(){ requestAnimationFrame(onHeroScroll); }, {passive:true});
@@ -4766,9 +4971,9 @@ setTimeout(function(){
       if(d.getDay() !== 0 && d.getDay() !== 6) days.unshift(new Date(d));
       d.setDate(d.getDate() - 1);
     }
-    var vals = [2.00], v = 2.00;
+    var vals = [2.02], v = 2.02;
     for(var i = 1; i < 245; i++){
-      v = i === 1 ? 2.02 : v - (rnd() - .5) * .045 + .0016;
+      v = i === 1 ? 2.00 : v - (rnd() - .5) * .045 + .0016;
       v = Math.max(1.7, Math.min(3.4, v));
       vals.unshift(Math.round(v * 100) / 100);
     }
