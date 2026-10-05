@@ -1082,7 +1082,7 @@
   .pfF-stage{ position:sticky; top:0; height:100vh; overflow:hidden; }
   .pfF-side{
     position:absolute; top:0; bottom:0; left:max(24px, calc((100% - 1320px) / 2 + 24px));
-    width:min(330px, 28vw);
+    width:min(290px, 24vw);
     padding-top:var(--header-h);
     display:flex; flex-direction:column; justify-content:center; gap:44px;
   }
@@ -1099,6 +1099,29 @@
   .pfF-ov .dots{ fill:none; stroke-linecap:round; stroke-dasharray:.001 .06; animation:pfFdots 2.6s linear infinite; }
   @keyframes pfFdots{ to{ stroke-dashoffset:-.061; } }
   .pfF-ov .dots.out{ animation-direction:reverse; }
+  /* MOVE — scroll-scrubbed video + the four ways of travelling passing over it */
+  .pfF-vid{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+  .pfF-move::after{ content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(0deg, rgba(6,9,15,.72) 0%, rgba(6,9,15,.2) 38%, transparent 60%); }
+  .pfF-modes{
+    position:absolute; left:28px; right:28px; bottom:26px; z-index:1;
+    list-style:none; margin:0; padding:0;
+    display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:20px;
+    color:var(--white);
+  }
+  .pfF-modes li{ display:flex; flex-direction:column; gap:3px; opacity:0; }
+  .pfF-modes .cv-ico{ width:34px; height:34px; margin-bottom:8px; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.28); }
+  .pfF-modes .cv-ico svg{ width:16px; height:16px; }
+  .pfF-modes .m-cat{ font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#8FD0FF; }
+  .pfF-modes b{ font-size:18px; font-weight:700; }
+  .pfF-modes small{ font-size:12px; line-height:1.45; color:rgba(255,255,255,.72); }
+  .pfF-clouds{ position:absolute; left:0; right:0; top:0; height:260%; z-index:3; pointer-events:none; visibility:hidden; will-change:transform; }
+  .pfF-clouds img{ position:absolute; height:auto; display:block; }
+  .pfF-cloud-core{
+    position:absolute; left:-5%; right:-5%; top:15%; bottom:15%; background:#FFFFFF;
+    /* feathered so its straight edges melt into the cloud art instead of reading as a hard line */
+    -webkit-mask-image:linear-gradient(180deg, transparent, #000 10%, #000 90%, transparent);
+    mask-image:linear-gradient(180deg, transparent, #000 10%, #000 90%, transparent);
+  }
   .pfF-scrim{
     position:absolute; inset:0; pointer-events:none; opacity:0;
     background:
@@ -1108,7 +1131,7 @@
   .pfF-labs{ position:absolute; inset:0; pointer-events:none; }
   .pfF-labs .cv-lab, .pfF-labs .cv-out{ transition:none; }
   .pfF-over{
-    position:absolute; z-index:3;
+    position:absolute; z-index:4;
     left:max(24px, calc((100% - 1320px) / 2 + 24px)); bottom:48px;
     width:min(560px, calc(100% - 48px));
     color:var(--white); pointer-events:none;
@@ -1141,6 +1164,11 @@
     .pfF-oc h3{ font-size:34px; }
     .pfF-oc p{ font-size:15px; margin-bottom:12px; }
     .pfF-oc .pfF-sum{ font-size:12px; padding:6px 12px; border-radius:14px; }
+    .pfF-modes{ left:14px; right:14px; bottom:14px; grid-template-columns:repeat(2, minmax(0,1fr)); gap:12px 14px; }
+    .pfF-modes .cv-ico{ width:26px; height:26px; margin-bottom:4px; }
+    .pfF-modes .cv-ico svg{ width:13px; height:13px; }
+    .pfF-modes b{ font-size:14px; }
+    .pfF-modes small{ display:none; }
     .pfF-frame .pfF-ph{ right:auto; left:12px; top:12px; bottom:auto; font-size:9.5px; padding:4px 9px; white-space:nowrap; }
     /* full-screen on a phone has no free corner (chips top, caption bottom, buttons right); the notice was already shown on MOVE/MIX */
     .pfF-frame.is-full .pfF-ph{ display:none; }
@@ -2667,7 +2695,7 @@ setTimeout(function(){
       <div class="pfF-stage" id="pfFStage">
         <div class="pfF-side" id="pfFSide">
           <ol class="pfD-rail pfF-rail" id="pfFRail" style="--p:0">
-            <li class="active" tabindex="0" data-i="0"><b>MOVE</b><small>เส้นทาง</small></li>
+            <li class="active" tabindex="0" data-i="0"><b>MOVE</b><small>Door-to-door</small></li>
             <li tabindex="0" data-i="1"><b>MIX</b><small>สถานี · การเชื่อมต่อ</small></li>
             <li tabindex="0" data-i="2"><b>MATCH</b><small>จุดตัด</small></li>
             <li tabindex="0" data-i="3"><b>NEW</b><small>ความเป็นไปได้ใหม่</small></li>
@@ -2675,8 +2703,8 @@ setTimeout(function(){
           <div class="pfD-caps pfF-caps">
             <div class="pfD-cap on" data-i="0">
               <div class="eyebrow"><span class="pf-dot" style="background:#3FA3EC"></span>01 · MOVE</div>
-              <h3>เส้นทางที่พาผู้คนไปถึง</h3>
-              <p>รถไฟฟ้า · Mobility · ผู้คน · โครงสร้างพื้นฐาน เส้นทางหลักที่เมืองเคลื่อนไปทุกวัน</p>
+              <h3>เชื่อมผู้คนกับพื้นที่</h3>
+              <p>ผู้บุกเบิกรถไฟฟ้าบีทีเอสกว่า 20 ปี วันนี้กำลังขยายสู่การเดินทางแบบ door-to-door ทั้งทางราง ถนน น้ำ และอากาศ</p>
               <a class="pf-link" href="https://www.btsgroup.co.th/th/our-business/move">ดูธุรกิจ MOVE <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
             </div>
             <div class="pfD-cap" data-i="1">
@@ -2689,11 +2717,35 @@ setTimeout(function(){
         </div>
 
         <div class="pfF-frame" id="pfFFrame" data-header="dark">
-          <div class="pfF-scene" data-i="0"><img alt="" decoding="async"><svg class="pfF-ov" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg></div>
+          <!-- MOVE: real drone shot of the line (same footage as the live site), scrubbed by scroll in reverse —
+               the camera comes down from far above to just over the roof as the train runs toward the viewer -->
+          <div class="pfF-scene pfF-move" data-i="0">
+            <video class="pfF-vid" muted playsinline preload="auto" poster="img/move-train-poster-far.webp" aria-hidden="true" data-src="media/move-train-1280.mp4"></video>
+            <ul class="pfF-modes">
+              <li><span class="cv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3.1V7a4 4 0 0 0 8 0V3.1"/><path d="m9 15-1-1"/><path d="m15 15 1-1"/><path d="M9 19c-2.8 0-5-2.2-5-5v-4a8 8 0 0 1 16 0v4c0 2.8-2.2 5-5 5Z"/><path d="m8 19-2 3"/><path d="m16 19 2 3"/></svg></span><span class="m-cat" lang="en">Rail</span><b>ทางราง</b><small>รถไฟฟ้าสายสีเขียว ทอง ชมพู และเหลือง</small></li>
+              <li><span class="cv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/></svg></span><span class="m-cat" lang="en">Road</span><b>ทางถนน</b><small>รถโดยสาร BRT และทางหลวงพิเศษ M6 · M81</small></li>
+              <li><span class="cv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10.189V14"/><path d="M12 2v3"/><path d="M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-8.188-3.639a2 2 0 0 0-1.624 0L3 14a11.6 11.6 0 0 0 2.81 7.76"/><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1s1.2 1 2.5 1c2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg></span><span class="m-cat" lang="en">Water</span><b>ทางน้ำ</b><small>เรือด่วนเจ้าพระยา</small></li>
+              <li><span class="cv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg></span><span class="m-cat" lang="en">Air</span><b>ทางอากาศ</b><small>สนามบินอู่ตะเภาและเมืองการบิน</small></li>
+            </ul>
+          </div>
           <div class="pfF-scene" data-i="1"><img alt="" decoding="async"><svg class="pfF-ov" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg></div>
           <div class="pfF-scene" data-i="2"><img alt="" decoding="async"><svg class="pfF-ov" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg></div>
           <div class="pfF-scrim"></div>
           <div class="pfF-labs" id="pfFLabs" aria-hidden="true"></div>
+          <!-- cloud bank (same cloud art as the live site) that carries MOVE into MIX: ragged edge, solid middle, ragged edge -->
+          <div class="pfF-clouds" id="pfFClouds" aria-hidden="true">
+            <img src="img/cloud.avif" alt="" style="left:-22%;top:7%;width:72%">
+            <img src="img/cloud-bottom.avif" alt="" style="left:14%;top:11%;width:64%">
+            <img src="img/cloud.avif" alt="" style="left:44%;top:6%;width:70%;transform:scaleX(-1)">
+            <img src="img/cloud-bottom.avif" alt="" style="left:-6%;top:13%;width:56%">
+            <img src="img/cloud.avif" alt="" style="left:58%;top:12%;width:60%">
+            <i class="pfF-cloud-core"></i>
+            <img src="img/cloud-bottom.avif" alt="" style="left:-20%;bottom:7%;width:70%;transform:scaleY(-1)">
+            <img src="img/cloud.avif" alt="" style="left:16%;bottom:11%;width:64%;transform:scale(-1,-1)">
+            <img src="img/cloud-bottom.avif" alt="" style="left:46%;bottom:6%;width:70%;transform:scaleY(-1)">
+            <img src="img/cloud.avif" alt="" style="left:-4%;bottom:13%;width:56%;transform:scaleY(-1)">
+            <img src="img/cloud-bottom.avif" alt="" style="left:60%;bottom:12%;width:58%;transform:scaleY(-1)">
+          </div>
           <div class="pfF-over">
             <div class="pfF-oc" data-i="2">
               <div class="eyebrow"><span class="pf-dot" style="background:var(--red)"></span>03 · MATCH</div>
@@ -3841,6 +3893,10 @@ setTimeout(function(){
     var ocs = frame.querySelectorAll('.pfF-oc');
     var scrim = frame.querySelector('.pfF-scrim');
     var scenes = frame.querySelectorAll('.pfF-scene');
+    var vid = frame.querySelector('.pfF-vid');
+    var modes = frame.querySelectorAll('.pfF-modes li');
+    var clouds = document.getElementById('pfFClouds');
+    var phTag = frame.querySelector('.pfF-ph');
     var VW = 1600, VH = 1000;
     var PHASES = [0, .25, .5, .78], JUMP = [.12, .4, .7, .93];
     var built = false, phase = -1, lastP = 0;
@@ -3946,20 +4002,6 @@ setTimeout(function(){
         + '<rect width="1600" height="1000" fill="url(#lt)"/><rect width="1600" height="1000" fill="#0A2A55" opacity=".1"/><rect width="1600" height="1000" fill="url(#vg)"/>';
     }
 
-    // MOVE — one elevated line cutting diagonally across the city
-    var MV_A = [-80, 820], MV_B = [1680, 300];
-    function sceneMove(){
-      var R = rng(11), s = city(R, { park:.06 });
-      s += canal('M-20 150 C 400 110, 900 230, 1620 120');
-      var dx = MV_B[0] - MV_A[0], dy = MV_B[1] - MV_A[1], L = Math.sqrt(dx * dx + dy * dy), nx = -dy / L, ny = dx / L;
-      [.12, .3, .5, .68, .86].forEach(function(t){
-        var c = [MV_A[0] + dx * t, MV_A[1] + dy * t];
-        s += road(R, [c[0] - nx * 900, c[1] - ny * 900], [c[0] + nx * 900, c[1] + ny * 900], 24);
-      });
-      var o2 = off(MV_A, MV_B, -330); s += road(R, o2[0], o2[1], 32);
-      s += road(R, MV_A, MV_B, 62) + rail(MV_A, MV_B) + train(MV_A, MV_B, .43, 5);
-      return s + finish();
-    }
     // MIX — a station on the line, skywalks branching into malls and buildings
     var MX_Y = 560;
     var MX_BR = [
@@ -4032,17 +4074,11 @@ setTimeout(function(){
     function lin(a, b, t){ return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]; }
 
     function buildOverlays(){
-      var ov = frame.querySelectorAll('.pfF-ov');
       CHIPS = []; OV = [[], [], []];
       function add(sc, html, f, chips){ OV[sc].push({ html: html, f: f, chips: chips || [] }); }
       // ptMob: alternative spot for narrow screens (outcomes pulled toward C so the bottom caption doesn't cover them)
       function chip(sc, pt, l, i, at, out, s, ptMob){ CHIPS.push({ sc: sc, pt: pt, ptMob: ptMob, l: l, i: i, at: at, out: !!out, s: s || '' }); return CHIPS.length - 1; }
 
-      // MOVE
-      add(0, route([MV_A, MV_B], 'r', '#3FA3EC'), function(p){ return seg(p, .03, .2); }, [
-        chip(0, lin(MV_A, MV_B, .28), 'ผู้คน', 'users', .28), chip(0, lin(MV_A, MV_B, .42), 'รถไฟฟ้า', 'train', .42),
-        chip(0, lin(MV_A, MV_B, .58), 'Mobility', 'route', .58), chip(0, lin(MV_A, MV_B, .72), 'โครงสร้างพื้นฐาน', 'landmark', .72)
-      ]);
       // MIX — the line is already lit (it's the MOVE route), branches grow out of the station
       add(1, route([[-80, MX_Y], [1680, MX_Y]], 'r', '#3FA3EC'), function(p){ return .55 + .45 * seg(p, .24, .32); });
       MX_BR.forEach(function(b, k){
@@ -4071,7 +4107,9 @@ setTimeout(function(){
           [chip(2, lin(r.p[0], r.p[1], .62), r.l, r.i, .62, true, r.s, lin(r.p[0], r.p[1], .3))]);
       });
 
-      ov.forEach(function(svg, sc){
+      Array.prototype.forEach.call(scenes, function(scene, sc){
+        var svg = scene.querySelector('.pfF-ov');
+        if(!svg) return; // MOVE has no overlay
         var extra = sc === 2
           ? '<circle class="fw" cx="800" cy="500" r="20" fill="none" stroke="#8FD0FF" stroke-width="2" opacity="0"/>'
             + '<circle class="fb" cx="800" cy="500" r="12" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0"/>'
@@ -4115,10 +4153,13 @@ setTimeout(function(){
     function build(){
       if(built) return;
       built = true;
-      var imgs = frame.querySelectorAll('.pfF-scene img');
-      rasterise(sceneMove(), imgs[0]);
-      rasterise(sceneMix(), imgs[1]);
-      rasterise(sceneMatch(), imgs[2]);
+      var imgs = frame.querySelectorAll('.pfF-scene img'); // MIX, MATCH (MOVE is the video)
+      rasterise(sceneMix(), imgs[0]);
+      rasterise(sceneMatch(), imgs[1]);
+      if(!reduceMotion){ // reduced motion keeps the poster
+        vid.addEventListener('loadedmetadata', function(){ update(lastP); });
+        vid.src = vid.getAttribute('data-src'); vid.load();
+      }
       buildOverlays();
       update(lastP);
     }
@@ -4128,14 +4169,14 @@ setTimeout(function(){
       var W = stage.clientWidth, H = stage.clientHeight, hh = 88, B = {};
       if(W > 1024){
         var cl = Math.max(24, (W - 1320) / 2 + 24), cw = W - 2 * cl, ty = hh + 24, th = H - ty - 32;
-        var sideW = Math.min(330, W * .28) + 56, ax = cl + sideW, aw = cw - sideW;
-        var mw = Math.min(aw * .68, th * 1.35), mh = mw / 1.35;
+        var sideW = Math.min(290, W * .24) + 48, ax = cl + sideW, aw = cw - sideW;
+        var mw = Math.min(aw * .8, th * 16 / 9), mh = mw * 9 / 16; // the footage is 16:9
         var xw = Math.min(aw, th * 1.6), xh = Math.min(th, xw / 1.45);
         B.move = { l: ax + (aw - mw) / 2, t: ty + (th - mh) / 2, w: mw, h: mh, r: 24 };
         B.mix = { l: ax + (aw - xw) / 2, t: ty + (th - xh) / 2, w: xw, h: xh, r: 24 };
       } else {
         var ty2 = hh + 52, th2 = H - ty2 - 176, cw2 = W - 32;
-        var mh2 = Math.min(th2 * .78, cw2 * .72 / .82), mw2 = mh2 * .82;
+        var mw2 = cw2 * .86, mh2 = Math.min(th2 * .8, mw2 * 1.15); // train runs down the middle, so a portrait crop still works
         var xh2 = Math.min(th2, cw2 / .82), xw2 = Math.min(cw2, xh2 * .82);
         B.move = { l: (W - mw2) / 2, t: ty2 + (th2 - mh2) / 2, w: mw2, h: mh2, r: 20 };
         B.mix = { l: (W - xw2) / 2, t: ty2 + (th2 - xh2) / 2, w: xw2, h: xh2, r: 20 };
@@ -4165,8 +4206,24 @@ setTimeout(function(){
       side.style.opacity = (1 - seg(p, .47, .53)).toFixed(3); // gone before the growing frame reaches the captions
 
       // scene crossfades + slow zoom-out (MATCH pulls back while the frame grows: "now you see the whole city")
-      var op = [1 - seg(p, .22, .3), seg(p, .22, .3) * (1 - seg(p, .5, .58)), seg(p, .5, .58)];
-      var z = [1.08 - .08 * seg(p, 0, .25), 1.08 - .08 * seg(p, .25, .5), 1.22 - .22 * ease(seg(p, .5, .92))];
+      // MOVE → MIX is a hard swap hidden behind the cloud bank (fully covered at p=.25); MIX → MATCH crossfades
+      var op = [p < .25 ? 1 : 0, (p >= .25 ? 1 : 0) * (1 - seg(p, .5, .58)), seg(p, .5, .58)];
+      var z = [1, 1.08 - .08 * seg(p, .25, .5), 1.22 - .22 * ease(seg(p, .5, .92))];
+
+      // MOVE footage runs in reverse: far above the line → just over the roof, the train coming toward us
+      if(vid.duration){
+        var vt = vid.duration * (1 - seg(p, 0, .23)) - .001;
+        if(Math.abs(vid.currentTime - vt) > .02) vid.currentTime = Math.max(0, vt);
+      }
+      Array.prototype.forEach.call(modes, function(li, k){
+        var a = seg(p, .04 + k * .025, .08 + k * .025), o = 1 - seg(p, .17, .21);
+        li.style.opacity = (a * o).toFixed(3);
+        li.style.transform = 'translateY(' + ((1 - a) * 24 - (1 - o) * 24).toFixed(1) + 'px)';
+      });
+      var ct = seg(p, .19, .31);
+      clouds.style.visibility = ct > 0 && ct < 1 ? 'visible' : 'hidden';
+      clouds.style.transform = 'translateY(' + (bx.h - 3.6 * bx.h * ct).toFixed(1) + 'px)';
+      phTag.style.visibility = p < .25 ? 'hidden' : ''; // MOVE is real footage — no placeholder notice there
       Array.prototype.forEach.call(scenes, function(el, k){ el.style.opacity = op[k].toFixed(3); el.style.transform = 'scale(' + z[k].toFixed(4) + ')'; el.style.visibility = op[k] > 0 ? '' : 'hidden'; });
       scrim.style.opacity = seg(p, .6, .68).toFixed(3);
 
