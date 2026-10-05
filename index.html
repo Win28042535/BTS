@@ -1075,6 +1075,81 @@
     .pfD-ping{ animation:none; opacity:0; }
   }
 
+  /* ============ Section 3 · version F — INTERSECTION (aerial frames that grow; MATCH goes full screen) ============ */
+  .pfF{ position:relative; background:var(--cream); color:var(--charcoal); }
+  .pfF-pin{ position:relative; height:520vh; }
+  /* full-bleed (not max-width) so the MATCH frame can grow to the whole viewport; JS sets the frame's box */
+  .pfF-stage{ position:sticky; top:0; height:100vh; overflow:hidden; }
+  .pfF-side{
+    position:absolute; top:0; bottom:0; left:max(24px, calc((100% - 1320px) / 2 + 24px));
+    width:min(330px, 28vw);
+    padding-top:var(--header-h);
+    display:flex; flex-direction:column; justify-content:center; gap:44px;
+  }
+  .pfF-frame{
+    position:absolute; left:0; top:0; width:0; height:0; z-index:2;
+    overflow:hidden; border-radius:24px; background:#0B111C;
+    box-shadow:0 50px 80px -40px rgba(35,50,78,.55);
+    will-change:left, top, width, height;
+  }
+  .pfF-scene{ position:absolute; inset:0; opacity:0; transform-origin:50% 50%; }
+  .pfF-scene img, .pfF-ov{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+  .pfF-scene img{ object-fit:cover; }
+  .pfF-ov .rt{ fill:none; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:1 1; }
+  .pfF-ov .dots{ fill:none; stroke-linecap:round; stroke-dasharray:.001 .06; animation:pfFdots 2.6s linear infinite; }
+  @keyframes pfFdots{ to{ stroke-dashoffset:-.061; } }
+  .pfF-ov .dots.out{ animation-direction:reverse; }
+  .pfF-scrim{
+    position:absolute; inset:0; pointer-events:none; opacity:0;
+    background:
+      linear-gradient(0deg, rgba(6,9,15,.82) 0%, rgba(6,9,15,.35) 34%, transparent 58%),
+      linear-gradient(90deg, rgba(6,9,15,.55) 0%, transparent 46%);
+  }
+  .pfF-labs{ position:absolute; inset:0; pointer-events:none; }
+  .pfF-labs .cv-lab, .pfF-labs .cv-out{ transition:none; }
+  .pfF-over{
+    position:absolute; z-index:3;
+    left:max(24px, calc((100% - 1320px) / 2 + 24px)); bottom:48px;
+    width:min(560px, calc(100% - 48px));
+    color:var(--white); pointer-events:none;
+  }
+  .pfF-oc{
+    position:absolute; left:0; bottom:0; width:100%;
+    opacity:0; transform:translateY(24px);
+    transition:opacity .5s ease, transform .7s cubic-bezier(.2,.8,.2,1);
+  }
+  .pfF-oc.on{ opacity:1; transform:none; pointer-events:auto; }
+  .pfF-oc .eyebrow{ display:flex; align-items:center; gap:8px; color:rgba(255,255,255,.85); margin-bottom:14px; }
+  /* climax type — clearly bigger than the MOVE/MIX captions */
+  .pfF-oc h3{ margin:0 0 14px; font-size:clamp(40px,4.6vw,76px); font-weight:700; line-height:1.2; }
+  .pfF-oc p{ margin:0 0 18px; font-size:17px; line-height:1.5; color:rgba(255,255,255,.75); max-width:46ch; }
+  .pfF-oc .pfF-sum{
+    display:inline-block; margin:0; padding:8px 16px; border-radius:999px;
+    font-size:14px; font-weight:700; color:var(--white);
+    background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2);
+    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+  }
+  .pfF-frame .pfF-ph{ right:92px; bottom:28px; z-index:4; } /* clear of the floating settings / back-to-top buttons */
+
+  @media (max-width:1024px){
+    .pfF .pf-intro{ grid-template-columns:1fr; gap:28px; padding-bottom:40px; }
+    .pfF-pin{ height:480vh; }
+    .pfF-side{ position:static; display:block; width:auto; padding:0; }
+    .pfF-rail{ position:absolute; top:calc(var(--header-h) + 8px); left:16px; right:16px; width:auto; max-width:none; margin:0 auto; }
+    .pfF-caps{ position:absolute; left:16px; right:16px; bottom:16px; width:auto; max-width:480px; margin:0 auto; height:150px; }
+    .pfF-over{ left:16px; right:16px; width:auto; bottom:28px; }
+    .pfF-oc h3{ font-size:34px; }
+    .pfF-oc p{ font-size:15px; margin-bottom:12px; }
+    .pfF-oc .pfF-sum{ font-size:12px; padding:6px 12px; border-radius:14px; }
+    .pfF-frame .pfF-ph{ right:auto; left:12px; top:12px; bottom:auto; font-size:9.5px; padding:4px 9px; white-space:nowrap; }
+    /* full-screen on a phone has no free corner (chips top, caption bottom, buttons right); the notice was already shown on MOVE/MIX */
+    .pfF-frame.is-full .pfF-ph{ display:none; }
+  }
+  @media (prefers-reduced-motion:reduce){
+    .pfF-ov .dots{ animation:none; }
+    .pfF-oc{ transition:none; }
+  }
+
   /* ============ Section 3 · version B — sticky-stack full-bleed panels (DNA: unitedcarriers.com/about) ============ */
   .pfB{ background:var(--cream); }
   .pfB-lede{ margin:4px 0 0; max-width:44ch; font-size:clamp(18px,1.3vw,20px); font-weight:400; line-height:1.5; color:rgba(35,50,78,.7); }
@@ -2575,6 +2650,69 @@ setTimeout(function(){
       </div>
     </div>
   </section>
+
+  <!-- ---- Section 3 · version F — INTERSECTION: same story as D told with aerial "photos", where scale is the
+       narrative — MOVE is a small frame, MIX a bigger one, and MATCH bursts to full screen as the climax.
+       The aerial scenes are procedural placeholders rasterised in JS (swap each <img> for a real aerial photo). ---- -->
+  <section class="pfF" id="platformsF" data-variant="f" hidden>
+    <div class="pf-intro">
+      <div>
+        <div class="eyebrow"><span class="pf-dot" style="background:var(--red)"></span>Intersection</div>
+        <h2 class="pf-h2">3 แพลตฟอร์ม<br>หนึ่งจุดตัด<span>MOVE · MIX · MATCH</span></h2>
+      </div>
+      <p class="pf-read" id="pfReadF">ทุกวันมีผู้คนนับล้าน เดินทางผ่านจุดเปลี่ยนถ่าย ของเมือง — MOVE พาผู้คนมาถึง MIX เชื่อมข้อมูล และประสบการณ์ และ MATCH คือจุดตัด ที่ทุกความสามารถ มาพบกัน กลายเป็นความเป็นไปได้ใหม่ ของทั้งเมือง</p>
+    </div>
+
+    <div class="pfF-pin" id="pfFPin">
+      <div class="pfF-stage" id="pfFStage">
+        <div class="pfF-side" id="pfFSide">
+          <ol class="pfD-rail pfF-rail" id="pfFRail" style="--p:0">
+            <li class="active" tabindex="0" data-i="0"><b>MOVE</b><small>เส้นทาง</small></li>
+            <li tabindex="0" data-i="1"><b>MIX</b><small>สถานี · การเชื่อมต่อ</small></li>
+            <li tabindex="0" data-i="2"><b>MATCH</b><small>จุดตัด</small></li>
+            <li tabindex="0" data-i="3"><b>NEW</b><small>ความเป็นไปได้ใหม่</small></li>
+          </ol>
+          <div class="pfD-caps pfF-caps">
+            <div class="pfD-cap on" data-i="0">
+              <div class="eyebrow"><span class="pf-dot" style="background:#3FA3EC"></span>01 · MOVE</div>
+              <h3>เส้นทางที่พาผู้คนไปถึง</h3>
+              <p>รถไฟฟ้า · Mobility · ผู้คน · โครงสร้างพื้นฐาน เส้นทางหลักที่เมืองเคลื่อนไปทุกวัน</p>
+              <a class="pf-link" href="https://www.btsgroup.co.th/th/our-business/move">ดูธุรกิจ MOVE <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+            </div>
+            <div class="pfD-cap" data-i="1">
+              <div class="eyebrow"><span class="pf-dot" style="background:#8FD0FF"></span>02 · MIX</div>
+              <h3>สถานีที่เชื่อมทุกอย่างเข้าหากัน</h3>
+              <p>Data · Media · Digital · Experience แตกแขนงจากสถานีไปถึงทุกจุดหมายรอบตัว</p>
+              <a class="pf-link" href="https://www.btsgroup.co.th/th/our-business/mix">ดูธุรกิจ MIX <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="pfF-frame" id="pfFFrame" data-header="dark">
+          <div class="pfF-scene" data-i="0"><img alt="" decoding="async"><svg class="pfF-ov" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg></div>
+          <div class="pfF-scene" data-i="1"><img alt="" decoding="async"><svg class="pfF-ov" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg></div>
+          <div class="pfF-scene" data-i="2"><img alt="" decoding="async"><svg class="pfF-ov" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg></div>
+          <div class="pfF-scrim"></div>
+          <div class="pfF-labs" id="pfFLabs" aria-hidden="true"></div>
+          <div class="pfF-over">
+            <div class="pfF-oc" data-i="2">
+              <div class="eyebrow"><span class="pf-dot" style="background:var(--red)"></span>03 · MATCH</div>
+              <h3>ทุกอย่าง<br>มาบรรจบที่นี่</h3>
+              <p>MOVE · MIX · พันธมิตร Business · Property · Hotel · Finance · Technology พบกันที่จุดตัดเดียว</p>
+              <a class="pf-link on-dark" href="https://www.btsgroup.co.th/th/our-business/match">ดูธุรกิจ MATCH <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+            </div>
+            <div class="pfF-oc" data-i="3">
+              <div class="eyebrow"><span class="pf-dot" style="background:var(--white);box-shadow:0 0 0 2px #3FA3EC"></span>New possibility</div>
+              <h3>เกิดเป็น<br>ความเป็นไปได้ใหม่</h3>
+              <p>สำหรับธุรกิจ เมือง และผู้คน</p>
+              <p class="pfD-sum pfF-sum">หลายความสามารถ <i>→</i> จุดบรรจบ <i>→</i> ความเป็นไปได้ใหม่</p>
+            </div>
+          </div>
+          <span class="im-photo-tag pfF-ph">ภาพตัวอย่าง · แทนที่ด้วยภาพมุมสูงจริง</span>
+        </div>
+      </div>
+    </div>
+  </section>
   </div>
 
   <!-- ============ Section 4 — เครือข่ายที่ขับเคลื่อนธุรกิจ (versions A / B, switchable) ============ -->
@@ -3094,6 +3232,7 @@ setTimeout(function(){
         <button type="button" data-v="b" aria-pressed="false">B · Sticky stack</button>
         <button type="button" data-v="c" aria-pressed="false">C · 2 คอลัมน์</button>
         <button type="button" data-v="d" aria-pressed="false">D · Convergence</button>
+        <button type="button" data-v="f" aria-pressed="false">F · Intersection</button>
       </div>
     </div>
     <div>
@@ -3368,7 +3507,7 @@ setTimeout(function(){
 
   /* ---- Section 3: highlight-on-scroll intro ---- */
   // versions A and D each have their own intro paragraph; whichever is visible gets the effect
-  var readers = ['pfRead', 'pfReadD'].map(function(id){ return document.getElementById(id); }).filter(Boolean).map(function(el){
+  var readers = ['pfRead', 'pfReadD', 'pfReadF'].map(function(id){ return document.getElementById(id); }).filter(Boolean).map(function(el){
     el.innerHTML = el.textContent.trim().split(/\s+/).map(function(w){
       var key = /^(MOVE|MIX|MATCH)$/.test(w) ? ' key' : '';
       return '<span class="w' + key + (reduceMotion ? ' lit' : '') + '">' + w + '</span>';
@@ -3460,7 +3599,7 @@ setTimeout(function(){
     if(!pinD || !svg || !labs) return;
     var railItems = document.querySelectorAll('#pfDRail li');
     var rail = document.getElementById('pfDRail');
-    var capsD = document.querySelectorAll('.pfD-cap');
+    var capsD = document.querySelectorAll('#platformsD .pfD-cap'); // version F reuses the class
     var tag = document.getElementById('pfDTag');
     var portraitMQ = window.matchMedia('(max-width: 1024px)'); // same breakpoint as the CSS that swaps the card to portrait
     var W = 1200, H = 675, C = [760, 338];
@@ -3683,6 +3822,420 @@ setTimeout(function(){
     if(portraitMQ.addEventListener) portraitMQ.addEventListener('change', build);
     window.addEventListener('scroll', function(){ requestAnimationFrame(onScrollD); }, {passive:true});
     window.addEventListener('resize', onScrollD);
+  })();
+
+  /* ---- Section 3 · F: INTERSECTION — aerial scenes + frame that grows MOVE → MIX → full-screen MATCH ----
+     The three "aerial photos" are placeholders drawn procedurally (seeded, so they're identical every load),
+     rasterised once to JPEG so the growing frame only scales a bitmap. Route overlays stay live SVG in the same
+     1600×1000 space with the same cover-crop, so they stay registered to the image at any frame size. */
+  (function(){
+    var pinF = document.getElementById('pfFPin');
+    var stage = document.getElementById('pfFStage');
+    var frame = document.getElementById('pfFFrame');
+    if(!pinF || !stage || !frame) return;
+    var side = document.getElementById('pfFSide');
+    var labsF = document.getElementById('pfFLabs');
+    var railF = document.getElementById('pfFRail');
+    var railItemsF = railF.querySelectorAll('li');
+    var capsF = document.querySelectorAll('#platformsF .pfD-cap');
+    var ocs = frame.querySelectorAll('.pfF-oc');
+    var scrim = frame.querySelector('.pfF-scrim');
+    var scenes = frame.querySelectorAll('.pfF-scene');
+    var VW = 1600, VH = 1000;
+    var PHASES = [0, .25, .5, .78], JUMP = [.12, .4, .7, .93];
+    var built = false, phase = -1, lastP = 0;
+
+    function seg(p, a, b){ return Math.max(0, Math.min(1, (p - a) / (b - a))); }
+    function ease(t){ return t * t * (3 - 2 * t); }
+    function lerp(a, b, t){ return a + (b - a) * t; }
+    function rng(seed){ return function(){ seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+    /* ---------- aerial placeholder generator (night city, top-down) ---------- */
+    function pts(a){ return a.map(function(q){ return q[0].toFixed(1) + ',' + q[1].toFixed(1); }).join(' '); }
+    function off(a, b, d){ // a straight segment offset sideways by d
+      var dx = b[0] - a[0], dy = b[1] - a[1], L = Math.sqrt(dx * dx + dy * dy), nx = -dy / L * d, ny = dx / L * d;
+      return [[a[0] + nx, a[1] + ny], [b[0] + nx, b[1] + ny]];
+    }
+    function line(a, b, st){ return '<line x1="' + a[0] + '" y1="' + a[1] + '" x2="' + b[0] + '" y2="' + b[1] + '" ' + st + '/>'; }
+
+    function city(R, opt){
+      var s = '<rect width="1600" height="1000" fill="#0A0F18"/>';
+      var tones = ['#161E2C', '#1A2332', '#1E2839', '#222D40', '#18202F', '#1C2A36'];
+      for(var y = -10; y < 1000; y += 56){
+        for(var x = -10; x < 1600; x += 56){
+          var r = R();
+          if(r < opt.park){
+            s += '<rect x="' + (x + 3) + '" y="' + (y + 3) + '" width="50" height="50" fill="#0F211D"/>';
+            for(var k = 0; k < 7; k++){
+              var tx = x + 8 + R() * 40, ty = y + 8 + R() * 40, tr = 3 + R() * 5;
+              s += '<circle cx="' + (tx + 2) + '" cy="' + (ty + 3) + '" r="' + tr + '" fill="#060B0A" opacity=".6"/><circle cx="' + tx + '" cy="' + ty + '" r="' + tr + '" fill="' + (R() < .5 ? '#163126' : '#1B3A2E') + '"/>';
+            }
+            continue;
+          }
+          var tall = R() < .1, n = tall ? 1 : (R() < .45 ? 2 : 1);
+          for(var b = 0; b < n; b++){
+            var w = n === 2 ? 22 + R() * 4 : 40 + R() * 10, h = 36 + R() * 14;
+            var bx = x + 4 + (n === 2 ? b * 26 : R() * (50 - w)), by = y + 4 + R() * (50 - h);
+            var sh = tall ? 16 : 6 + R() * 5;
+            s += '<rect x="' + (bx + sh * .7) + '" y="' + (by + sh) + '" width="' + w + '" height="' + h + '" fill="#03060A" opacity=".6"/>';
+            s += '<rect x="' + bx + '" y="' + by + '" width="' + w + '" height="' + h + '" rx="1.5" fill="' + (tall ? '#2A364B' : tones[Math.floor(R() * tones.length)]) + '" stroke="rgba(255,255,255,.05)"/>';
+            var d = Math.floor(R() * 3);
+            for(var q = 0; q < d; q++) s += '<rect x="' + (bx + 3 + R() * (w - 12)) + '" y="' + (by + 3 + R() * (h - 12)) + '" width="' + (4 + R() * 6) + '" height="' + (4 + R() * 6) + '" fill="#2F3B52"/>';
+            if(tall) s += '<circle cx="' + (bx + w / 2) + '" cy="' + (by + h / 2) + '" r="8" fill="none" stroke="#56647C" stroke-width="1.2"/>';
+            if(R() < .3) s += '<rect x="' + (bx + R() * (w - 4)) + '" y="' + (by + R() * (h - 4)) + '" width="3" height="3" fill="#FFD58A" opacity="' + (.5 + R() * .4).toFixed(2) + '"/>';
+          }
+        }
+      }
+      return s;
+    }
+    function canal(d){ return '<path d="' + d + '" fill="none" stroke="#0B1A28" stroke-width="44"/><path d="' + d + '" fill="none" stroke="#163049" stroke-width="2" opacity=".7" transform="translate(0 -12)"/>'; }
+    function road(R, a, b, w){
+      var s = line(a, b, 'stroke="#343A45" stroke-width="' + (w + 5) + '"') + line(a, b, 'stroke="#22272F" stroke-width="' + w + '"');
+      if(w >= 40){
+        var m = off(a, b, 0);
+        s += line(m[0], m[1], 'stroke="#C9A85A" stroke-width="1.4" opacity=".55"');
+        [-w / 4, w / 4].forEach(function(o){ var l = off(a, b, o); s += line(l[0], l[1], 'stroke="#C8CED8" stroke-width="1.2" stroke-dasharray="14 20" opacity=".35"'); });
+      }
+      // traffic light trails: warm heads one way, red tails the other
+      [[-w * .3, '#FFF1CF'], [w * .3, '#FF4B45']].forEach(function(lane){
+        var l = off(a, b, lane[0]), da = (4 + R() * 8) + ' ' + (30 + R() * 50) + ' ' + (2 + R() * 4) + ' ' + (60 + R() * 90);
+        s += line(l[0], l[1], 'stroke="' + lane[1] + '" stroke-width="6" opacity=".12" stroke-dasharray="' + da + '" stroke-dashoffset="' + (R() * 200) + '"');
+        s += line(l[0], l[1], 'stroke="' + lane[1] + '" stroke-width="2.2" opacity=".85" stroke-dasharray="' + da + '" stroke-dashoffset="' + (R() * 200) + '"');
+      });
+      return s;
+    }
+    function curveRoad(d, w){ return '<path d="' + d + '" fill="none" stroke="#343A45" stroke-width="' + (w + 5) + '"/><path d="' + d + '" fill="none" stroke="#22272F" stroke-width="' + w + '"/><path d="' + d + '" fill="none" stroke="#FFF1CF" stroke-width="2" stroke-dasharray="5 46 3 80" opacity=".7"/>'; }
+    function rail(a, b){
+      var sh = off(a, b, 0);
+      var s = '<g transform="translate(16 18)">' + line(sh[0], sh[1], 'stroke="#02040A" stroke-width="36" opacity=".55"') + '</g>';
+      s += line(a, b, 'stroke="#2A3242" stroke-width="34"') + line(a, b, 'stroke="#465267" stroke-width="29"') + line(a, b, 'stroke="#323B4C" stroke-width="5"');
+      [-8, 8].forEach(function(o){ var l = off(a, b, o); s += line(l[0], l[1], 'stroke="#A3AEC0" stroke-width="1.6"'); });
+      return s;
+    }
+    function train(a, b, t, cars){
+      var ang = Math.atan2(b[1] - a[1], b[0] - a[0]) * 180 / Math.PI;
+      var cx = a[0] + (b[0] - a[0]) * t, cy = a[1] + (b[1] - a[1]) * t, s = '<g transform="translate(' + cx + ' ' + cy + ') rotate(' + ang + ')">';
+      s += '<rect x="' + (-cars * 35) + '" y="-14" width="' + (cars * 70) + '" height="28" rx="10" fill="#8FD0FF" opacity=".12"/>';
+      for(var i = 0; i < cars; i++){
+        var x = -cars * 35 + i * 70 + 2;
+        s += '<rect x="' + x + '" y="-9" width="66" height="18" rx="' + (i === 0 || i === cars - 1 ? 7 : 2) + '" fill="#DCE4EE"/><rect x="' + (x + 4) + '" y="-1.5" width="58" height="3" fill="#00599B"/><rect x="' + (x + 10) + '" y="-6" width="10" height="3" fill="#B8C3D2"/><rect x="' + (x + 44) + '" y="-6" width="10" height="3" fill="#B8C3D2"/>';
+      }
+      return s + '</g>';
+    }
+    function station(c, ang, len, wid){
+      var s = '<g transform="translate(' + c[0] + ' ' + c[1] + ') rotate(' + ang + ')">';
+      s += '<rect x="' + (-len / 2 + 14) + '" y="' + (-wid / 2 + 16) + '" width="' + len + '" height="' + wid + '" rx="12" fill="#02040A" opacity=".55"/>';
+      s += '<rect x="' + (-len / 2) + '" y="' + (-wid / 2) + '" width="' + len + '" height="' + wid + '" rx="12" fill="#56657B" stroke="#8C9BB1" stroke-width="1.5"/>';
+      for(var x = -len / 2 + 14; x < len / 2 - 8; x += 13) s += '<line x1="' + x + '" y1="' + (-wid / 2 + 4) + '" x2="' + x + '" y2="' + (wid / 2 - 4) + '" stroke="#6D7D95" stroke-width="1.2"/>';
+      s += '<rect x="' + (-len / 2 + 20) + '" y="-5" width="' + (len - 40) + '" height="10" rx="5" fill="#9CC3E6" opacity=".45"/>';
+      return s + '</g>';
+    }
+    function skywalk(p){ return '<polyline points="' + pts(p) + '" fill="none" stroke="#02040A" stroke-width="18" opacity=".5" transform="translate(8 10)"/><polyline points="' + pts(p) + '" fill="none" stroke="#56667D" stroke-width="14" stroke-linejoin="round"/><polyline points="' + pts(p) + '" fill="none" stroke="#A7CDEE" stroke-width="4" opacity=".45" stroke-linejoin="round"/>'; }
+    function mall(R, x, y, w, h){
+      var s = '<rect x="' + (x + 18) + '" y="' + (y + 22) + '" width="' + w + '" height="' + h + '" fill="#02040A" opacity=".6"/>';
+      s += '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="6" fill="#283246" stroke="#3E4B62" stroke-width="2"/>';
+      s += '<rect x="' + (x + 16) + '" y="' + (y + 16) + '" width="' + (w - 32) + '" height="' + (h - 32) + '" rx="4" fill="#202A3B"/>';
+      for(var i = x + 28; i < x + w - 28; i += 18) s += '<line x1="' + i + '" y1="' + (y + 24) + '" x2="' + i + '" y2="' + (y + h * .45) + '" stroke="#36435A" stroke-width="1"/>';
+      for(var k = 0; k < 6; k++) s += '<rect x="' + (x + 24 + R() * (w - 60)) + '" y="' + (y + h * .55 + R() * (h * .3)) + '" width="' + (8 + R() * 14) + '" height="' + (8 + R() * 10) + '" fill="#3A4760"/>';
+      s += '<circle cx="' + (x + w * .7) + '" cy="' + (y + h * .3) + '" r="' + Math.min(w, h) * .12 + '" fill="#9CC3E6" opacity=".22"/>';
+      return s;
+    }
+    function finish(){ // night grade + vignette, like a long-exposure aerial
+      return '<defs><radialGradient id="vg" cx="50%" cy="50%" r="75%"><stop offset=".45" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".62"/></radialGradient>'
+        + '<radialGradient id="lt" cx="50%" cy="50%" r="55%"><stop offset="0" stop-color="#3F7EC0" stop-opacity=".16"/><stop offset="1" stop-color="#3F7EC0" stop-opacity="0"/></radialGradient></defs>'
+        + '<rect width="1600" height="1000" fill="url(#lt)"/><rect width="1600" height="1000" fill="#0A2A55" opacity=".1"/><rect width="1600" height="1000" fill="url(#vg)"/>';
+    }
+
+    // MOVE — one elevated line cutting diagonally across the city
+    var MV_A = [-80, 820], MV_B = [1680, 300];
+    function sceneMove(){
+      var R = rng(11), s = city(R, { park:.06 });
+      s += canal('M-20 150 C 400 110, 900 230, 1620 120');
+      var dx = MV_B[0] - MV_A[0], dy = MV_B[1] - MV_A[1], L = Math.sqrt(dx * dx + dy * dy), nx = -dy / L, ny = dx / L;
+      [.12, .3, .5, .68, .86].forEach(function(t){
+        var c = [MV_A[0] + dx * t, MV_A[1] + dy * t];
+        s += road(R, [c[0] - nx * 900, c[1] - ny * 900], [c[0] + nx * 900, c[1] + ny * 900], 24);
+      });
+      var o2 = off(MV_A, MV_B, -330); s += road(R, o2[0], o2[1], 32);
+      s += road(R, MV_A, MV_B, 62) + rail(MV_A, MV_B) + train(MV_A, MV_B, .43, 5);
+      return s + finish();
+    }
+    // MIX — a station on the line, skywalks branching into malls and buildings
+    var MX_Y = 560;
+    var MX_BR = [
+      { p:[[700,527],[700,430],[480,430],[480,280]], l:'Data', i:'db' },
+      { p:[[900,527],[900,410],[1220,410],[1220,250]], l:'Media', i:'tv' },
+      { p:[[900,593],[900,690],[1245,690],[1245,850]], l:'Digital', i:'phone' },
+      { p:[[700,593],[700,690],[440,690],[440,860]], l:'Experience', i:'sparkles' }
+    ];
+    function sceneMix(){
+      var R = rng(23), s = city(R, { park:.05 });
+      s += road(R, [-80, 250], [1680, 250], 26) + road(R, [-80, 880], [1680, 880], 26) + road(R, [330, -40], [330, 1040], 24) + road(R, [1400, -40], [1400, 1040], 24);
+      s += mall(R, 330, 150, 300, 220) + mall(R, 1060, 120, 320, 220) + mall(R, 1080, 760, 330, 200) + mall(R, 290, 770, 300, 190);
+      s += road(R, [-80, MX_Y], [1680, MX_Y], 64) + rail([-80, MX_Y], [1680, MX_Y]);
+      MX_BR.forEach(function(b){ s += skywalk(b.p.slice(0, 3).concat([[b.p[3][0], b.p[3][1] > MX_Y ? b.p[3][1] - 90 : b.p[3][1] + 90]])); });
+      s += station([800, MX_Y], 0, 330, 76) + train([-80, MX_Y], [1680, MX_Y], .3, 4);
+      return s + finish();
+    }
+    // MATCH — three lines and a grand avenue crossing at one interchange (C), roundabout around it
+    var C = [800, 500];
+    var RA = [[-80, 500], [1680, 500]], RB = [[240, -70], [1360, 1070]], RC = [[1470, -70], [130, 1070]];
+    function sceneMatch(){
+      var R = rng(37), s = city(R, { park:.04 });
+      s += road(R, [-80, 220], [1680, 220], 26) + road(R, [-80, 790], [1680, 790], 26) + road(R, [380, -40], [380, 1040], 26) + road(R, [1220, -40], [1220, 1040], 26);
+      s += '<circle cx="800" cy="500" r="178" fill="none" stroke="#343A45" stroke-width="50"/><circle cx="800" cy="500" r="178" fill="none" stroke="#22272F" stroke-width="44"/>'
+        + '<circle cx="800" cy="500" r="178" fill="none" stroke="#FFF1CF" stroke-width="2" stroke-dasharray="4 40 2 70" opacity=".75"/><circle cx="800" cy="500" r="178" fill="none" stroke="#FF4B45" stroke-width="2" stroke-dasharray="3 60 5 50" opacity=".7" transform="rotate(40 800 500)"/>';
+      s += curveRoad('M 620 -40 Q 640 300 980 330 T 1680 360', 30) + curveRoad('M -80 700 Q 500 650 620 680 T 980 1040', 30);
+      s += road(R, [800, -80], [800, 1080], 72) + road(R, RA[0], RA[1], 58) + road(R, RB[0], RB[1], 50) + road(R, RC[0], RC[1], 50);
+      s += rail(RA[0], RA[1]) + rail(RB[0], RB[1]) + rail(RC[0], RC[1]);
+      s += station([1000, 500], 0, 220, 64) + station([600, 500], 0, 220, 64);
+      s += station([800 + 150 * .707, 500 + 150 * .707], 45.5, 180, 60) + station([800 - 150 * .766, 500 + 150 * .643], 139.7, 180, 60);
+      s += '<rect x="708" y="408" width="200" height="200" rx="34" fill="#02040A" opacity=".6"/><rect x="690" y="390" width="220" height="220" rx="34" fill="#5B6A80" stroke="#9AA9BF" stroke-width="2"/>';
+      for(var i = 0; i < 16; i++) s += '<line x1="800" y1="500" x2="' + (800 + Math.cos(i * Math.PI / 8) * 106) + '" y2="' + (500 + Math.sin(i * Math.PI / 8) * 106) + '" stroke="#71819A" stroke-width="1.2"/>';
+      s += '<circle cx="800" cy="500" r="56" fill="#9CC3E6" opacity=".55"/><circle cx="800" cy="500" r="56" fill="none" stroke="#C9E2F7" stroke-width="2"/>';
+      s += train(RA[0], RA[1], .28, 4) + train(RB[0], RB[1], .75, 4) + train(RC[0], RC[1], .2, 4);
+      return s + finish();
+    }
+
+    function rasterise(svgBody, img){
+      var src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000">' + svgBody + '</svg>');
+      var im = new Image();
+      im.onload = function(){
+        try{
+          var cv = document.createElement('canvas'), k = 1.5;
+          cv.width = 1600 * k; cv.height = 1000 * k;
+          var cx = cv.getContext('2d');
+          cx.drawImage(im, 0, 0, cv.width, cv.height);
+          // film grain so it reads as a photograph rather than vector art
+          var d = cx.getImageData(0, 0, cv.width, cv.height), a = d.data, R = rng(5);
+          for(var i = 0; i < a.length; i += 4){ var g = (R() - .5) * 18; a[i] += g; a[i + 1] += g; a[i + 2] += g; }
+          cx.putImageData(d, 0, 0);
+          img.src = cv.toDataURL('image/jpeg', .86);
+        }catch(e){ img.src = src; } // canvas tainted (some browsers) — fall back to the vector image
+      };
+      im.src = src;
+    }
+
+    /* ---------- live overlay: routes over the image ---------- */
+    function route(p, cls, col, outward){
+      var d = 'M' + pts(p).split(' ').join(' L');
+      return '<g class="' + cls + '">'
+        + '<path class="rt" pathLength="1" d="' + d + '" stroke="' + col + '" stroke-width="16" opacity=".1"/>'
+        + '<path class="rt" pathLength="1" d="' + d + '" stroke="' + col + '" stroke-width="7" opacity=".3"/>'
+        + '<path class="rt" pathLength="1" d="' + d + '" stroke="#FFFFFF" stroke-width="2.4"/>'
+        + '<path class="dots' + (outward ? ' out' : '') + '" pathLength="1" d="' + d + '" stroke="#FFFFFF" stroke-width="5" opacity="0"/>'
+        + '</g>';
+    }
+    // chips: scene index, scene-space point, label, icon; `out` = big outcome label
+    var CHIPS = [];
+    var OV = [[], [], []]; // per scene: { g, f(p), chipIdx[] }
+    function lin(a, b, t){ return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]; }
+
+    function buildOverlays(){
+      var ov = frame.querySelectorAll('.pfF-ov');
+      CHIPS = []; OV = [[], [], []];
+      function add(sc, html, f, chips){ OV[sc].push({ html: html, f: f, chips: chips || [] }); }
+      // ptMob: alternative spot for narrow screens (outcomes pulled toward C so the bottom caption doesn't cover them)
+      function chip(sc, pt, l, i, at, out, s, ptMob){ CHIPS.push({ sc: sc, pt: pt, ptMob: ptMob, l: l, i: i, at: at, out: !!out, s: s || '' }); return CHIPS.length - 1; }
+
+      // MOVE
+      add(0, route([MV_A, MV_B], 'r', '#3FA3EC'), function(p){ return seg(p, .03, .2); }, [
+        chip(0, lin(MV_A, MV_B, .28), 'ผู้คน', 'users', .28), chip(0, lin(MV_A, MV_B, .42), 'รถไฟฟ้า', 'train', .42),
+        chip(0, lin(MV_A, MV_B, .58), 'Mobility', 'route', .58), chip(0, lin(MV_A, MV_B, .72), 'โครงสร้างพื้นฐาน', 'landmark', .72)
+      ]);
+      // MIX — the line is already lit (it's the MOVE route), branches grow out of the station
+      add(1, route([[-80, MX_Y], [1680, MX_Y]], 'r', '#3FA3EC'), function(p){ return .55 + .45 * seg(p, .24, .32); });
+      MX_BR.forEach(function(b, k){
+        add(1, route(b.p, 'r', '#8FD0FF', true), function(p){ return seg(p, .3 + k * .025, .45); }, [chip(1, b.p[3], b.l, b.i, .98)]);
+      });
+      // MATCH — five approaches converge on C at the same moment (p≈.72)…
+      var IN = [
+        { p:[RA[0], C], c:[['MOVE', 'train', .35]] },
+        { p:[RB[0], C], c:[['MIX', 'layers', .35]] },
+        { p:[[800, -80], C], c:[['Business', 'briefcase', .3], ['Property', 'house', .46], ['Technology', 'cpu', .62]] },
+        { p:[RC[0], C], c:[['Hotel', 'bed', .3], ['Finance', 'wallet', .5]] },
+        { p:[RC[1], C], c:[] }
+      ];
+      IN.forEach(function(r, k){
+        add(2, route(r.p, 'r', k < 2 ? '#3FA3EC' : '#C6D0DE'), function(p){ return seg(p, .6 + k * .012, .72); },
+          r.c.map(function(c){ return chip(2, lin(r.p[0], r.p[1], c[2]), c[0], c[1], c[2]); }));
+      });
+      // …then New Possibility leaves along the three remaining directions
+      var OUT = [
+        { p:[C, RA[1]], l:'CITY', s:'เมือง', i:'city' },
+        { p:[C, RB[1]], l:'PEOPLE', s:'ผู้คน', i:'users' },
+        { p:[C, [800, 1080]], l:'BUSINESS', s:'ธุรกิจ', i:'trend' }
+      ];
+      OUT.forEach(function(r, k){
+        add(2, route(r.p, 'r', '#8FD0FF', true), function(p){ return seg(p, .8 + k * .02, .92 + k * .02); },
+          [chip(2, lin(r.p[0], r.p[1], .62), r.l, r.i, .62, true, r.s, lin(r.p[0], r.p[1], .3))]);
+      });
+
+      ov.forEach(function(svg, sc){
+        var extra = sc === 2
+          ? '<circle class="fw" cx="800" cy="500" r="20" fill="none" stroke="#8FD0FF" stroke-width="2" opacity="0"/>'
+            + '<circle class="fb" cx="800" cy="500" r="12" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0"/>'
+            + '<circle class="pfD-ping fp" cx="800" cy="500" r="16" fill="none" stroke="#ED1D24" stroke-width="2"/>'
+            + '<circle class="pfD-ping p2 fp" cx="800" cy="500" r="16" fill="none" stroke="#ED1D24" stroke-width="2"/>'
+            + '<circle class="fh" cx="800" cy="500" r="90" fill="url(#fHalo)"/>'
+            + '<circle class="fc" cx="800" cy="500" r="6" fill="#8FD0FF" stroke="#FFFFFF" stroke-width="3"/>'
+          : '';
+        svg.innerHTML = '<defs><radialGradient id="fHalo"><stop offset="0" stop-color="#ED1D24" stop-opacity=".55"/><stop offset="1" stop-color="#ED1D24" stop-opacity="0"/></radialGradient></defs>'
+          + OV[sc].map(function(o){ return o.html; }).join('') + extra;
+        Array.prototype.forEach.call(svg.querySelectorAll(':scope > g'), function(g, k){ OV[sc][k].g = g; OV[sc][k].rts = g.querySelectorAll('.rt'); OV[sc][k].dots = g.querySelector('.dots'); });
+      });
+
+      var ICON = {
+        users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+        train:'<path d="M8 3.1V7a4 4 0 0 0 8 0V3.1"/><path d="m9 15-1-1"/><path d="m15 15 1-1"/><path d="M9 19c-2.8 0-5-2.2-5-5v-4a8 8 0 0 1 16 0v4c0 2.8-2.2 5-5 5Z"/><path d="m8 19-2 3"/><path d="m16 19 2 3"/>',
+        route:'<circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/>',
+        landmark:'<line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/>',
+        db:'<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/>',
+        tv:'<rect width="20" height="15" x="2" y="7" rx="2" ry="2"/><path d="m17 2-5 5-5-5"/>',
+        phone:'<rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/>',
+        sparkles:'<path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>',
+        layers:'<path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/>',
+        briefcase:'<path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/>',
+        house:'<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+        bed:'<path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/>',
+        wallet:'<path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>',
+        cpu:'<rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/>',
+        trend:'<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>',
+        city:'<path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/>'
+      };
+      function ico(k){ return '<span class="cv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICON[k] + '</svg></span>'; }
+      labsF.innerHTML = CHIPS.map(function(c){
+        return c.out
+          ? '<span class="cv-out">' + ico(c.i) + '<b>' + c.l + '</b><small>' + c.s + '</small></span>'
+          : '<span class="cv-lab">' + ico(c.i) + '<span>' + c.l + '</span></span>';
+      }).join('');
+      CHIPS.forEach(function(c, k){ c.el = labsF.children[k]; });
+    }
+
+    function build(){
+      if(built) return;
+      built = true;
+      var imgs = frame.querySelectorAll('.pfF-scene img');
+      rasterise(sceneMove(), imgs[0]);
+      rasterise(sceneMix(), imgs[1]);
+      rasterise(sceneMatch(), imgs[2]);
+      buildOverlays();
+      update(lastP);
+    }
+
+    /* ---------- frame geometry per state ---------- */
+    function boxes(){
+      var W = stage.clientWidth, H = stage.clientHeight, hh = 88, B = {};
+      if(W > 1024){
+        var cl = Math.max(24, (W - 1320) / 2 + 24), cw = W - 2 * cl, ty = hh + 24, th = H - ty - 32;
+        var sideW = Math.min(330, W * .28) + 56, ax = cl + sideW, aw = cw - sideW;
+        var mw = Math.min(aw * .68, th * 1.35), mh = mw / 1.35;
+        var xw = Math.min(aw, th * 1.6), xh = Math.min(th, xw / 1.45);
+        B.move = { l: ax + (aw - mw) / 2, t: ty + (th - mh) / 2, w: mw, h: mh, r: 24 };
+        B.mix = { l: ax + (aw - xw) / 2, t: ty + (th - xh) / 2, w: xw, h: xh, r: 24 };
+      } else {
+        var ty2 = hh + 52, th2 = H - ty2 - 176, cw2 = W - 32;
+        var mh2 = Math.min(th2 * .78, cw2 * .72 / .82), mw2 = mh2 * .82;
+        var xh2 = Math.min(th2, cw2 / .82), xw2 = Math.min(cw2, xh2 * .82);
+        B.move = { l: (W - mw2) / 2, t: ty2 + (th2 - mh2) / 2, w: mw2, h: mh2, r: 20 };
+        B.mix = { l: (W - xw2) / 2, t: ty2 + (th2 - xh2) / 2, w: xw2, h: xh2, r: 20 };
+      }
+      B.full = { l: 0, t: 0, w: W, h: H, r: 0 };
+      return B;
+    }
+    var KEYS = [[0, 'move'], [.17, 'move'], [.3, 'mix'], [.47, 'mix'], [.62, 'full'], [1, 'full']];
+    function boxAt(p, B){
+      for(var i = 0; i < KEYS.length - 1; i++){
+        var a = KEYS[i], b = KEYS[i + 1];
+        if(p <= b[0]){
+          var t = ease(seg(p, a[0], b[0])), A = B[a[1]], Z = B[b[1]];
+          return { l: lerp(A.l, Z.l, t), t: lerp(A.t, Z.t, t), w: lerp(A.w, Z.w, t), h: lerp(A.h, Z.h, t), r: lerp(A.r, Z.r, t) };
+        }
+      }
+      return B.full;
+    }
+
+    function update(p){
+      lastP = p;
+      var B = boxes(), bx = boxAt(p, B);
+      frame.style.left = bx.l + 'px'; frame.style.top = bx.t + 'px';
+      frame.style.width = bx.w + 'px'; frame.style.height = bx.h + 'px';
+      frame.style.borderRadius = bx.r + 'px';
+
+      side.style.opacity = (1 - seg(p, .47, .53)).toFixed(3); // gone before the growing frame reaches the captions
+
+      // scene crossfades + slow zoom-out (MATCH pulls back while the frame grows: "now you see the whole city")
+      var op = [1 - seg(p, .22, .3), seg(p, .22, .3) * (1 - seg(p, .5, .58)), seg(p, .5, .58)];
+      var z = [1.08 - .08 * seg(p, 0, .25), 1.08 - .08 * seg(p, .25, .5), 1.22 - .22 * ease(seg(p, .5, .92))];
+      Array.prototype.forEach.call(scenes, function(el, k){ el.style.opacity = op[k].toFixed(3); el.style.transform = 'scale(' + z[k].toFixed(4) + ')'; el.style.visibility = op[k] > 0 ? '' : 'hidden'; });
+      scrim.style.opacity = seg(p, .6, .68).toFixed(3);
+
+      if(built){
+        OV.forEach(function(list){
+          list.forEach(function(o){
+            var f = o.f(p);
+            o.cur = f;
+            var offv = (1 - f).toFixed(4), vis = f > .002 ? '' : 'hidden';
+            Array.prototype.forEach.call(o.rts, function(r){ r.style.strokeDashoffset = offv; r.style.visibility = vis; });
+            o.dots.setAttribute('opacity', f >= 1 && !reduceMotion ? .9 : 0);
+            o.chips.forEach(function(ci){ CHIPS[ci].on = f >= CHIPS[ci].at; });
+          });
+        });
+        // the interchange point: wakes as routes approach, turns red when they all land, then the wave
+        var mv = frame.querySelector('.pfF-scene[data-i="2"] .pfF-ov');
+        var landed = p >= .71;
+        mv.querySelector('.fc').setAttribute('r', (6 + 6 * seg(p, .62, .72)).toFixed(2));
+        mv.querySelector('.fc').setAttribute('fill', landed ? '#ED1D24' : '#8FD0FF');
+        mv.querySelector('.fh').setAttribute('opacity', landed ? 1 : 0);
+        Array.prototype.forEach.call(mv.querySelectorAll('.fp'), function(el){ el.style.visibility = landed && !reduceMotion ? 'visible' : 'hidden'; });
+        var b = seg(p, .72, .82), w = seg(p, .78, .97);
+        mv.querySelector('.fb').setAttribute('r', (12 + 320 * b).toFixed(1));
+        mv.querySelector('.fb').setAttribute('opacity', b > 0 && b < 1 ? ((1 - b) * .9).toFixed(3) : 0);
+        mv.querySelector('.fw').setAttribute('r', (20 + 1000 * w).toFixed(1));
+        mv.querySelector('.fw').setAttribute('opacity', w > 0 && w < 1 ? ((1 - w) * .5).toFixed(3) : 0);
+
+        // chips follow the cover-crop + zoom of their scene, clamped inside the frame
+        var fw = bx.w, fh = bx.h, narrow = B.full.w <= 1024;
+        CHIPS.forEach(function(c){
+          var s = Math.max(fw / VW, fh / VH) * z[c.sc], pt = narrow && c.ptMob ? c.ptMob : c.pt;
+          var x = fw / 2 + (pt[0] - VW / 2) * s, y = fh / 2 + (pt[1] - VH / 2) * s;
+          var m = c.out ? 44 : 22;
+          x = Math.max(m, Math.min(fw - m, x)); y = Math.max(m, Math.min(fh - m, y));
+          c.el.style.left = x.toFixed(1) + 'px'; c.el.style.top = y.toFixed(1) + 'px';
+          c.el.style.opacity = c.on ? op[c.sc].toFixed(3) : 0;
+        });
+      }
+
+      railF.style.setProperty('--p', p.toFixed(4));
+      Array.prototype.forEach.call(railItemsF, function(el, k){ el.classList.toggle('done', p >= PHASES[k] + .01 || (k === 0 && p > .01)); });
+      var ph = p >= PHASES[3] ? 3 : p >= PHASES[2] ? 2 : p >= PHASES[1] ? 1 : 0;
+      var full = p >= .62;
+      if(ph !== phase || full !== frame.classList.contains('is-full')){
+        phase = ph;
+        frame.classList.toggle('is-full', full);
+        Array.prototype.forEach.call(capsF, function(el, k){ el.classList.toggle('on', k === Math.min(ph, 1)); });
+        Array.prototype.forEach.call(ocs, function(el){ el.classList.toggle('on', full && +el.getAttribute('data-i') === ph); });
+        Array.prototype.forEach.call(railItemsF, function(el, k){ el.classList.toggle('active', k === ph); });
+      }
+    }
+
+    function onScrollF(){
+      if(!pinF.offsetParent) return;
+      if(!built) build();
+      var r = pinF.getBoundingClientRect(), total = r.height - window.innerHeight;
+      update(total > 0 ? Math.max(0, Math.min(1, -r.top / total)) : 0);
+    }
+    Array.prototype.forEach.call(railItemsF, function(el){
+      function go(){
+        var i = +el.getAttribute('data-i');
+        var top = pinF.getBoundingClientRect().top + window.scrollY, total = pinF.offsetHeight - window.innerHeight;
+        window.scrollTo({ top: top + total * JUMP[i], behavior: reduceMotion ? 'auto' : 'smooth' });
+      }
+      el.addEventListener('click', go);
+      el.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); go(); } });
+    });
+    window.addEventListener('scroll', function(){ requestAnimationFrame(onScrollF); }, {passive:true});
+    window.addEventListener('resize', onScrollF);
   })();
 
   /* ---- Section 4: opacity follows scroll focus ---- */
