@@ -933,105 +933,28 @@
     .pf-scene, .pf-cap, .pf-count-num span, .mt-beam, .mt-plate, .mv-route-lit{ transition:none; }
   }
 
-  /* ============ Section 3 · version D — THE CONVERGENCE (scroll-scrubbed streams → one point → new possibility) ============ */
-  .pfD{ position:relative; background:var(--cream); color:var(--charcoal); }
-  .pfD-pin{ position:relative; height:500vh; }
-  .pfD-stage{
-    position:sticky; top:0; height:100vh;
-    max-width:1320px; margin:0 auto;
-    padding:calc(var(--header-h) + 16px) 24px 32px;
-    display:grid; grid-template-columns:minmax(250px,310px) minmax(0,1fr);
-    align-items:center; gap:48px;
-  }
-  .pfD-side{ display:flex; flex-direction:column; gap:44px; }
-
+  /* ============ Section 3 · version E — shared pieces (progress rail, summary pill, ping rings, route chips) ============ */
   /* one continuous progress line instead of three separate bars — the story doesn't reset between platforms */
-  .pfD-rail{ position:relative; list-style:none; margin:0; padding:0 0 0 22px; display:flex; flex-direction:column; gap:20px; }
-  .pfD-rail::before, .pfD-rail::after{ content:""; position:absolute; left:0; top:4px; width:2px; border-radius:2px; }
-  .pfD-rail::before{ bottom:4px; background:rgba(35,50,78,.12); }
-  .pfD-rail::after{ height:calc((100% - 8px) * var(--p)); background:var(--blue); }
-  .pfD-rail li{ position:relative; display:flex; flex-direction:column; gap:2px; cursor:pointer; }
-  .pfD-rail li::before{
-    content:""; position:absolute; left:-26px; top:7px; width:10px; height:10px; border-radius:50%;
-    background:var(--cream); border:2px solid rgba(35,50,78,.2); transition:border-color .3s ease, background .3s ease;
-  }
-  .pfD-rail li.done::before{ border-color:var(--blue); background:var(--blue); }
-  .pfD-rail li[data-i="2"].done::before{ border-color:var(--red); background:var(--red); }
-  .pfD-rail b{ font-size:15px; font-weight:700; color:rgba(35,50,78,.32); transition:color .3s ease; }
-  .pfD-rail small{ font-size:12px; color:rgba(41,43,44,.42); transition:color .3s ease; }
-  .pfD-rail li.active b{ color:var(--navy); }
-  .pfD-rail li.active small{ color:rgba(41,43,44,.72); }
-  .pfD-rail li:focus-visible{ outline:2px solid var(--blue); outline-offset:6px; border-radius:8px; }
-
-  .pfD-caps{ position:relative; height:300px; }
-  .pfD-cap{
-    position:absolute; inset:0;
-    opacity:0; transform:translateY(14px);
-    transition:opacity .5s ease, transform .6s cubic-bezier(.2,.7,.2,1);
-    pointer-events:none;
-  }
-  .pfD-cap.on{ opacity:1; transform:none; pointer-events:auto; }
-  .pfD-cap .eyebrow{ display:flex; align-items:center; gap:8px; color:var(--navy); margin-bottom:12px; }
-  .pfD-cap h3{ margin:0 0 10px; font-size:clamp(24px,1.7vw,34px); font-weight:700; line-height:1.4; color:var(--navy); text-wrap:balance; }
-  .pfD-cap p{ margin:0 0 16px; font-size:16px; line-height:1.5; color:rgba(41,43,44,.62); }
-  .pfD-cap .pfD-sum{
-    display:inline-block; margin:4px 0 0; padding:8px 14px; border-radius:12px;
-    font-size:13px; font-weight:700; color:var(--navy); background:rgba(0,89,155,.08); text-wrap:balance;
-  }
-  .pfD-sum i{ font-style:normal; color:var(--red); margin:0 2px; }
-
-  /* the canvas — dark "island" on cream, same material as the version-A card. Its aspect ratio is swapped
-     (portrait) below 1024px and the JS rotates the geometry to match, so the flow runs top → bottom on phones */
-  .pfD-card{
-    --ar:1200 / 675;
-    position:relative; justify-self:end;
-    width:min(100%, calc((100vh - var(--header-h) - 64px) * 1200 / 675));
-    aspect-ratio:var(--ar);
-    border-radius:24px; overflow:hidden;
-    background:
-      radial-gradient(circle at var(--cx,63%) var(--cy,50%), rgba(0,89,155,calc(.18 + var(--glow,0) * .4)), transparent 46%),
-      radial-gradient(rgba(169,183,204,.14) 1px, transparent 1.4px) 0 0 / 22px 22px,
-      var(--dark-2);
-    box-shadow:0 50px 80px -40px rgba(35,50,78,.55), 0 2px 0 rgba(255,255,255,.06) inset;
-  }
-  .pfD-svg{ position:absolute; inset:0; width:100%; height:100%; display:block; }
-  .pfD-svg .st{ fill:none; stroke-linecap:round; stroke-dasharray:1 1; }
-  .pfD-svg .pt{ fill:#FFFFFF; }
-  .pfD-tag{
-    position:absolute; top:20px; left:24px; z-index:2;
-    font-size:10.5px; font-weight:400; text-transform:uppercase; color:rgba(255,255,255,.5);
-  }
-  @keyframes pfDping{ 0%{ transform:scale(1); opacity:.7; } 100%{ transform:scale(2.6); opacity:0; } }
-  .pfD-ping{ transform-box:fill-box; transform-origin:center; animation:pfDping 2.4s ease-out infinite; }
-  .pfD-ping.p2{ animation-delay:1.2s; }
-
-  /* MATCH climax: the moment everything lands, the whole section goes dark (JS fades the background colour),
-     the card loses its edge into it, a flash hits the card and the copy flips to light */
-  .pfD-flash{ position:absolute; inset:0; z-index:3; pointer-events:none; opacity:0; background:radial-gradient(circle at var(--cx,63%) var(--cy,50%), #FFFFFF 0%, rgba(255,255,255,.65) 18%, rgba(143,208,255,0) 60%); }
-  .pfD-card{ transition:box-shadow .5s ease; }
-  .pfD.is-dark .pfD-card{ box-shadow:0 0 0 1px rgba(169,183,204,.08), 0 0 120px rgba(0,89,155,.35); }
-  .pfD.is-dark .pfD-rail::before{ background:rgba(255,255,255,.14); }
-  .pfD.is-dark .pfD-rail li::before{ background:#151C2B; }
-  .pfD.is-dark .pfD-rail b{ color:rgba(255,255,255,.35); }
-  .pfD.is-dark .pfD-rail small{ color:rgba(255,255,255,.35); }
-  .pfD.is-dark .pfD-rail li.active b{ color:var(--white); }
-  .pfD.is-dark .pfD-rail li.active small{ color:rgba(255,255,255,.7); }
-  .pfD.is-dark .pfD-cap .eyebrow, .pfD.is-dark .pfD-cap h3{ color:var(--white); }
-  .pfD.is-dark .pfD-cap p{ color:rgba(255,255,255,.7); }
-  .pfD.is-dark .pfD-cap .pfD-sum{ color:var(--white); background:rgba(255,255,255,.1); }
-  .pfD.is-dark .pfD-cap .pf-link{ color:var(--white); border-bottom-color:rgba(255,255,255,.35); }
-  .pfD-climax h3{ font-size:clamp(30px,2.5vw,46px); line-height:1.25; }
-  .pfD-climax .pfD-sum{ margin-bottom:14px; }
-
-  /* chips sit at real points on the generated streams (positions set in % by JS) */
-  .pfD-labs{ position:absolute; inset:0; pointer-events:none; }
+  .pfE-rail{ position:relative; list-style:none; margin:0; padding:0 0 0 22px; display:flex; flex-direction:column; gap:20px; }
+  .pfE-rail::before, .pfE-rail::after{ content:""; position:absolute; left:0; top:4px; width:2px; border-radius:2px; }
+  .pfE-rail::before{ bottom:4px; background:rgba(35,50,78,.12); }
+  .pfE-rail::after{ height:calc((100% - 8px) * var(--p)); background:var(--blue); }
+  .pfE-rail li{ position:relative; display:flex; flex-direction:column; gap:2px; cursor:pointer; }
+  .pfE-rail b{ font-size:15px; font-weight:700; transition:color .3s ease; }
+  .pfE-rail small{ font-size:12px; transition:color .3s ease; }
+  .pfE-rail li:focus-visible{ outline:2px solid var(--blue); outline-offset:6px; border-radius:8px; }
+  .pfE-sum i{ font-style:normal; color:var(--red); margin:0 2px; }
+  @keyframes pfEping{ 0%{ transform:scale(1); opacity:.7; } 100%{ transform:scale(2.6); opacity:0; } }
+  .pfE-ping{ transform-box:fill-box; transform-origin:center; animation:pfEping 2.4s ease-out infinite; }
+  .pfE-ping.p2{ animation-delay:1.2s; }
+  /* small chips sit at real points on the routes (positions set by JS) */
   .cv-lab{
     position:absolute; display:flex; align-items:center; gap:7px;
     padding:3px 10px 3px 3px; border-radius:999px;
     background:rgba(18,22,31,.72); border:1px solid rgba(169,183,204,.22);
     transform:translate(-15px,-50%);
     font-size:11.5px; color:rgba(255,255,255,.78); white-space:nowrap;
-    opacity:0; transition:opacity .35s ease;
+    opacity:0;
   }
   .cv-ico{
     width:24px; height:24px; border-radius:50%; flex:none;
@@ -1039,102 +962,60 @@
     background:#2E3F5F; color:var(--white);
   }
   .cv-ico svg{ width:13px; height:13px; }
-  .cv-lab[data-g="move"] .cv-ico{ background:#1D4F7C; }
-  .cv-lab[data-g="mix"] .cv-ico{ background:#24506B; }
-  .cv-out{
-    position:absolute; transform:translate(-50%,-20px) scale(var(--s,1)); /* icon centre sits on the stream's end point */
-    display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center;
-    opacity:0; transition:opacity .4s ease;
-  }
-  .cv-out .cv-ico{ width:40px; height:40px; background:var(--blue); box-shadow:0 0 0 6px rgba(0,89,155,.25), 0 0 30px rgba(63,163,236,.6); }
-  .cv-out .cv-ico svg{ width:18px; height:18px; }
-  .cv-out b{ font-size:12px; font-weight:700; letter-spacing:.08em; color:var(--white); }
-  .cv-out small{ font-size:11px; color:rgba(255,255,255,.6); margin-top:-4px; }
-
   @media (max-width:1024px){
-    .pfD .pf-intro{ grid-template-columns:1fr; gap:28px; padding-bottom:40px; }
-    .pfD-pin{ height:420vh; }
-    .pfD-stage{
-      grid-template-columns:1fr; grid-template-rows:auto 1fr auto;
-      justify-items:center; align-items:center; gap:14px;
-      padding:calc(var(--header-h) + 8px) 16px 16px;
-    }
-    .pfD-side{ display:contents; }
-    .pfD-rail{ order:0; width:100%; max-width:480px; flex-direction:row; justify-content:space-between; padding:0 0 12px; gap:8px; }
-    .pfD-rail::before, .pfD-rail::after{ top:auto; bottom:0; left:0; height:2px; width:auto; }
-    .pfD-rail::before{ right:0; }
-    .pfD-rail::after{ width:calc(100% * var(--p)); height:2px; }
-    .pfD-rail li::before{ display:none; }
-    .pfD-rail b{ font-size:13px; }
-    .pfD-rail small{ display:none; }
-    .pfD-card{
-      order:1; justify-self:center; --ar:675 / 1200;
-      width:min(100%, calc((100svh - var(--header-h) - 250px) * 675 / 1200));
-    }
-    .pfD-caps{ order:2; width:100%; max-width:480px; height:170px; }
-    .pfD-cap{ text-align:center; }
-    .pfD-cap .eyebrow{ justify-content:center; margin-bottom:6px; }
-    .pfD-cap h3{ font-size:20px; margin-bottom:4px; }
-    .pfD-cap p{ font-size:14px; margin-bottom:8px; }
-    .pfD-cap .pfD-sum{ font-size:12px; padding:6px 12px; }
-    .pfD-climax h3{ font-size:22px; }
-    .pfD-climax h3 br{ display:none; }
-    .pfD-climax .pfD-sum{ margin-bottom:6px; }
-    .pfD-cap .pf-link{ font-size:14px; }
-    /* portrait canvas is narrow — incoming chips collapse to icons, only the three outcomes keep their words */
+    .pfE-rail{ flex-direction:row; justify-content:space-between; padding:0 0 12px; gap:8px; }
+    .pfE-rail::before, .pfE-rail::after{ top:auto; bottom:0; left:0; height:2px; width:auto; }
+    .pfE-rail::before{ right:0; }
+    .pfE-rail::after{ width:calc(100% * var(--p)); height:2px; }
+    .pfE-rail b{ font-size:13px; }
+    .pfE-rail small{ display:none; }
+    /* narrow screens: route chips collapse to icons */
     .cv-lab{ padding:2px; transform:translate(-50%,-50%); }
     .cv-lab > span:not(.cv-ico){ display:none; }
-    .cv-out{ transform:translate(-50%,-16px) scale(var(--s,1)); }
-    .cv-out .cv-ico{ width:32px; height:32px; }
-    .cv-out b{ font-size:10.5px; letter-spacing:.04em; }
-    .cv-out small{ display:none; }
-    .pfD-tag{ display:none; } /* would collide with the incoming chips along the top edge */
   }
-
   @media (prefers-reduced-motion:reduce){
-    .pfD-cap, .cv-lab, .cv-out, .pfD-rail li::before{ transition:none; }
-    .pfD-ping{ animation:none; opacity:0; }
+    .pfE-ping{ animation:none; opacity:0; }
   }
 
-  /* ============ Section 3 · version F — INTERSECTION (full-bleed aerial story; MATCH is the climax by type, camera and colour) ============ */
-  .pfF{ position:relative; background:var(--cream); color:var(--charcoal); }
-  .pfF-pin{ position:relative; height:560vh; }
-  .pfF-stage{ position:sticky; top:0; height:100vh; overflow:hidden; background:#0B111C; }
+  /* ============ Section 3 · version E — INTERSECTION (full-bleed aerial story; MATCH is the climax by type, camera and colour) ============ */
+  .pfE{ position:relative; background:var(--cream); color:var(--charcoal); }
+  .pfE-pin{ position:relative; height:560vh; }
+  .pfE-stage{ position:sticky; top:0; height:100vh; overflow:hidden; background:#0B111C; }
   /* every phase is full-bleed — MOVE and MIX no longer sit in a card */
-  .pfF-frame{ position:absolute; inset:0; z-index:2; overflow:hidden; background:#0B111C; }
-  .pfF-scene{ position:absolute; inset:0; opacity:0; transform-origin:50% 50%; }
-  .pfF-scene img, .pfF-ov{ position:absolute; inset:0; width:100%; height:100%; display:block; }
-  .pfF-scene img{ object-fit:cover; }
-  .pfF-ov .rt{ fill:none; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:1 1; }
-  .pfF-ov .dots{ fill:none; stroke-linecap:round; stroke-dasharray:.001 .06; animation:pfFdots 2.6s linear infinite; }
-  @keyframes pfFdots{ to{ stroke-dashoffset:-.061; } }
-  .pfF-ov .dots.out{ animation-direction:reverse; }
+  .pfE-frame{ position:absolute; inset:0; z-index:2; overflow:hidden; background:#0B111C; }
+  .pfE-scene{ position:absolute; inset:0; opacity:0; transform-origin:50% 50%; }
+  .pfE-scene img, .pfE-ov{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+  .pfE-scene img{ object-fit:cover; }
+  .pfE-ov .rt{ fill:none; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:1 1; }
+  .pfE-ov .dots{ fill:none; stroke-linecap:round; stroke-dasharray:.001 .06; animation:pfEdots 2.6s linear infinite; }
+  @keyframes pfEdots{ to{ stroke-dashoffset:-.061; } }
+  .pfE-ov .dots.out{ animation-direction:reverse; }
 
   /* MOVE — scroll-scrubbed video + the four ways of travelling passing over it (bottom-right, clear of the caption) */
-  .pfF-vid{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
-  .pfF-modes{
+  .pfE-vid{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+  .pfE-modes{
     position:absolute; z-index:1; right:112px; bottom:52px; width:min(460px, 34%);
     list-style:none; margin:0; padding:0;
     display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:26px 28px;
     color:var(--white);
   }
-  .pfF-modes li{ display:flex; flex-direction:column; gap:3px; opacity:0; }
-  .pfF-modes .cv-ico{ width:36px; height:36px; margin-bottom:8px; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); }
-  .pfF-modes .cv-ico svg{ width:16px; height:16px; }
-  .pfF-modes .m-cat{ font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#8FD0FF; }
-  .pfF-modes b{ font-size:20px; font-weight:700; }
-  .pfF-modes small{ font-size:12.5px; line-height:1.45; color:rgba(255,255,255,.78); }
+  .pfE-modes li{ display:flex; flex-direction:column; gap:3px; opacity:0; }
+  .pfE-modes .cv-ico{ width:36px; height:36px; margin-bottom:8px; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); }
+  .pfE-modes .cv-ico svg{ width:16px; height:16px; }
+  .pfE-modes .m-cat{ font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#8FD0FF; }
+  .pfE-modes b{ font-size:20px; font-weight:700; }
+  .pfE-modes small{ font-size:12.5px; line-height:1.45; color:rgba(255,255,255,.78); }
 
-  .pfF-clouds{ position:absolute; left:0; right:0; top:0; height:260%; z-index:3; pointer-events:none; visibility:hidden; will-change:transform; }
-  .pfF-clouds img{ position:absolute; height:auto; display:block; }
-  .pfF-cloud-core{
+  .pfE-clouds{ position:absolute; left:0; right:0; top:0; height:260%; z-index:3; pointer-events:none; visibility:hidden; will-change:transform; }
+  .pfE-clouds img{ position:absolute; height:auto; display:block; }
+  .pfE-cloud-core{
     position:absolute; left:-5%; right:-5%; top:15%; bottom:15%; background:#FFFFFF;
     /* feathered so its straight edges melt into the cloud art instead of reading as a hard line */
     -webkit-mask-image:linear-gradient(180deg, transparent, #000 10%, #000 90%, transparent);
     mask-image:linear-gradient(180deg, transparent, #000 10%, #000 90%, transparent);
   }
   /* daylight imagery under white type: darken bottom-left (captions), right edge (modes) and top (rail) */
-  .pfF-scrim{
+  .pfE-scrim{
     position:absolute; inset:0; pointer-events:none;
     background:
       linear-gradient(180deg, rgba(6,9,15,.55) 0%, transparent 24%),
@@ -1142,53 +1023,53 @@
       linear-gradient(90deg, rgba(6,9,15,.55) 0%, transparent 48%),
       linear-gradient(270deg, rgba(6,9,15,.4) 0%, transparent 42%);
   }
-  .pfF-labs{ position:absolute; inset:0; pointer-events:none; }
-  .pfF-labs .cv-lab, .pfF-labs .cv-out{ transition:none; }
+  .pfE-labs{ position:absolute; inset:0; pointer-events:none; }
+  .pfE-labs .cv-lab, .pfE-labs .cv-out{ transition:none; }
 
   /* rail: horizontal progress over the image, under the header */
-  .pfF-rail{
+  .pfE-rail{
     position:absolute; z-index:4; top:calc(var(--header-h) + 20px);
     left:max(24px, calc((100% - 1320px) / 2 + 24px)); width:min(560px, calc(100% - 48px));
     flex-direction:row; justify-content:space-between; gap:16px; padding:0 0 14px;
   }
-  .pfF-rail::before, .pfF-rail::after{ top:auto; bottom:0; left:0; height:2px; width:auto; }
-  .pfF-rail::before{ right:0; background:rgba(255,255,255,.25); }
-  .pfF-rail::after{ width:calc(100% * var(--p)); height:2px; background:var(--white); }
-  .pfF-rail li::before{ display:none; }
-  .pfF-rail b{ color:rgba(255,255,255,.5); }
-  .pfF-rail small{ color:rgba(255,255,255,.5); }
-  .pfF-rail li.active b{ color:var(--white); }
-  .pfF-rail li.active small{ color:rgba(255,255,255,.85); }
-  .pfF-rail li:focus-visible{ outline-color:var(--white); }
+  .pfE-rail::before, .pfE-rail::after{ top:auto; bottom:0; left:0; height:2px; width:auto; }
+  .pfE-rail::before{ right:0; background:rgba(255,255,255,.25); }
+  .pfE-rail::after{ width:calc(100% * var(--p)); height:2px; background:var(--white); }
+  .pfE-rail li::before{ display:none; }
+  .pfE-rail b{ color:rgba(255,255,255,.5); }
+  .pfE-rail small{ color:rgba(255,255,255,.5); }
+  .pfE-rail li.active b{ color:var(--white); }
+  .pfE-rail li.active small{ color:rgba(255,255,255,.85); }
+  .pfE-rail li:focus-visible{ outline-color:var(--white); }
 
-  .pfF-over{
+  .pfE-over{
     position:absolute; z-index:4;
     left:max(24px, calc((100% - 1320px) / 2 + 24px)); bottom:52px;
     width:min(680px, calc(100% - 48px));
     color:var(--white); pointer-events:none;
   }
-  .pfF-oc{
+  .pfE-oc{
     position:absolute; left:0; bottom:0; width:100%;
     opacity:0; transform:translateY(24px);
     transition:opacity .5s ease, transform .7s cubic-bezier(.2,.8,.2,1);
   }
-  .pfF-oc.on{ opacity:1; transform:none; pointer-events:auto; }
-  .pfF-oc .eyebrow{ display:flex; align-items:center; gap:8px; color:rgba(255,255,255,.85); margin-bottom:14px; }
+  .pfE-oc.on{ opacity:1; transform:none; pointer-events:auto; }
+  .pfE-oc .eyebrow{ display:flex; align-items:center; gap:8px; color:rgba(255,255,255,.85); margin-bottom:14px; }
   /* climax type: MATCH/NEW headlines ≈1.6–1.8× the MOVE/MIX ones */
-  .pfF-oc h3{ margin:0 0 14px; font-size:clamp(44px,4.6vw,76px); font-weight:700; line-height:1.15; }
-  .pfF-oc.sm h3{ font-size:clamp(26px,2.8vw,46px); line-height:1.3; }
-  .pfF-oc p{ margin:0 0 18px; font-size:17px; line-height:1.5; color:rgba(255,255,255,.78); max-width:46ch; }
-  .pfF-oc .pfF-sum{
+  .pfE-oc h3{ margin:0 0 14px; font-size:clamp(44px,4.6vw,76px); font-weight:700; line-height:1.15; }
+  .pfE-oc.sm h3{ font-size:clamp(26px,2.8vw,46px); line-height:1.3; }
+  .pfE-oc p{ margin:0 0 18px; font-size:17px; line-height:1.5; color:rgba(255,255,255,.78); max-width:46ch; }
+  .pfE-oc .pfE-sum{
     display:inline-block; margin:0; padding:8px 16px; border-radius:999px;
     font-size:14px; font-weight:700; color:var(--white);
     background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2);
     -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
   }
-  .pfF-frame .pfF-ph{ right:24px; top:calc(var(--header-h) + 20px); bottom:auto; z-index:5; } /* top-right, level with the rail: the bottom corners belong to the caption, results and floating buttons */
+  .pfE-frame .pfE-ph{ right:24px; top:calc(var(--header-h) + 20px); bottom:auto; z-index:5; } /* top-right, level with the rail: the bottom corners belong to the caption, results and floating buttons */
 
   /* MOVE stand-in (shown only if the footage fails): same camera move, drawn */
-  .pfF-movefb{ position:absolute; inset:0; overflow:hidden; }
-  .pfF-movefb img, .pfF-fbov{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; transform-origin:50% 50%; }
+  .pfE-movefb{ position:absolute; inset:0; overflow:hidden; }
+  .pfE-movefb img, .pfE-fbov{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; transform-origin:50% 50%; }
 
   /* MIX: every destination labelled the way MOVE's modes are — icon, category, Thai name, one line */
   .cv-card{
@@ -1220,31 +1101,31 @@
   .cv-big b{ font-size:17px; font-weight:700; letter-spacing:.06em; }
   .cv-big small{ font-size:12.5px; line-height:1.4; color:rgba(255,255,255,.8); }
 
-  .pfF-core{
+  .pfE-core{
     position:absolute; left:0; top:0; z-index:2; width:clamp(130px, 13vw, 200px); aspect-ratio:1;
     border-radius:50%; opacity:0; pointer-events:none; transform:translate(-50%, -50%) scale(var(--s,1));
   }
-  .pfF-core img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:50%; border:4px solid var(--white); box-shadow:0 0 0 8px rgba(237,29,36,.55), 0 0 80px 10px rgba(237,29,36,.45), 0 20px 50px rgba(0,0,0,.45); }
-  .pfF-core-ring{ position:absolute; inset:-28px; border-radius:50%; border:2px dashed rgba(255,255,255,.7); animation:pfspin 18s linear infinite; }
-  .pfF-flash{ position:absolute; inset:0; z-index:3; pointer-events:none; opacity:0; background:radial-gradient(circle at 50% 50%, #FFFFFF 0%, rgba(255,255,255,.7) 22%, rgba(255,255,255,0) 70%); }
+  .pfE-core img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:50%; border:4px solid var(--white); box-shadow:0 0 0 8px rgba(237,29,36,.55), 0 0 80px 10px rgba(237,29,36,.45), 0 20px 50px rgba(0,0,0,.45); }
+  .pfE-core-ring{ position:absolute; inset:-28px; border-radius:50%; border:2px dashed rgba(255,255,255,.7); animation:pfspin 18s linear infinite; }
+  .pfE-flash{ position:absolute; inset:0; z-index:3; pointer-events:none; opacity:0; background:radial-gradient(circle at 50% 50%, #FFFFFF 0%, rgba(255,255,255,.7) 22%, rgba(255,255,255,0) 70%); }
 
   @media (max-width:1024px){
-    .pfF .pf-intro{ grid-template-columns:1fr; gap:28px; padding-bottom:40px; }
-    .pfF-pin{ height:500vh; }
-    .pfF-rail{ top:calc(var(--header-h) + 8px); left:16px; right:16px; width:auto; max-width:none; padding-bottom:12px; }
-    .pfF-over{ left:16px; right:16px; width:auto; bottom:28px; }
-    .pfF-oc h3{ font-size:38px; }
-    .pfF-oc.sm h3{ font-size:24px; }
-    .pfF-oc p{ font-size:15px; margin-bottom:12px; }
-    .pfF-oc .pfF-sum{ font-size:12px; padding:6px 12px; border-radius:14px; }
+    .pfE .pf-intro{ grid-template-columns:1fr; gap:28px; padding-bottom:40px; }
+    .pfE-pin{ height:500vh; }
+    .pfE-rail{ top:calc(var(--header-h) + 8px); left:16px; right:16px; width:auto; max-width:none; padding-bottom:12px; }
+    .pfE-over{ left:16px; right:16px; width:auto; bottom:28px; }
+    .pfE-oc h3{ font-size:38px; }
+    .pfE-oc.sm h3{ font-size:24px; }
+    .pfE-oc p{ font-size:15px; margin-bottom:12px; }
+    .pfE-oc .pfE-sum{ font-size:12px; padding:6px 12px; border-radius:14px; }
     /* phones: the modes become dark pills under the rail — readable over the bright train roof */
-    .pfF-modes{ left:16px; right:16px; width:auto; top:calc(var(--header-h) + 52px); bottom:auto; gap:8px; }
-    .pfF-modes li{ justify-self:start; flex-direction:row; align-items:center; gap:7px; padding:3px 12px 3px 3px; border-radius:999px; background:rgba(18,22,31,.72); border:1px solid rgba(169,183,204,.22); }
-    .pfF-modes .cv-ico{ width:26px; height:26px; margin:0; }
-    .pfF-modes .cv-ico svg{ width:13px; height:13px; }
-    .pfF-modes b{ font-size:13px; }
-    .pfF-modes .m-cat, .pfF-modes small{ display:none; }
-    .pfF-frame .pfF-ph{ right:auto; left:16px; top:calc(var(--header-h) + 44px); bottom:auto; font-size:9.5px; padding:4px 9px; white-space:nowrap; }
+    .pfE-modes{ left:16px; right:16px; width:auto; top:calc(var(--header-h) + 52px); bottom:auto; gap:8px; }
+    .pfE-modes li{ justify-self:start; flex-direction:row; align-items:center; gap:7px; padding:3px 12px 3px 3px; border-radius:999px; background:rgba(18,22,31,.72); border:1px solid rgba(169,183,204,.22); }
+    .pfE-modes .cv-ico{ width:26px; height:26px; margin:0; }
+    .pfE-modes .cv-ico svg{ width:13px; height:13px; }
+    .pfE-modes b{ font-size:13px; }
+    .pfE-modes .m-cat, .pfE-modes small{ display:none; }
+    .pfE-frame .pfE-ph{ right:auto; left:16px; top:calc(var(--header-h) + 44px); bottom:auto; font-size:9.5px; padding:4px 9px; white-space:nowrap; }
     .cv-card{ width:auto; padding:3px 11px 3px 3px; border-radius:999px; align-items:center; gap:7px; }
     .cv-card .cv-ico{ width:26px; height:26px; }
     .cv-card .cv-ico svg{ width:13px; height:13px; }
@@ -1256,14 +1137,14 @@
     .cv-big .cv-ico svg{ width:15px; height:15px; }
     .cv-big b{ font-size:12.5px; }
     .cv-big small{ display:none; }
-    .pfF-oc .pfF-sum{ display:none; }
-    .pfF-core{ width:120px; }
-    .pfF-core-ring{ inset:-18px; }
+    .pfE-oc .pfE-sum{ display:none; }
+    .pfE-core{ width:120px; }
+    .pfE-core-ring{ inset:-18px; }
   }
   @media (prefers-reduced-motion:reduce){
-    .pfF-core-ring{ animation:none; }
-    .pfF-ov .dots{ animation:none; }
-    .pfF-oc{ transition:none; }
+    .pfE-core-ring{ animation:none; }
+    .pfE-ov .dots{ animation:none; }
+    .pfE-oc{ transition:none; }
   }
 
   /* ============ Section 3 · version B — sticky-stack full-bleed panels (DNA: unitedcarriers.com/about) ============ */
@@ -2425,7 +2306,7 @@ setTimeout(function(){
   </div>
 
   <!-- ============ Section 3 — 3 แพลตฟอร์ม หนึ่งระบบนิเวศ (versions A / B / C, switchable) ============ -->
-  <div class="s3-wrap" id="s3Wrap" data-default="d">
+  <div class="s3-wrap" id="s3Wrap" data-default="e">
   <section class="platforms" id="platforms" data-variant="a">
     <div class="pf-intro">
       <div>
@@ -2708,139 +2589,84 @@ setTimeout(function(){
     </div>
   </section>
 
-  <!-- ---- Section 3 · version D — THE CONVERGENCE: MOVE → MIX → MATCH as one continuous scroll story.
-       Every stream drawn in MOVE/MIX keeps flowing and lands on the same point in MATCH, which then
-       releases New Possibility (Business / City / People). Strands, chips and particles are generated in JS. ---- -->
-  <section class="pfD" id="platformsD" data-variant="d" hidden>
-    <div class="pf-intro">
-      <div>
-        <div class="eyebrow"><span class="pf-dot" style="background:var(--red)"></span>The Convergence</div>
-        <h2 class="pf-h2">3 แพลตฟอร์ม<br>หนึ่งจุดบรรจบ<span>MOVE · MIX · MATCH</span></h2>
-      </div>
-      <p class="pf-read" id="pfReadD">BTS Group ไม่ได้เป็นแค่รถไฟฟ้า — MOVE พาผู้คนเคลื่อนที่ MIX เติมข้อมูล และประสบการณ์ ให้ทุกการเดินทาง และ MATCH คือจุดที่ ทุกความสามารถ มาบรรจบกัน เพื่อเปิดความเป็นไปได้ใหม่ ให้ธุรกิจ เมือง และผู้คน</p>
-    </div>
-
-    <div class="pfD-pin" id="pfDPin">
-      <div class="pfD-stage">
-        <div class="pfD-side">
-          <ol class="pfD-rail" id="pfDRail" style="--p:0">
-            <li class="active" tabindex="0" data-i="0"><b>MOVE</b><small>การเดินทาง · ผู้คน</small></li>
-            <li tabindex="0" data-i="1"><b>MIX</b><small>ข้อมูล · ประสบการณ์</small></li>
-            <li tabindex="0" data-i="2"><b>MATCH</b><small>จุดบรรจบ → ความเป็นไปได้ใหม่</small></li>
-          </ol>
-
-          <div class="pfD-caps">
-            <div class="pfD-cap on" data-i="0">
-              <div class="eyebrow"><span class="pf-dot" style="background:#3FA3EC"></span>01 · MOVE</div>
-              <h3>เริ่มจากการเดินทาง</h3>
-              <p>รถไฟฟ้า · Mobility · ผู้คน · โครงสร้างพื้นฐาน เส้นทางแรกที่พาผู้คนไปถึงทุกปลายทาง</p>
-              <a class="pf-link" href="https://www.btsgroup.co.th/th/our-business/move">ดูธุรกิจ MOVE <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-            </div>
-            <div class="pfD-cap" data-i="1">
-              <div class="eyebrow"><span class="pf-dot" style="background:#8FD0FF"></span>02 · MIX</div>
-              <h3>เติมข้อมูลและประสบการณ์</h3>
-              <p>Data · Media · Digital · Experience ไหลเข้ามาสมทบ ให้ทุกการเดินทางมีความหมายมากขึ้น</p>
-              <a class="pf-link" href="https://www.btsgroup.co.th/th/our-business/mix">ดูธุรกิจ MIX <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-            </div>
-            <!-- MATCH carries its own result: the convergence and the new possibility are one beat -->
-            <div class="pfD-cap pfD-climax" data-i="2">
-              <div class="eyebrow"><span class="pf-dot" style="background:var(--red)"></span>03 · MATCH</div>
-              <h3>ทุกอย่างมาบรรจบ<br>ที่จุดนี้</h3>
-              <p>MOVE, MIX และพันธมิตร รวมเป็นหนึ่ง แล้วเกิดเป็นความเป็นไปได้ใหม่ สำหรับธุรกิจ เมือง และผู้คน</p>
-              <p class="pfD-sum">หลายความสามารถ <i>→</i> จุดบรรจบ <i>→</i> ความเป็นไปได้ใหม่</p>
-              <a class="pf-link" href="https://www.btsgroup.co.th/th/our-business/match">ดูธุรกิจ MATCH <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-            </div>
-          </div>
-        </div>
-
-        <div class="pfD-card" id="pfDCard">
-          <svg class="pfD-svg" id="pfDSvg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
-          <div class="pfD-labs" id="pfDLabs" aria-hidden="true"></div>
-          <i class="pfD-flash" id="pfDFlash" aria-hidden="true"></i>
-          <span class="pfD-tag" id="pfDTag">Movement</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ---- Section 3 · version F — INTERSECTION: same story as D told full-bleed on daylight aerial imagery.
+  <!-- ---- Section 3 · version E — INTERSECTION: MOVE → MIX → MATCH told full-bleed on daylight aerial imagery.
        MOVE is the live site's drone shot; MIX/MATCH are procedural placeholders rasterised in JS (swap each <img>
        for a real aerial photo). MATCH is the climax through type size, a pull-back camera and the only red. ---- -->
-  <section class="pfF" id="platformsF" data-variant="f" hidden>
+  <section class="pfE" id="platformsE" data-variant="e" hidden>
     <div class="pf-intro">
       <div>
         <div class="eyebrow"><span class="pf-dot" style="background:var(--red)"></span>Intersection</div>
         <h2 class="pf-h2">3 แพลตฟอร์ม<br>หนึ่งจุดตัด<span>MOVE · MIX · MATCH</span></h2>
       </div>
-      <p class="pf-read" id="pfReadF">ทุกวันมีผู้คนนับล้าน เดินทางผ่านจุดเปลี่ยนถ่าย ของเมือง — MOVE พาผู้คนมาถึง MIX เชื่อมข้อมูล และประสบการณ์ และ MATCH คือจุดตัด ที่ทุกความสามารถ มาพบกัน กลายเป็นความเป็นไปได้ใหม่ ของทั้งเมือง</p>
+      <p class="pf-read" id="pfReadE">ทุกวันมีผู้คนนับล้าน เดินทางผ่านจุดเปลี่ยนถ่าย ของเมือง — MOVE พาผู้คนมาถึง MIX เชื่อมข้อมูล และประสบการณ์ และ MATCH คือจุดตัด ที่ทุกความสามารถ มาพบกัน กลายเป็นความเป็นไปได้ใหม่ ของทั้งเมือง</p>
     </div>
 
-    <div class="pfF-pin" id="pfFPin">
-      <div class="pfF-stage" id="pfFStage">
-        <ol class="pfD-rail pfF-rail" id="pfFRail" style="--p:0" data-header="dark">
+    <div class="pfE-pin" id="pfEPin">
+      <div class="pfE-stage" id="pfEStage">
+        <ol class="pfE-rail" id="pfERail" style="--p:0" data-header="dark">
           <li class="active" tabindex="0" data-i="0"><b>MOVE</b><small>Door-to-door</small></li>
           <li tabindex="0" data-i="1"><b>MIX</b><small>สถานี · การเชื่อมต่อ</small></li>
           <li tabindex="0" data-i="2"><b>MATCH</b><small>จุดตัด → ความเป็นไปได้ใหม่</small></li>
         </ol>
 
-        <div class="pfF-frame" id="pfFFrame" data-header="dark">
+        <div class="pfE-frame" id="pfEFrame" data-header="dark">
           <!-- MOVE: real drone shot of the line (same footage as the live site), scrubbed by scroll in reverse —
                the camera comes down from far above to just over the roof as the train runs toward the viewer -->
-          <div class="pfF-scene pfF-move" data-i="0">
-            <video class="pfF-vid" muted playsinline preload="auto" poster="img/move-train-poster-far.webp" aria-hidden="true" data-src="media/move-train-1280.mp4"></video>
+          <div class="pfE-scene pfE-move" data-i="0">
+            <video class="pfE-vid" muted playsinline preload="auto" poster="img/move-train-poster-far.webp" aria-hidden="true" data-src="media/move-train-1280.mp4"></video>
             <!-- drawn stand-in with the same move (camera descends, train runs toward us) if the footage can't load -->
-            <div class="pfF-movefb" aria-hidden="true" hidden><img alt=""><svg class="pfF-fbov" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice"></svg></div>
-            <ul class="pfF-modes">
+            <div class="pfE-movefb" aria-hidden="true" hidden><img alt=""><svg class="pfE-fbov" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice"></svg></div>
+            <ul class="pfE-modes">
               <li><span class="cv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3.1V7a4 4 0 0 0 8 0V3.1"/><path d="m9 15-1-1"/><path d="m15 15 1-1"/><path d="M9 19c-2.8 0-5-2.2-5-5v-4a8 8 0 0 1 16 0v4c0 2.8-2.2 5-5 5Z"/><path d="m8 19-2 3"/><path d="m16 19 2 3"/></svg></span><span class="m-cat" lang="en">Rail</span><b>ทางราง</b><small>รถไฟฟ้าสายสีเขียว ทอง ชมพู และเหลือง</small></li>
               <li><span class="cv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/></svg></span><span class="m-cat" lang="en">Road</span><b>ทางถนน</b><small>รถโดยสาร BRT และทางหลวงพิเศษ M6 · M81</small></li>
               <li><span class="cv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10.189V14"/><path d="M12 2v3"/><path d="M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-8.188-3.639a2 2 0 0 0-1.624 0L3 14a11.6 11.6 0 0 0 2.81 7.76"/><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1s1.2 1 2.5 1c2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg></span><span class="m-cat" lang="en">Water</span><b>ทางน้ำ</b><small>เรือด่วนเจ้าพระยา</small></li>
               <li><span class="cv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg></span><span class="m-cat" lang="en">Air</span><b>ทางอากาศ</b><small>สนามบินอู่ตะเภาและเมืองการบิน</small></li>
             </ul>
           </div>
-          <div class="pfF-scene" data-i="1"><img alt="" decoding="async"><svg class="pfF-ov" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg></div>
-          <div class="pfF-scene" data-i="2"><img alt="" decoding="async"><svg class="pfF-ov" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg></div>
-          <div class="pfF-scrim"></div>
-          <div class="pfF-labs" id="pfFLabs" aria-hidden="true"></div>
+          <div class="pfE-scene" data-i="1"><img alt="" decoding="async"><svg class="pfE-ov" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg></div>
+          <div class="pfE-scene" data-i="2"><img alt="" decoding="async"><svg class="pfE-ov" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg></div>
+          <div class="pfE-scrim"></div>
+          <div class="pfE-labs" id="pfELabs" aria-hidden="true"></div>
           <!-- MATCH's centre: a real photo of partners shaking hands (same image as the live site's MATCH) -->
-          <div class="pfF-core" id="pfFCore" aria-hidden="true"><i class="pfF-core-ring"></i><img src="img/match-core.webp" alt=""></div>
-          <i class="pfF-flash" id="pfFFlash" aria-hidden="true"></i>
+          <div class="pfE-core" id="pfECore" aria-hidden="true"><i class="pfE-core-ring"></i><img src="img/match-core.webp" alt=""></div>
+          <i class="pfE-flash" id="pfEFlash" aria-hidden="true"></i>
           <!-- cloud bank (same cloud art as the live site) that carries MOVE into MIX: ragged edge, solid middle, ragged edge -->
-          <div class="pfF-clouds" id="pfFClouds" aria-hidden="true">
+          <div class="pfE-clouds" id="pfEClouds" aria-hidden="true">
             <img src="img/cloud.avif" alt="" style="left:-22%;top:7%;width:72%">
             <img src="img/cloud-bottom.avif" alt="" style="left:14%;top:11%;width:64%">
             <img src="img/cloud.avif" alt="" style="left:44%;top:6%;width:70%;transform:scaleX(-1)">
             <img src="img/cloud-bottom.avif" alt="" style="left:-6%;top:13%;width:56%">
             <img src="img/cloud.avif" alt="" style="left:58%;top:12%;width:60%">
-            <i class="pfF-cloud-core"></i>
+            <i class="pfE-cloud-core"></i>
             <img src="img/cloud-bottom.avif" alt="" style="left:-20%;bottom:7%;width:70%;transform:scaleY(-1)">
             <img src="img/cloud.avif" alt="" style="left:16%;bottom:11%;width:64%;transform:scale(-1,-1)">
             <img src="img/cloud-bottom.avif" alt="" style="left:46%;bottom:6%;width:70%;transform:scaleY(-1)">
             <img src="img/cloud.avif" alt="" style="left:-4%;bottom:13%;width:56%;transform:scaleY(-1)">
             <img src="img/cloud-bottom.avif" alt="" style="left:60%;bottom:12%;width:58%;transform:scaleY(-1)">
           </div>
-          <div class="pfF-over">
-            <div class="pfF-oc sm on" data-i="0">
+          <div class="pfE-over">
+            <div class="pfE-oc sm on" data-i="0">
               <div class="eyebrow"><span class="pf-dot" style="background:#3FA3EC"></span>01 · MOVE</div>
               <h3>เชื่อมผู้คนกับพื้นที่</h3>
               <p>ผู้บุกเบิกรถไฟฟ้าบีทีเอสกว่า 20 ปี วันนี้กำลังขยายสู่การเดินทางแบบ door-to-door ทั้งทางราง ถนน น้ำ และอากาศ</p>
               <a class="pf-link on-dark" href="https://www.btsgroup.co.th/th/our-business/move">ดูธุรกิจ MOVE <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
             </div>
-            <div class="pfF-oc sm" data-i="1">
+            <div class="pfE-oc sm" data-i="1">
               <div class="eyebrow"><span class="pf-dot" style="background:#8FD0FF"></span>02 · MIX</div>
               <h3>สถานีที่เชื่อม<br>ทุกอย่างเข้าหากัน</h3>
               <p>การตลาด Offline-to-Online — สื่อ การชำระเงิน การกระจายสินค้า และข้อมูล แตกแขนงจากสถานีไปถึงทุกจุดหมาย</p>
               <a class="pf-link on-dark" href="https://www.btsgroup.co.th/th/our-business/mix">ดูธุรกิจ MIX <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
             </div>
             <!-- MATCH carries its own result: the convergence and the new possibility are one beat -->
-            <div class="pfF-oc" data-i="2">
+            <div class="pfE-oc" data-i="2">
               <div class="eyebrow"><span class="pf-dot" style="background:var(--red)"></span>03 · MATCH</div>
               <h3>ทุกอย่าง<br>มาบรรจบที่นี่</h3>
               <p>MOVE · MIX และพันธมิตร พบกันที่จุดตัดเดียว แล้วเกิดเป็นความเป็นไปได้ใหม่ สำหรับธุรกิจ เมือง และผู้คน</p>
-              <p class="pfD-sum pfF-sum">หลายความสามารถ <i>→</i> จุดบรรจบ <i>→</i> ความเป็นไปได้ใหม่</p>
+              <p class="pfE-sum">หลายความสามารถ <i>→</i> จุดบรรจบ <i>→</i> ความเป็นไปได้ใหม่</p>
               <a class="pf-link on-dark" href="https://www.btsgroup.co.th/th/our-business/match">ดูธุรกิจ MATCH <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
             </div>
           </div>
-          <span class="im-photo-tag pfF-ph">ภาพตัวอย่าง · แทนที่ด้วยภาพมุมสูงจริง</span>
+          <span class="im-photo-tag pfE-ph">ภาพตัวอย่าง · แทนที่ด้วยภาพมุมสูงจริง</span>
         </div>
       </div>
     </div>
@@ -3363,8 +3189,7 @@ setTimeout(function(){
         <button type="button" data-v="a" aria-pressed="true">A · Pinned card</button>
         <button type="button" data-v="b" aria-pressed="false">B · Sticky stack</button>
         <button type="button" data-v="c" aria-pressed="false">C · 2 คอลัมน์</button>
-        <button type="button" data-v="d" aria-pressed="false">D · Convergence</button>
-        <button type="button" data-v="f" aria-pressed="false">F · Intersection</button>
+        <button type="button" data-v="e" aria-pressed="false">E · Intersection</button>
       </div>
     </div>
     <div>
@@ -3639,7 +3464,7 @@ setTimeout(function(){
 
   /* ---- Section 3: highlight-on-scroll intro ---- */
   // versions A and D each have their own intro paragraph; whichever is visible gets the effect
-  var readers = ['pfRead', 'pfReadD', 'pfReadF'].map(function(id){ return document.getElementById(id); }).filter(Boolean).map(function(el){
+  var readers = ['pfRead', 'pfReadE'].map(function(id){ return document.getElementById(id); }).filter(Boolean).map(function(el){
     el.innerHTML = el.textContent.trim().split(/\s+/).map(function(w){
       var key = /^(MOVE|MIX|MATCH)$/.test(w) ? ' key' : '';
       return '<span class="w' + key + (reduceMotion ? ' lit' : '') + '">' + w + '</span>';
@@ -3720,291 +3545,28 @@ setTimeout(function(){
   onReadScroll();
   onPinScroll();
 
-  /* ---- Section 3 · D: THE CONVERGENCE — one scroll-scrubbed story instead of three separate scenes.
-     Each stream is a bundle of strands that all end exactly on point C; MOVE draws first, MIX joins, partners
-     arrive in MATCH and every stream lands on C at the same moment (p≈.72), then New Possibility fans out. ---- */
+  /* ---- Section 3 · E: INTERSECTION — full-bleed aerial scenes, MOVE → MIX → MATCH (MATCH carries the new possibility) ----
+     MOVE is the live site's drone shot (drawn stand-in if it fails); MIX/MATCH are procedural placeholders (seeded, so
+     identical every load) rasterised once to JPEG. Route overlays stay live SVG in the same 1600×1000 space with the
+     same cover-crop, so they stay registered to the image at any viewport size. */
   (function(){
-    var pinD = document.getElementById('pfDPin');
-    var svg = document.getElementById('pfDSvg');
-    var labs = document.getElementById('pfDLabs');
-    var card = document.getElementById('pfDCard');
-    if(!pinD || !svg || !labs) return;
-    var railItems = document.querySelectorAll('#pfDRail li');
-    var rail = document.getElementById('pfDRail');
-    var capsD = document.querySelectorAll('#platformsD .pfD-cap'); // version F reuses the class
-    var tag = document.getElementById('pfDTag');
-    var sec = document.getElementById('platformsD');
-    var flash = document.getElementById('pfDFlash');
-    var portraitMQ = window.matchMedia('(max-width: 1024px)'); // same breakpoint as the CSS that swaps the card to portrait
-    var W = 1200, H = 675, C = [760, 338];
-    var PHASES = [0, .28, .56];                   // MOVE · MIX · MATCH (MATCH includes the new possibility)
-    var JUMP = [.14, .44, .82];
-    var TAGS = ['Movement', 'Movement + Experience', 'Convergence → New possibility'];
-    var portrait = false, phase = -1, lastP = 0;
-
-    var ICON = {
-      users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
-      train:'<path d="M8 3.1V7a4 4 0 0 0 8 0V3.1"/><path d="m9 15-1-1"/><path d="m15 15 1-1"/><path d="M9 19c-2.8 0-5-2.2-5-5v-4a8 8 0 0 1 16 0v4c0 2.8-2.2 5-5 5Z"/><path d="m8 19-2 3"/><path d="m16 19 2 3"/>',
-      route:'<circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/>',
-      landmark:'<line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/>',
-      db:'<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/>',
-      tv:'<rect width="20" height="15" x="2" y="7" rx="2" ry="2"/><path d="m17 2-5 5-5-5"/>',
-      phone:'<rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/>',
-      sparkles:'<path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>',
-      briefcase:'<path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/>',
-      house:'<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
-      bed:'<path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/>',
-      wallet:'<path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>',
-      cpu:'<rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/>',
-      trend:'<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>',
-      city:'<path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/>'
-    };
-    function ico(k){ return '<span class="cv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICON[k] + '</svg></span>'; }
-    function seg(p, a, b){ return Math.max(0, Math.min(1, (p - a) / (b - a))); }
-    function lerp(a, b, t){ return a + (b - a) * t; }
-    function backOut(t){ var c = 1.70158; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); }
-    function mixF(k){ return function(p){ return .78 * seg(p, .3 + k * .03, .48 + k * .02) + .22 * seg(p, .58, .72); }; }
-    function partF(k){ return function(p){ return seg(p, .57 + k * .012, .72); }; }
-    function outF(k){ return function(p){ return seg(p, .75 + k * .02, .86 + k * .02); }; } // straight after the landing
-
-    // geometry is authored landscape (1200×675); portrait just swaps x/y, so the same story runs top → bottom
-    var STREAMS = [
-      { g:'move', col:'#3FA3EC', n:7, spread:30, ov:[0,1], pts:[[-20,338],[260,338],[520,338],C],
-        f:function(p){ return .72 * seg(p, .02, .22) + .28 * seg(p, .58, .72); }, parts:6,
-        chips:[{t:.14,l:'ผู้คน',i:'users'},{t:.32,l:'รถไฟฟ้า',i:'train'},{t:.5,l:'Mobility',i:'route'},{t:.67,l:'โครงสร้างพื้นฐาน',i:'landmark'}] },
-      { g:'mix', col:'#8FD0FF', n:3, spread:12, ov:[0,1], pts:[[-20,92],[300,92],[540,300],C], f:mixF(0), parts:2, chips:[{t:.08,l:'Data',i:'db'}] },
-      { g:'mix', col:'#8FD0FF', n:3, spread:12, ov:[0,1], pts:[[-20,196],[280,196],[560,326],C], f:mixF(1), parts:2, chips:[{t:.08,l:'Media',i:'tv'}] },
-      { g:'mix', col:'#8FD0FF', n:3, spread:12, ov:[0,1], pts:[[-20,480],[280,480],[560,350],C], f:mixF(2), parts:2, chips:[{t:.08,l:'Digital',i:'phone'}] },
-      { g:'mix', col:'#8FD0FF', n:3, spread:12, ov:[0,1], pts:[[-20,584],[300,584],[540,376],C], f:mixF(3), parts:2, chips:[{t:.08,l:'Experience',i:'sparkles'}] },
-      { g:'part', col:'#C6D0DE', n:3, spread:12, ov:[1,0], pts:[[300,-20],[330,230],[600,330],C], f:partF(0), parts:2, chips:[{t:.16,l:'Business',i:'briefcase'}] },
-      { g:'part', col:'#C6D0DE', n:3, spread:12, ov:[1,0], pts:[[560,-20],[580,190],[700,300],C], f:partF(1), parts:2, chips:[{t:.16,l:'Property',i:'house'}] },
-      { g:'part', col:'#C6D0DE', n:3, spread:12, ov:[1,0], pts:[[940,-20],[910,170],[810,280],C], f:partF(2), parts:2, chips:[{t:.16,l:'Hotel',i:'bed'}] },
-      { g:'part', col:'#C6D0DE', n:3, spread:12, ov:[1,0], pts:[[480,695],[500,480],[680,370],C], f:partF(3), parts:2, chips:[{t:.16,l:'Finance',i:'wallet'}] },
-      { g:'part', col:'#C6D0DE', n:3, spread:12, ov:[1,0], pts:[[920,695],[900,500],[810,396],C], f:partF(4), parts:2, chips:[{t:.16,l:'Technology',i:'cpu'}] },
-      { g:'out', out:true, n:5, spread:18, ov:[0,1], pts:[C,[900,338],[980,170],[1090,170]], f:outF(0), parts:4, end:{l:'BUSINESS',s:'ธุรกิจ',i:'trend'} },
-      { g:'out', out:true, n:5, spread:18, ov:[0,1], pts:[C,[920,338],[1000,338],[1090,338]], f:outF(1), parts:4, end:{l:'CITY',s:'เมือง',i:'city'} },
-      { g:'out', out:true, n:5, spread:18, ov:[0,1], pts:[C,[900,338],[980,506],[1090,506]], f:outF(2), parts:4, end:{l:'PEOPLE',s:'ผู้คน',i:'users'} }
-    ];
-
-    var inG, outG, core, halo, burst, burst2, pings, partEls = [], particles = [], vw = W, vh = H;
-    function map(q){ return portrait ? [q[1], q[0]] : [q[0], q[1]]; }
-    function xy(q){ return q[0].toFixed(1) + ',' + q[1].toFixed(1); }
-
-    function build(){
-      portrait = portraitMQ.matches;
-      vw = portrait ? H : W; vh = portrait ? W : H;
-      svg.setAttribute('viewBox', '0 0 ' + vw + ' ' + vh);
-      var cp = map(C);
-      card.style.setProperty('--cx', (cp[0] / vw * 100).toFixed(2) + '%');
-      card.style.setProperty('--cy', (cp[1] / vh * 100).toFixed(2) + '%');
-
-      var defs = '<radialGradient id="cvHalo"><stop offset="0" stop-color="#3FA3EC" stop-opacity=".55"/><stop offset=".45" stop-color="#00599B" stop-opacity=".18"/><stop offset="1" stop-color="#00599B" stop-opacity="0"/></radialGradient>'
-               + '<filter id="cvGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>';
-      var ins = '', outs = '';
-      STREAMS.forEach(function(s, k){
-        var a = map(s.out ? s.pts[0] : s.pts[0]), b = map(s.pts[3]);
-        defs += '<linearGradient id="cvg' + k + '" gradientUnits="userSpaceOnUse" x1="' + a[0] + '" y1="' + a[1] + '" x2="' + b[0] + '" y2="' + b[1] + '">'
-          + (s.out
-            ? '<stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#8FD0FF" stop-opacity=".95"/><stop offset="1" stop-color="#3FA3EC" stop-opacity=".55"/>'
-            : '<stop offset="0" stop-color="' + s.col + '" stop-opacity="0"/><stop offset=".12" stop-color="' + s.col + '" stop-opacity=".6"/><stop offset="1" stop-color="' + s.col + '"/>')
-          + '</linearGradient>';
-        // strands: offsets taper to 0 at C (incoming) or grow from 0 at C (outgoing), so the bundle physically pinches into the point
-        var w = s.out ? [0, .3, .8, 1] : [1, .85, .35, 0], html = '';
-        for(var j = 0; j < s.n; j++){
-          var o = (j - (s.n - 1) / 2) * (2 * s.spread / (s.n - 1));
-          var q = s.pts.map(function(pt, i){ return map([pt[0] + s.ov[0] * o * w[i], pt[1] + s.ov[1] * o * w[i]]); });
-          var mid = o === 0;
-          html += '<path class="st' + (mid ? ' mid' : '') + '" pathLength="1" d="M' + xy(q[0]) + 'C' + xy(q[1]) + ' ' + xy(q[2]) + ' ' + xy(q[3]) + '"'
-            + ' stroke="url(#cvg' + k + ')" stroke-width="' + (mid ? (s.out ? 2.4 : 1.8) : (s.out ? 1.1 : .8)) + '"'
-            + ' opacity="' + (mid ? 1 : (1 - Math.abs(o) / s.spread * .6).toFixed(2)) + '"/>';
-        }
-        if(s.out) html = '<g filter="url(#cvGlow)" opacity=".7">' + html + '</g>' + html;
-        html = '<g data-k="' + k + '">' + html + '</g>';
-        if(s.out) outs += html; else ins += html;
-      });
-      svg.innerHTML = '<defs>' + defs + '</defs>'
-        + '<circle class="cv-halo" cx="' + cp[0] + '" cy="' + cp[1] + '" r="150" fill="url(#cvHalo)"/>'
-        + '<g class="cv-ing">' + ins + '</g>'
-        + '<g class="cv-outg">' + outs + '</g>'
-        + '<g class="cv-parts"></g>'
-        + '<circle class="cv-burst" cx="' + cp[0] + '" cy="' + cp[1] + '" r="12" fill="none" stroke="#FFFFFF" stroke-width="3" opacity="0"/>'
-        + '<circle class="cv-burst2" cx="' + cp[0] + '" cy="' + cp[1] + '" r="12" fill="none" stroke="#ED1D24" stroke-width="2.5" opacity="0"/>'
-        + '<circle class="pfD-ping" cx="' + cp[0] + '" cy="' + cp[1] + '" r="12" fill="none" stroke="#ED1D24" stroke-width="1.5" opacity="0"/>'
-        + '<circle class="pfD-ping p2" cx="' + cp[0] + '" cy="' + cp[1] + '" r="12" fill="none" stroke="#ED1D24" stroke-width="1.5" opacity="0"/>'
-        + '<circle class="cv-core" cx="' + cp[0] + '" cy="' + cp[1] + '" r="3" fill="#8FD0FF" stroke="#FFFFFF" stroke-width="2"/>';
-
-      inG = svg.querySelector('.cv-ing'); outG = svg.querySelector('.cv-outg');
-      halo = svg.querySelector('.cv-halo'); burst = svg.querySelector('.cv-burst'); burst2 = svg.querySelector('.cv-burst2');
-      core = svg.querySelector('.cv-core'); pings = svg.querySelectorAll('.pfD-ping');
-
-      var labHtml = '';
-      STREAMS.forEach(function(s, k){
-        var g = svg.querySelector('g[data-k="' + k + '"]');
-        s.paths = g.querySelectorAll('.st');
-        s.center = g.querySelector('.st.mid');
-        s.len = s.center.getTotalLength();
-        (s.chips || []).forEach(function(c){
-          if(portrait && c.t < .14) c = { t: .14, l: c.l, i: c.i }; // keep edge chips clear of the portrait card's rounded corners
-          var pt = s.center.getPointAtLength(c.t * s.len);
-          labHtml += '<span class="cv-lab" data-g="' + s.g + '" data-k="' + k + '" data-t="' + c.t + '" style="left:' + (pt.x / vw * 100).toFixed(2) + '%;top:' + (pt.y / vh * 100).toFixed(2) + '%">' + ico(c.i) + '<span>' + c.l + '</span></span>';
-        });
-        if(s.end){
-          var e = map(s.pts[3]);
-          labHtml += '<span class="cv-out" data-k="' + k + '" data-t=".92" style="left:' + (e[0] / vw * 100).toFixed(2) + '%;top:' + (e[1] / vh * 100).toFixed(2) + '%">' + ico(s.end.i) + '<b>' + s.end.l + '</b><small>' + s.end.s + '</small></span>';
-        }
-      });
-      labs.innerHTML = labHtml;
-      STREAMS.forEach(function(s){ s.labs = []; });
-      Array.prototype.forEach.call(labs.children, function(el){
-        STREAMS[+el.getAttribute('data-k')].labs.push({ el: el, t: parseFloat(el.getAttribute('data-t')) });
-      });
-
-      // particles ride the centre strand of each stream, but only along the part that is already drawn
-      var pg = svg.querySelector('.cv-parts'), ph = '';
-      particles = [];
-      STREAMS.forEach(function(s){
-        for(var i = 0; i < s.parts; i++){
-          particles.push({ s: s, u: i / s.parts, v: (s.out ? .32 : .2) + (i % 3) * .05 });
-          ph += '<circle class="pt" r="' + (s.out ? 2.4 : 1.8) + '" opacity="0"/>';
-        }
-      });
-      pg.innerHTML = ph;
-      partEls = pg.querySelectorAll('.pt');
-      phase = -1;
-      update(lastP);
-    }
-
-    function update(p){
-      lastP = p;
-      STREAMS.forEach(function(s){
-        var f = s.f(p);
-        s.cur = f;
-        var off = (1 - f).toFixed(4), vis = f > .002 ? '' : 'hidden';
-        Array.prototype.forEach.call(s.paths, function(el){ el.style.strokeDashoffset = off; el.style.visibility = vis; });
-        s.labs.forEach(function(l){
-          if(!s.out){ l.el.style.opacity = f >= l.t ? 1 : 0; return; }
-          // outcomes spring out (slight overshoot) as their stream reaches them
-          var k = seg(f, .7, 1);
-          l.el.style.opacity = Math.min(1, k * 3).toFixed(3);
-          l.el.style.setProperty('--s', (k <= 0 ? .4 : backOut(k) * .6 + .4).toFixed(3));
-        });
-      });
-      inG.style.opacity = (1 - .45 * seg(p, .78, .88)).toFixed(3);
-
-      // climax: section turns dark as everything lands, flash on the card, strands flare, second (red) shock ring
-      var dk = seg(p, .69, .75);
-      sec.style.backgroundColor = 'rgb(' + Math.round(lerp(247, 21, dk)) + ',' + Math.round(lerp(245, 28, dk)) + ',' + Math.round(lerp(242, 43, dk)) + ')';
-      var darkNow = dk > .5;
-      if(darkNow !== sec.classList.contains('is-dark')){
-        sec.classList.toggle('is-dark', darkNow);
-        if(darkNow) sec.setAttribute('data-header', 'dark'); else sec.removeAttribute('data-header');
-      }
-      var fl = seg(p, .705, .72) * (1 - seg(p, .72, .78));
-      flash.style.opacity = (fl * .85).toFixed(3);
-      svg.style.filter = fl > 0 ? 'brightness(' + (1 + fl).toFixed(3) + ')' : '';
-      card.style.transform = 'scale(' + (1 + .035 * dk).toFixed(4) + ')';
-      var b2 = seg(p, .73, .9);
-      burst2.setAttribute('r', (12 + 420 * b2).toFixed(1));
-      burst2.setAttribute('opacity', b2 > 0 && b2 < 1 ? ((1 - b2) * .9).toFixed(3) : 0);
-
-      // the point: barely there in MOVE, wakes up in MIX, turns BTS red the moment everything lands
-      var landed = p >= .71;
-      core.setAttribute('r', (3 + 3 * seg(p, .3, .5) + 5 * seg(p, .64, .72)).toFixed(2));
-      core.setAttribute('fill', landed ? '#ED1D24' : '#8FD0FF');
-      core.setAttribute('opacity', (.35 + .65 * seg(p, .2, .4)).toFixed(3));
-      halo.setAttribute('opacity', (.2 + .3 * seg(p, .3, .5) + .5 * seg(p, .62, .72)).toFixed(3));
-      // visibility, not opacity — the ping keyframes animate opacity and would override the attribute
-      Array.prototype.forEach.call(pings, function(el){ el.style.visibility = landed && !reduceMotion ? 'visible' : 'hidden'; });
-      var b = seg(p, .71, .82);
-      burst.setAttribute('r', (12 + 300 * b).toFixed(1));
-      burst.setAttribute('opacity', b > 0 && b < 1 ? ((1 - b) * .8).toFixed(3) : 0);
-      card.style.setProperty('--glow', (seg(p, .6, .74) * (1 - .4 * seg(p, .85, 1))).toFixed(3));
-
-      rail.style.setProperty('--p', p.toFixed(4));
-      var ph = p >= PHASES[3] ? 3 : p >= PHASES[2] ? 2 : p >= PHASES[1] ? 1 : 0;
-      Array.prototype.forEach.call(railItems, function(el, k){ el.classList.toggle('done', p >= PHASES[k] + .01 || (k === 0 && p > .01)); });
-      if(ph !== phase){
-        phase = ph;
-        Array.prototype.forEach.call(capsD, function(el, k){ el.classList.toggle('on', k === ph); });
-        Array.prototype.forEach.call(railItems, function(el, k){ el.classList.toggle('active', k === ph); });
-        tag.textContent = TAGS[ph];
-      }
-    }
-
-    function progress(){
-      var r = pinD.getBoundingClientRect();
-      var total = r.height - window.innerHeight;
-      return total > 0 ? Math.max(0, Math.min(1, -r.top / total)) : 0;
-    }
-    function onScrollD(){
-      if(!pinD.offsetParent) return;
-      update(progress());
-    }
-
-    var running = false, last = 0;
-    function tick(now){
-      if(!running) return;
-      var dt = Math.min(.05, (now - last) / 1000 || 0);
-      last = now;
-      particles.forEach(function(pt, i){
-        var f = pt.s.cur, el = partEls[i];
-        if(f < .03){ el.setAttribute('opacity', 0); return; }
-        pt.u += pt.v * (pt.s.out && lastP > .74 ? 1.9 : 1) * dt; // results rush outward after the landing
-        if(pt.u > f) pt.u = 0;
-        var q = pt.s.center.getPointAtLength(pt.u * pt.s.len);
-        el.setAttribute('cx', q.x.toFixed(1));
-        el.setAttribute('cy', q.y.toFixed(1));
-        el.setAttribute('opacity', Math.min(1, pt.u * 10, (f - pt.u) * 10).toFixed(2));
-      });
-      requestAnimationFrame(tick);
-    }
-    if(!reduceMotion && 'IntersectionObserver' in window){
-      new IntersectionObserver(function(entries){
-        var vis = entries[0].isIntersecting;
-        if(vis && !running){ running = true; last = performance.now(); requestAnimationFrame(tick); }
-        else if(!vis) running = false;
-      }).observe(pinD);
-    }
-
-    Array.prototype.forEach.call(railItems, function(el){
-      function go(){
-        var i = +el.getAttribute('data-i');
-        var top = pinD.getBoundingClientRect().top + window.scrollY;
-        var total = pinD.offsetHeight - window.innerHeight;
-        window.scrollTo({ top: top + total * JUMP[i], behavior: reduceMotion ? 'auto' : 'smooth' });
-      }
-      el.addEventListener('click', go);
-      el.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); go(); } });
-    });
-
-    build();
-    if(portraitMQ.addEventListener) portraitMQ.addEventListener('change', build);
-    window.addEventListener('scroll', function(){ requestAnimationFrame(onScrollD); }, {passive:true});
-    window.addEventListener('resize', onScrollD);
-  })();
-
-  /* ---- Section 3 · F: INTERSECTION — aerial scenes + frame that grows MOVE → MIX → full-screen MATCH ----
-     The three "aerial photos" are placeholders drawn procedurally (seeded, so they're identical every load),
-     rasterised once to JPEG so the growing frame only scales a bitmap. Route overlays stay live SVG in the same
-     1600×1000 space with the same cover-crop, so they stay registered to the image at any frame size. */
-  (function(){
-    var pinF = document.getElementById('pfFPin');
-    var stage = document.getElementById('pfFStage');
-    var frame = document.getElementById('pfFFrame');
+    var pinF = document.getElementById('pfEPin');
+    var stage = document.getElementById('pfEStage');
+    var frame = document.getElementById('pfEFrame');
     if(!pinF || !stage || !frame) return;
-    var labsF = document.getElementById('pfFLabs');
-    var railF = document.getElementById('pfFRail');
+    var labsF = document.getElementById('pfELabs');
+    var railF = document.getElementById('pfERail');
     var railItemsF = railF.querySelectorAll('li');
-    var ocs = frame.querySelectorAll('.pfF-oc');
-    var scenes = frame.querySelectorAll('.pfF-scene');
-    var vid = frame.querySelector('.pfF-vid');
-    var modes = frame.querySelectorAll('.pfF-modes li');
-    var clouds = document.getElementById('pfFClouds');
-    var phTag = frame.querySelector('.pfF-ph');
+    var ocs = frame.querySelectorAll('.pfE-oc');
+    var scenes = frame.querySelectorAll('.pfE-scene');
+    var vid = frame.querySelector('.pfE-vid');
+    var modes = frame.querySelectorAll('.pfE-modes li');
+    var clouds = document.getElementById('pfEClouds');
+    var phTag = frame.querySelector('.pfE-ph');
     var VW = 1600, VH = 1000;
-    var core = document.getElementById('pfFCore');
-    var flash = document.getElementById('pfFFlash');
-    var matchImg = frame.querySelector('.pfF-scene[data-i="2"] img');
+    var core = document.getElementById('pfECore');
+    var flash = document.getElementById('pfEFlash');
+    var matchImg = frame.querySelector('.pfE-scene[data-i="2"] img');
     var PHASES = [0, .25, .5], JUMP = [.12, .4, .82]; // MOVE · MIX · MATCH (MATCH includes the new possibility)
     var built = false, phase = -1, capPhase = -1, lastP = 0;
 
@@ -4234,15 +3796,15 @@ setTimeout(function(){
       });
 
       Array.prototype.forEach.call(scenes, function(scene, sc){
-        var svg = scene.querySelector('.pfF-ov');
+        var svg = scene.querySelector('.pfE-ov');
         if(!svg) return; // MOVE has no overlay
         // MATCH's red rings are sized to sit just outside the photo medallion
         var extra = sc === 2
           ? '<circle class="fw" cx="800" cy="500" r="20" fill="none" stroke="#FFFFFF" stroke-width="3" opacity="0"/>'
             + '<circle class="fb" cx="800" cy="500" r="110" fill="none" stroke="#FFFFFF" stroke-width="6" opacity="0"/>'
             + '<circle class="fh" cx="800" cy="500" r="260" fill="url(#fHalo)"/>'
-            + '<circle class="pfD-ping fp" cx="800" cy="500" r="112" fill="none" stroke="#ED1D24" stroke-width="3"/>'
-            + '<circle class="pfD-ping p2 fp" cx="800" cy="500" r="112" fill="none" stroke="#ED1D24" stroke-width="3"/>'
+            + '<circle class="pfE-ping fp" cx="800" cy="500" r="112" fill="none" stroke="#ED1D24" stroke-width="3"/>'
+            + '<circle class="pfE-ping p2 fp" cx="800" cy="500" r="112" fill="none" stroke="#ED1D24" stroke-width="3"/>'
             + '<circle class="fc" cx="800" cy="500" r="6" fill="#8FD0FF" stroke="#FFFFFF" stroke-width="3"/>'
           : '';
         svg.innerHTML = '<defs><radialGradient id="fHalo"><stop offset="0" stop-color="#ED1D24" stop-opacity=".55"/><stop offset="1" stop-color="#ED1D24" stop-opacity="0"/></radialGradient></defs>'
@@ -4276,13 +3838,13 @@ setTimeout(function(){
     }
 
     // MOVE stand-in: if the footage can't load (blocked file, offline, unsupported), draw the same shot instead
-    var fb = frame.querySelector('.pfF-movefb'), fbOn = false, fbTrain = null;
+    var fb = frame.querySelector('.pfE-movefb'), fbOn = false, fbTrain = null;
     function useFallback(){
       if(fbOn) return;
       fbOn = true;
       vid.hidden = true; fb.hidden = false;
       rasterise(sceneMoveFb(), fb.querySelector('img'));
-      fb.querySelector('.pfF-fbov').innerHTML = '<g class="fbt">' + train([0, -1], [0, 1], .5, 5) + '</g>';
+      fb.querySelector('.pfE-fbov').innerHTML = '<g class="fbt">' + train([0, -1], [0, 1], .5, 5) + '</g>';
       fbTrain = fb.querySelector('.fbt');
       update(lastP);
     }
@@ -4290,8 +3852,8 @@ setTimeout(function(){
     function build(){
       if(built) return;
       built = true;
-      rasterise(sceneMix(), frame.querySelector('.pfF-scene[data-i="1"] img'));
-      rasterise(sceneMatch(), frame.querySelector('.pfF-scene[data-i="2"] img'));
+      rasterise(sceneMix(), frame.querySelector('.pfE-scene[data-i="1"] img'));
+      rasterise(sceneMatch(), frame.querySelector('.pfE-scene[data-i="2"] img'));
       if(!reduceMotion){ // reduced motion keeps the poster
         vid.addEventListener('loadedmetadata', function(){ update(lastP); });
         vid.addEventListener('error', useFallback);
@@ -4322,7 +3884,7 @@ setTimeout(function(){
       }
       if(fbOn){ // drawn stand-in: same move — camera descends onto the line while the train runs down toward us
         var fz = 'scale(' + (1 + 1.3 * ease(mt)).toFixed(4) + ')';
-        fb.querySelector('img').style.transform = fz; fb.querySelector('.pfF-fbov').style.transform = fz;
+        fb.querySelector('img').style.transform = fz; fb.querySelector('.pfE-fbov').style.transform = fz;
         if(fbTrain) fbTrain.setAttribute('transform', 'translate(800 ' + lerp(-260, 470, ease(mt)).toFixed(1) + ')');
       }
       Array.prototype.forEach.call(modes, function(li, k){
@@ -4355,7 +3917,7 @@ setTimeout(function(){
           });
         });
         // the interchange point: wakes as routes approach, then the photo medallion lands with the rings and waves
-        var mv = frame.querySelector('.pfF-scene[data-i="2"] .pfF-ov');
+        var mv = frame.querySelector('.pfE-scene[data-i="2"] .pfE-ov');
         var landed = p >= .71;
         mv.querySelector('.fc').setAttribute('r', (6 + 6 * seg(p, .62, .72)).toFixed(2));
         mv.querySelector('.fc').setAttribute('fill', landed ? '#ED1D24' : '#00599B');
