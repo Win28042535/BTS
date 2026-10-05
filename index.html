@@ -1168,22 +1168,6 @@
   .cv-tile.lab-r > b{ top:50%; left:calc(100% + 10px); translate:0 -50%; }
   .cv-tile.is-hot .mt-tile{ translate:0 -2px; border-color:#F6B9BC; color:var(--red); box-shadow:0 0 0 4px rgba(237,29,36,.14), 0 16px 28px -14px rgba(237,29,36,.6); }
 
-  /* MATCH results: large cards that burst out of the centre (JS drives position, scale, opacity) */
-  .cv-big{
-    position:absolute; display:flex; gap:12px; align-items:center;
-    width:250px; padding:12px 16px 12px 12px; border-radius:18px;
-    background:rgba(0,40,80,.84); border:1px solid rgba(143,208,255,.45);
-    box-shadow:0 20px 50px -10px rgba(0,30,70,.6), 0 0 40px rgba(28,134,214,.35);
-    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
-    color:var(--white); transform:translate(-50%, -50%) scale(var(--s,1)); opacity:0;
-  }
-  .cv-big .cv-ico{ width:52px; height:52px; border-radius:28%; background:var(--white); color:var(--blue); box-shadow:0 8px 18px -8px rgba(0,0,0,.6); transition:color .3s ease, box-shadow .3s ease; }
-  .cv-big .cv-ico svg{ width:24px; height:24px; }
-  .cv-big.is-hot .cv-ico{ color:var(--red); box-shadow:0 0 0 4px rgba(237,29,36,.25), 0 8px 18px -8px rgba(237,29,36,.7); }
-  .cv-big span.m{ display:flex; flex-direction:column; gap:2px; }
-  .cv-big b{ font-size:17px; font-weight:700; letter-spacing:.06em; }
-  .cv-big small{ font-size:12.5px; line-height:1.4; color:rgba(255,255,255,.8); }
-
   /* MATCH centre: white rounded-square frame around the handshake photo, BTS Group logo badge on its lower edge,
      two red rings pulsing out (as on the live site) */
   .pfE-core{
@@ -1236,12 +1220,6 @@
     /* MATCH tiles: icons only (the labels would crowd a phone-width frame) */
     .mt-tile{ width:38px; }
     .cv-tile > b{ display:none; }
-    /* phones: results become bright pills so they fit between the medallion and the caption */
-    .cv-big{ width:auto; gap:8px; padding:4px 14px 4px 4px; border-radius:999px; }
-    .cv-big .cv-ico{ width:34px; height:34px; }
-    .cv-big .cv-ico svg{ width:16px; height:16px; }
-    .cv-big b{ font-size:12.5px; }
-    .cv-big small{ display:none; }
     .pfE-oc .pfE-sum{ display:none; }
     .pfE-core{ width:120px; }
   }
@@ -2773,7 +2751,7 @@ setTimeout(function(){
             <div class="pfE-oc" data-i="2">
               <div class="eyebrow"><span class="pf-dot" style="background:var(--red)"></span>03 · MATCH</div>
               <h3>ทุกอย่าง<br>มาบรรจบที่นี่</h3>
-              <p>MOVE · MIX และพันธมิตร พบกันที่จุดตัดเดียว แล้วเกิดเป็นความเป็นไปได้ใหม่ สำหรับธุรกิจ เมือง และผู้คน</p>
+              <p>MOVE · MIX และพันธมิตร พบกันที่จุดตัดเดียว แล้วต่อยอดสู่ธุรกิจโรงแรม บริการทางการเงิน ICT และอสังหาริมทรัพย์</p>
               <p class="pfE-sum">หลายความสามารถ <i>→</i> จุดบรรจบ <i>→</i> ความเป็นไปได้ใหม่</p>
               <a class="pf-link on-dark" href="https://www.btsgroup.co.th/th/our-business/match">ดูธุรกิจ MATCH <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
             </div>
@@ -4039,29 +4017,25 @@ setTimeout(function(){
         add(1, route(b.p, 'r', '#8FD0FF', true), function(p){ return seg(p, .3 + k * .025, .45); },
           [chip({ sc:1, pt:b.p[3], ptMob:b.mob || null, l:b.l, cat:b.cat, d:b.d, i:b.i, img:b.img, at:.9, kind:'card' })]);
       });
-      // MATCH — five approaches converge on C at the same moment (p≈.72)…
-      var IN = [
-        { p:[RA[0], C], c:[['MOVE', 'train', .35]] },
-        { p:[RB[0], C], c:[['MIX', 'layers', .5]] },
-        // 4th value: spot on phones, further down the route so the tile clears the rail under the header;
-        // 5th: label to the right of the tile (the three tiles on the vertical route sit close together)
-        { p:[[800, -80], C], c:[['พันธมิตร', 'handshake', .3, .46, 'r'], ['อสังหาริมทรัพย์', 'building', .46, .6, 'r'], ['เทคโนโลยีสารสนเทศ<br>และการสื่อสาร', 'cpu', .62, .74, 'r']] },
-        { p:[RC[0], C], c:[['ธุรกิจโรงแรม', 'bed', .3, .45], ['บริการทางการเงิน', 'wallet', .5, .62]] },
-        { p:[RC[1], C], c:[] }
-      ];
-      IN.forEach(function(r, k){
-        add(2, route(r.p, 'r', k < 2 ? '#3FA3EC' : '#C6D0DE', false, true), function(p){ return seg(p, .6 + k * .012, .72); },
-          r.c.map(function(c){ return chip({ sc:2, pt:lin(r.p[0], r.p[1], c[2]), ptMob:c[3] ? lin(r.p[0], r.p[1], c[3]) : null, l:c[0], i:c[1], at:c[2], side:c[4] || 'b', kind:'tile' }); }));
+      // MATCH — five approaches converge on C at the same moment (p≈.72); they carry no labels of their own…
+      [[RA[0], C], [RB[0], C], [[800, -80], C], [RC[0], C], [RC[1], C]].forEach(function(p2, k){
+        add(2, route(p2, 'r', k < 2 ? '#3FA3EC' : '#C6D0DE', false, true), function(p){ return seg(p, .6 + k * .012, .72); });
       });
-      // …then the new possibility bursts out along the three remaining directions, in the same beat
+      // …then the five partner businesses burst out of the centre where the old results sat (east, south-east, south),
+      // two per route on the first two; `row` is the order used for the single row phones get instead
       var OUT = [
-        { p:[C, RA[1]], t:.55, tm:.3, l:'CITY', s:'เมือง', d:'เมืองที่เชื่อมต่อทั่วถึงยิ่งขึ้น', i:'city' },
-        { p:[C, RB[1]], t:.62, tm:.3, l:'PEOPLE', s:'ผู้คน', d:'ชีวิตที่สะดวกขึ้นทุกวัน', i:'users' },
-        { p:[C, [800, 1080]], t:.34, tm:.2, l:'BUSINESS', s:'ธุรกิจ', d:'ธุรกิจใหม่จากการผนึกกำลัง', i:'trend', dx:160 }
+        { p:[C, RA[1]], items:[
+          { l:'พันธมิตร', i:'handshake', t:.33, row:0 },
+          { l:'เทคโนโลยีสารสนเทศ<br>และการสื่อสาร', i:'cpu', t:.64, row:1, late:.3 } ] },
+        { p:[C, RB[1]], items:[
+          { l:'อสังหาริมทรัพย์', i:'building', t:.3, row:2 },
+          { l:'ธุรกิจโรงแรม', i:'bed', t:.6, row:3, late:.3 } ] },
+        { p:[C, [800, 1080]], items:[
+          { l:'บริการทางการเงิน', i:'wallet', t:.36, row:4 } ] }
       ];
       OUT.forEach(function(r, k){
         add(2, route(r.p, 'r', '#8FD0FF', true, true), function(p){ return seg(p, .74 + k * .02, .86 + k * .02); },
-          [chip({ sc:2, pt:lin(r.p[0], r.p[1], r.t), ptMob:lin(r.p[0], r.p[1], r.tm), l:r.l, s:r.s, d:r.d, i:r.i, at:.05, kind:'big', dx:r.dx || 0 })]);
+          r.items.map(function(it){ return chip({ sc:2, pt:lin(r.p[0], r.p[1], it.t), l:it.l, i:it.i, at:.05, kind:'tile', burst:true, late:it.late || 0, row:it.row, side:'b' }); }));
       });
 
       Array.prototype.forEach.call(scenes, function(scene, sc){
@@ -4102,7 +4076,6 @@ setTimeout(function(){
       function ico(k){ return '<span class="cv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICON[k] + '</svg></span>'; }
       labsF.innerHTML = CHIPS.map(function(c){
         if(c.kind === 'card') return '<span class="cv-card"><span class="cv-photo"><img src="' + c.img + '" alt="" loading="eager" decoding="async">' + ico(c.i) + '</span><span class="m"><span class="m-cat" lang="en">' + c.cat + '</span><b>' + c.l + '</b><small>' + c.d + '</small></span></span>';
-        if(c.kind === 'big') return '<span class="cv-big">' + ico(c.i) + '<span class="m"><b lang="en">' + c.l + '</b><small>' + c.s + ' · ' + c.d + '</small></span></span>';
         // MATCH tile — the live site's style: white rounded square + icon, label pill beside/below
         return '<span class="cv-tile' + (c.side === 'r' ? ' lab-r' : '') + '"><span class="mt-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICON[c.i] + '</svg></span><b' + (/^[A-Z]+$/.test(c.l) ? ' lang="en"' : '') + '>' + c.l + '</b></span>';
       }).join('');
@@ -4139,7 +4112,7 @@ setTimeout(function(){
         var hotI = 0;
         setInterval(function(){
           if(lastP < .72) return;
-          var hot = CHIPS.filter(function(c){ return c.sc === 2 && (c.kind === 'tile' || c.kind === 'big') && c.on; });
+          var hot = CHIPS.filter(function(c){ return c.sc === 2 && c.kind === 'tile' && c.on; });
           CHIPS.forEach(function(c){ c.el.classList.remove('is-hot'); });
           if(hot.length) hot[hotI++ % hot.length].el.classList.add('is-hot');
         }, 1300);
@@ -4226,12 +4199,14 @@ setTimeout(function(){
         });
         CHIPS.forEach(function(c){
           var s = Math.max(fw / VW, fh / VH) * z[c.sc], pt = narrow && c.ptMob ? c.ptMob : c.pt;
-          var x = fw / 2 + (pt[0] - VW / 2) * s + (narrow ? 0 : c.dx || 0), y = fh / 2 + (pt[1] - VH / 2) * s;
+          var x = fw / 2 + (pt[0] - VW / 2) * s, y = fh / 2 + (pt[1] - VH / 2) * s;
+          // phones: the five partners sit in one row just under the centre instead of along the routes
+          if(narrow && c.row !== undefined){ x = fw * (.1 + .2 * c.row); y = cy + 112; }
           if(!c.hw && c.el.offsetWidth) c.hw = c.el.offsetWidth / 2, c.hh = c.el.offsetHeight / 2;
           var mx = (c.hw || 22) + 10, my = (c.hh || 22) + 10;
-          if(c.kind === 'big'){
-            // results burst out of the centre along their route, overshoot a little, then settle
-            var k = seg(c.f || 0, .1, 1);
+          if(c.burst){
+            // burst out of the centre along the route, overshoot a little, then settle (the second tile on a route follows a beat later)
+            var k = seg(c.f || 0, .1 + c.late, 1);
             x = lerp(cx, x, ease(k)); y = lerp(cy, y, ease(k));
             c.el.style.setProperty('--s', (k <= 0 ? .3 : .3 + .7 * backOut(k)).toFixed(3));
             c.el.style.opacity = (Math.min(1, k * 3) * op[2]).toFixed(3);
