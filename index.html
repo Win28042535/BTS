@@ -935,7 +935,7 @@
 
   /* ============ Section 3 · version D — THE CONVERGENCE (scroll-scrubbed streams → one point → new possibility) ============ */
   .pfD{ position:relative; background:var(--cream); color:var(--charcoal); }
-  .pfD-pin{ position:relative; height:460vh; }
+  .pfD-pin{ position:relative; height:500vh; }
   .pfD-stage{
     position:sticky; top:0; height:100vh;
     max-width:1320px; margin:0 auto;
@@ -963,7 +963,7 @@
   .pfD-rail li.active small{ color:rgba(41,43,44,.72); }
   .pfD-rail li:focus-visible{ outline:2px solid var(--blue); outline-offset:6px; border-radius:8px; }
 
-  .pfD-caps{ position:relative; height:220px; }
+  .pfD-caps{ position:relative; height:300px; }
   .pfD-cap{
     position:absolute; inset:0;
     opacity:0; transform:translateY(14px);
@@ -1005,6 +1005,24 @@
   .pfD-ping{ transform-box:fill-box; transform-origin:center; animation:pfDping 2.4s ease-out infinite; }
   .pfD-ping.p2{ animation-delay:1.2s; }
 
+  /* MATCH climax: the moment everything lands, the whole section goes dark (JS fades the background colour),
+     the card loses its edge into it, a flash hits the card and the copy flips to light */
+  .pfD-flash{ position:absolute; inset:0; z-index:3; pointer-events:none; opacity:0; background:radial-gradient(circle at var(--cx,63%) var(--cy,50%), #FFFFFF 0%, rgba(255,255,255,.65) 18%, rgba(143,208,255,0) 60%); }
+  .pfD-card{ transition:box-shadow .5s ease; }
+  .pfD.is-dark .pfD-card{ box-shadow:0 0 0 1px rgba(169,183,204,.08), 0 0 120px rgba(0,89,155,.35); }
+  .pfD.is-dark .pfD-rail::before{ background:rgba(255,255,255,.14); }
+  .pfD.is-dark .pfD-rail li::before{ background:#151C2B; }
+  .pfD.is-dark .pfD-rail b{ color:rgba(255,255,255,.35); }
+  .pfD.is-dark .pfD-rail small{ color:rgba(255,255,255,.35); }
+  .pfD.is-dark .pfD-rail li.active b{ color:var(--white); }
+  .pfD.is-dark .pfD-rail li.active small{ color:rgba(255,255,255,.7); }
+  .pfD.is-dark .pfD-cap .eyebrow, .pfD.is-dark .pfD-cap h3{ color:var(--white); }
+  .pfD.is-dark .pfD-cap p{ color:rgba(255,255,255,.7); }
+  .pfD.is-dark .pfD-cap .pfD-sum{ color:var(--white); background:rgba(255,255,255,.1); }
+  .pfD.is-dark .pfD-cap .pf-link{ color:var(--white); border-bottom-color:rgba(255,255,255,.35); }
+  .pfD-climax h3{ font-size:clamp(30px,2.5vw,46px); line-height:1.25; }
+  .pfD-climax .pfD-sum{ margin-bottom:14px; }
+
   /* chips sit at real points on the generated streams (positions set in % by JS) */
   .pfD-labs{ position:absolute; inset:0; pointer-events:none; }
   .cv-lab{
@@ -1024,7 +1042,7 @@
   .cv-lab[data-g="move"] .cv-ico{ background:#1D4F7C; }
   .cv-lab[data-g="mix"] .cv-ico{ background:#24506B; }
   .cv-out{
-    position:absolute; transform:translate(-50%,-20px); /* icon centre sits on the stream's end point */
+    position:absolute; transform:translate(-50%,-20px) scale(var(--s,1)); /* icon centre sits on the stream's end point */
     display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center;
     opacity:0; transition:opacity .4s ease;
   }
@@ -1051,19 +1069,22 @@
     .pfD-rail small{ display:none; }
     .pfD-card{
       order:1; justify-self:center; --ar:675 / 1200;
-      width:min(100%, calc((100svh - var(--header-h) - 230px) * 675 / 1200));
+      width:min(100%, calc((100svh - var(--header-h) - 250px) * 675 / 1200));
     }
-    .pfD-caps{ order:2; width:100%; max-width:480px; height:150px; }
+    .pfD-caps{ order:2; width:100%; max-width:480px; height:170px; }
     .pfD-cap{ text-align:center; }
     .pfD-cap .eyebrow{ justify-content:center; margin-bottom:6px; }
     .pfD-cap h3{ font-size:20px; margin-bottom:4px; }
     .pfD-cap p{ font-size:14px; margin-bottom:8px; }
     .pfD-cap .pfD-sum{ font-size:12px; padding:6px 12px; }
+    .pfD-climax h3{ font-size:22px; }
+    .pfD-climax h3 br{ display:none; }
+    .pfD-climax .pfD-sum{ margin-bottom:6px; }
     .pfD-cap .pf-link{ font-size:14px; }
     /* portrait canvas is narrow — incoming chips collapse to icons, only the three outcomes keep their words */
     .cv-lab{ padding:2px; transform:translate(-50%,-50%); }
     .cv-lab > span:not(.cv-ico){ display:none; }
-    .cv-out{ transform:translate(-50%,-16px); }
+    .cv-out{ transform:translate(-50%,-16px) scale(var(--s,1)); }
     .cv-out .cv-ico{ width:32px; height:32px; }
     .cv-out b{ font-size:10.5px; letter-spacing:.04em; }
     .cv-out small{ display:none; }
@@ -1163,7 +1184,49 @@
     background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2);
     -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
   }
-  .pfF-frame .pfF-ph{ right:92px; bottom:28px; z-index:5; } /* clear of the floating settings / back-to-top buttons */
+  .pfF-frame .pfF-ph{ right:24px; top:calc(var(--header-h) + 20px); bottom:auto; z-index:5; } /* top-right, level with the rail: the bottom corners belong to the caption, results and floating buttons */
+
+  /* MOVE stand-in (shown only if the footage fails): same camera move, drawn */
+  .pfF-movefb{ position:absolute; inset:0; overflow:hidden; }
+  .pfF-movefb img, .pfF-fbov{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; transform-origin:50% 50%; }
+
+  /* MIX: every destination labelled the way MOVE's modes are — icon, category, Thai name, one line */
+  .cv-card{
+    position:absolute; display:flex; gap:10px; align-items:flex-start;
+    width:220px; padding:10px 14px 11px 10px; border-radius:14px;
+    background:rgba(14,19,30,.78); border:1px solid rgba(169,183,204,.25);
+    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+    color:var(--white); transform:translate(-50%, -50%); opacity:0;
+  }
+  .cv-card .cv-ico{ width:34px; height:34px; background:#1C86D6; }
+  .cv-card .cv-ico svg{ width:16px; height:16px; }
+  .cv-card span.m{ display:flex; flex-direction:column; gap:1px; min-width:0; }
+  .cv-card .m-cat{ font-size:10px; letter-spacing:.14em; color:#8FD0FF; }
+  .cv-card b{ font-size:15px; font-weight:700; line-height:1.35; }
+  .cv-card small{ font-size:11.5px; line-height:1.4; color:rgba(255,255,255,.72); }
+
+  /* MATCH results: big cards that burst out of the centre (JS drives position, scale, opacity) */
+  .cv-big{
+    position:absolute; display:flex; gap:12px; align-items:center;
+    width:250px; padding:12px 16px 12px 12px; border-radius:18px;
+    background:rgba(0,40,80,.82); border:1px solid rgba(143,208,255,.45);
+    box-shadow:0 20px 50px -10px rgba(0,30,70,.6), 0 0 40px rgba(28,134,214,.35);
+    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+    color:var(--white); transform:translate(-50%, -50%) scale(var(--s,1)); opacity:0;
+  }
+  .cv-big .cv-ico{ width:48px; height:48px; background:var(--blue); box-shadow:0 0 0 5px rgba(28,134,214,.3); }
+  .cv-big .cv-ico svg{ width:22px; height:22px; }
+  .cv-big span.m{ display:flex; flex-direction:column; gap:2px; }
+  .cv-big b{ font-size:17px; font-weight:700; letter-spacing:.06em; }
+  .cv-big small{ font-size:12.5px; line-height:1.4; color:rgba(255,255,255,.8); }
+
+  .pfF-core{
+    position:absolute; left:0; top:0; z-index:2; width:clamp(130px, 13vw, 200px); aspect-ratio:1;
+    border-radius:50%; opacity:0; pointer-events:none; transform:translate(-50%, -50%) scale(var(--s,1));
+  }
+  .pfF-core img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:50%; border:4px solid var(--white); box-shadow:0 0 0 8px rgba(237,29,36,.55), 0 0 80px 10px rgba(237,29,36,.45), 0 20px 50px rgba(0,0,0,.45); }
+  .pfF-core-ring{ position:absolute; inset:-28px; border-radius:50%; border:2px dashed rgba(255,255,255,.7); animation:pfspin 18s linear infinite; }
+  .pfF-flash{ position:absolute; inset:0; z-index:3; pointer-events:none; opacity:0; background:radial-gradient(circle at 50% 50%, #FFFFFF 0%, rgba(255,255,255,.7) 22%, rgba(255,255,255,0) 70%); }
 
   @media (max-width:1024px){
     .pfF .pf-intro{ grid-template-columns:1fr; gap:28px; padding-bottom:40px; }
@@ -1182,8 +1245,23 @@
     .pfF-modes b{ font-size:13px; }
     .pfF-modes .m-cat, .pfF-modes small{ display:none; }
     .pfF-frame .pfF-ph{ right:auto; left:16px; top:calc(var(--header-h) + 44px); bottom:auto; font-size:9.5px; padding:4px 9px; white-space:nowrap; }
+    .cv-card{ width:auto; padding:3px 11px 3px 3px; border-radius:999px; align-items:center; gap:7px; }
+    .cv-card .cv-ico{ width:26px; height:26px; }
+    .cv-card .cv-ico svg{ width:13px; height:13px; }
+    .cv-card .m-cat, .cv-card small{ display:none; }
+    .cv-card b{ font-size:12.5px; white-space:nowrap; }
+    /* phones: results become bright pills so they fit between the medallion and the caption */
+    .cv-big{ width:auto; gap:8px; padding:4px 14px 4px 4px; border-radius:999px; }
+    .cv-big .cv-ico{ width:32px; height:32px; box-shadow:0 0 0 3px rgba(28,134,214,.3); }
+    .cv-big .cv-ico svg{ width:15px; height:15px; }
+    .cv-big b{ font-size:12.5px; }
+    .cv-big small{ display:none; }
+    .pfF-oc .pfF-sum{ display:none; }
+    .pfF-core{ width:120px; }
+    .pfF-core-ring{ inset:-18px; }
   }
   @media (prefers-reduced-motion:reduce){
+    .pfF-core-ring{ animation:none; }
     .pfF-ov .dots{ animation:none; }
     .pfF-oc{ transition:none; }
   }
@@ -2648,8 +2726,7 @@ setTimeout(function(){
           <ol class="pfD-rail" id="pfDRail" style="--p:0">
             <li class="active" tabindex="0" data-i="0"><b>MOVE</b><small>การเดินทาง · ผู้คน</small></li>
             <li tabindex="0" data-i="1"><b>MIX</b><small>ข้อมูล · ประสบการณ์</small></li>
-            <li tabindex="0" data-i="2"><b>MATCH</b><small>จุดบรรจบ</small></li>
-            <li tabindex="0" data-i="3"><b>NEW</b><small>ความเป็นไปได้ใหม่</small></li>
+            <li tabindex="0" data-i="2"><b>MATCH</b><small>จุดบรรจบ → ความเป็นไปได้ใหม่</small></li>
           </ol>
 
           <div class="pfD-caps">
@@ -2665,17 +2742,13 @@ setTimeout(function(){
               <p>Data · Media · Digital · Experience ไหลเข้ามาสมทบ ให้ทุกการเดินทางมีความหมายมากขึ้น</p>
               <a class="pf-link" href="https://www.btsgroup.co.th/th/our-business/mix">ดูธุรกิจ MIX <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
             </div>
-            <div class="pfD-cap" data-i="2">
+            <!-- MATCH carries its own result: the convergence and the new possibility are one beat -->
+            <div class="pfD-cap pfD-climax" data-i="2">
               <div class="eyebrow"><span class="pf-dot" style="background:var(--red)"></span>03 · MATCH</div>
-              <h3>ทุกอย่างมาบรรจบที่จุดนี้</h3>
-              <p>MOVE, MIX และพันธมิตร Business · Property · Hotel · Finance · Technology รวมเป็นหนึ่งเดียว</p>
-              <a class="pf-link" href="https://www.btsgroup.co.th/th/our-business/match">ดูธุรกิจ MATCH <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-            </div>
-            <div class="pfD-cap" data-i="3">
-              <div class="eyebrow"><span class="pf-dot" style="background:var(--white);box-shadow:0 0 0 2px var(--blue)"></span>New possibility</div>
-              <h3>เกิดเป็นความเป็นไปได้ใหม่</h3>
-              <p>สำหรับธุรกิจ เมือง และผู้คน</p>
+              <h3>ทุกอย่างมาบรรจบ<br>ที่จุดนี้</h3>
+              <p>MOVE, MIX และพันธมิตร รวมเป็นหนึ่ง แล้วเกิดเป็นความเป็นไปได้ใหม่ สำหรับธุรกิจ เมือง และผู้คน</p>
               <p class="pfD-sum">หลายความสามารถ <i>→</i> จุดบรรจบ <i>→</i> ความเป็นไปได้ใหม่</p>
+              <a class="pf-link" href="https://www.btsgroup.co.th/th/our-business/match">ดูธุรกิจ MATCH <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
             </div>
           </div>
         </div>
@@ -2683,6 +2756,7 @@ setTimeout(function(){
         <div class="pfD-card" id="pfDCard">
           <svg class="pfD-svg" id="pfDSvg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
           <div class="pfD-labs" id="pfDLabs" aria-hidden="true"></div>
+          <i class="pfD-flash" id="pfDFlash" aria-hidden="true"></i>
           <span class="pfD-tag" id="pfDTag">Movement</span>
         </div>
       </div>
@@ -2706,8 +2780,7 @@ setTimeout(function(){
         <ol class="pfD-rail pfF-rail" id="pfFRail" style="--p:0" data-header="dark">
           <li class="active" tabindex="0" data-i="0"><b>MOVE</b><small>Door-to-door</small></li>
           <li tabindex="0" data-i="1"><b>MIX</b><small>สถานี · การเชื่อมต่อ</small></li>
-          <li tabindex="0" data-i="2"><b>MATCH</b><small>จุดตัด</small></li>
-          <li tabindex="0" data-i="3"><b>NEW</b><small>ความเป็นไปได้ใหม่</small></li>
+          <li tabindex="0" data-i="2"><b>MATCH</b><small>จุดตัด → ความเป็นไปได้ใหม่</small></li>
         </ol>
 
         <div class="pfF-frame" id="pfFFrame" data-header="dark">
@@ -2715,6 +2788,8 @@ setTimeout(function(){
                the camera comes down from far above to just over the roof as the train runs toward the viewer -->
           <div class="pfF-scene pfF-move" data-i="0">
             <video class="pfF-vid" muted playsinline preload="auto" poster="img/move-train-poster-far.webp" aria-hidden="true" data-src="media/move-train-1280.mp4"></video>
+            <!-- drawn stand-in with the same move (camera descends, train runs toward us) if the footage can't load -->
+            <div class="pfF-movefb" aria-hidden="true" hidden><img alt=""><svg class="pfF-fbov" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice"></svg></div>
             <ul class="pfF-modes">
               <li><span class="cv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3.1V7a4 4 0 0 0 8 0V3.1"/><path d="m9 15-1-1"/><path d="m15 15 1-1"/><path d="M9 19c-2.8 0-5-2.2-5-5v-4a8 8 0 0 1 16 0v4c0 2.8-2.2 5-5 5Z"/><path d="m8 19-2 3"/><path d="m16 19 2 3"/></svg></span><span class="m-cat" lang="en">Rail</span><b>ทางราง</b><small>รถไฟฟ้าสายสีเขียว ทอง ชมพู และเหลือง</small></li>
               <li><span class="cv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/></svg></span><span class="m-cat" lang="en">Road</span><b>ทางถนน</b><small>รถโดยสาร BRT และทางหลวงพิเศษ M6 · M81</small></li>
@@ -2726,6 +2801,9 @@ setTimeout(function(){
           <div class="pfF-scene" data-i="2"><img alt="" decoding="async"><svg class="pfF-ov" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg></div>
           <div class="pfF-scrim"></div>
           <div class="pfF-labs" id="pfFLabs" aria-hidden="true"></div>
+          <!-- MATCH's centre: a real photo of partners shaking hands (same image as the live site's MATCH) -->
+          <div class="pfF-core" id="pfFCore" aria-hidden="true"><i class="pfF-core-ring"></i><img src="img/match-core.webp" alt=""></div>
+          <i class="pfF-flash" id="pfFFlash" aria-hidden="true"></i>
           <!-- cloud bank (same cloud art as the live site) that carries MOVE into MIX: ragged edge, solid middle, ragged edge -->
           <div class="pfF-clouds" id="pfFClouds" aria-hidden="true">
             <img src="img/cloud.avif" alt="" style="left:-22%;top:7%;width:72%">
@@ -2750,20 +2828,16 @@ setTimeout(function(){
             <div class="pfF-oc sm" data-i="1">
               <div class="eyebrow"><span class="pf-dot" style="background:#8FD0FF"></span>02 · MIX</div>
               <h3>สถานีที่เชื่อม<br>ทุกอย่างเข้าหากัน</h3>
-              <p>Data · Media · Digital · Experience แตกแขนงจากสถานีไปถึงทุกจุดหมายรอบตัว</p>
+              <p>การตลาด Offline-to-Online — สื่อ การชำระเงิน การกระจายสินค้า และข้อมูล แตกแขนงจากสถานีไปถึงทุกจุดหมาย</p>
               <a class="pf-link on-dark" href="https://www.btsgroup.co.th/th/our-business/mix">ดูธุรกิจ MIX <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
             </div>
+            <!-- MATCH carries its own result: the convergence and the new possibility are one beat -->
             <div class="pfF-oc" data-i="2">
               <div class="eyebrow"><span class="pf-dot" style="background:var(--red)"></span>03 · MATCH</div>
               <h3>ทุกอย่าง<br>มาบรรจบที่นี่</h3>
-              <p>MOVE · MIX · พันธมิตร Business · Property · Hotel · Finance · Technology พบกันที่จุดตัดเดียว</p>
-              <a class="pf-link on-dark" href="https://www.btsgroup.co.th/th/our-business/match">ดูธุรกิจ MATCH <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-            </div>
-            <div class="pfF-oc" data-i="3">
-              <div class="eyebrow"><span class="pf-dot" style="background:var(--white);box-shadow:0 0 0 2px #3FA3EC"></span>New possibility</div>
-              <h3>เกิดเป็น<br>ความเป็นไปได้ใหม่</h3>
-              <p>สำหรับธุรกิจ เมือง และผู้คน</p>
+              <p>MOVE · MIX และพันธมิตร พบกันที่จุดตัดเดียว แล้วเกิดเป็นความเป็นไปได้ใหม่ สำหรับธุรกิจ เมือง และผู้คน</p>
               <p class="pfD-sum pfF-sum">หลายความสามารถ <i>→</i> จุดบรรจบ <i>→</i> ความเป็นไปได้ใหม่</p>
+              <a class="pf-link on-dark" href="https://www.btsgroup.co.th/th/our-business/match">ดูธุรกิจ MATCH <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
             </div>
           </div>
           <span class="im-photo-tag pfF-ph">ภาพตัวอย่าง · แทนที่ด้วยภาพมุมสูงจริง</span>
@@ -3659,11 +3733,13 @@ setTimeout(function(){
     var rail = document.getElementById('pfDRail');
     var capsD = document.querySelectorAll('#platformsD .pfD-cap'); // version F reuses the class
     var tag = document.getElementById('pfDTag');
+    var sec = document.getElementById('platformsD');
+    var flash = document.getElementById('pfDFlash');
     var portraitMQ = window.matchMedia('(max-width: 1024px)'); // same breakpoint as the CSS that swaps the card to portrait
     var W = 1200, H = 675, C = [760, 338];
-    var PHASES = [0, .28, .56, .8];              // MOVE · MIX · MATCH · NEW
-    var JUMP = [.14, .44, .7, .93];
-    var TAGS = ['Movement', 'Movement + Experience', 'Convergence', 'New possibility'];
+    var PHASES = [0, .28, .56];                   // MOVE · MIX · MATCH (MATCH includes the new possibility)
+    var JUMP = [.14, .44, .82];
+    var TAGS = ['Movement', 'Movement + Experience', 'Convergence → New possibility'];
     var portrait = false, phase = -1, lastP = 0;
 
     var ICON = {
@@ -3685,9 +3761,11 @@ setTimeout(function(){
     };
     function ico(k){ return '<span class="cv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICON[k] + '</svg></span>'; }
     function seg(p, a, b){ return Math.max(0, Math.min(1, (p - a) / (b - a))); }
+    function lerp(a, b, t){ return a + (b - a) * t; }
+    function backOut(t){ var c = 1.70158; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); }
     function mixF(k){ return function(p){ return .78 * seg(p, .3 + k * .03, .48 + k * .02) + .22 * seg(p, .58, .72); }; }
     function partF(k){ return function(p){ return seg(p, .57 + k * .012, .72); }; }
-    function outF(k){ return function(p){ return seg(p, .8 + k * .025, .93 + k * .02); }; }
+    function outF(k){ return function(p){ return seg(p, .75 + k * .02, .86 + k * .02); }; } // straight after the landing
 
     // geometry is authored landscape (1200×675); portrait just swaps x/y, so the same story runs top → bottom
     var STREAMS = [
@@ -3708,7 +3786,7 @@ setTimeout(function(){
       { g:'out', out:true, n:5, spread:18, ov:[0,1], pts:[C,[900,338],[980,506],[1090,506]], f:outF(2), parts:4, end:{l:'PEOPLE',s:'ผู้คน',i:'users'} }
     ];
 
-    var inG, outG, core, halo, burst, pings, partEls = [], particles = [], vw = W, vh = H;
+    var inG, outG, core, halo, burst, burst2, pings, partEls = [], particles = [], vw = W, vh = H;
     function map(q){ return portrait ? [q[1], q[0]] : [q[0], q[1]]; }
     function xy(q){ return q[0].toFixed(1) + ',' + q[1].toFixed(1); }
 
@@ -3749,13 +3827,14 @@ setTimeout(function(){
         + '<g class="cv-ing">' + ins + '</g>'
         + '<g class="cv-outg">' + outs + '</g>'
         + '<g class="cv-parts"></g>'
-        + '<circle class="cv-burst" cx="' + cp[0] + '" cy="' + cp[1] + '" r="12" fill="none" stroke="#FFFFFF" stroke-width="1.5" opacity="0"/>'
+        + '<circle class="cv-burst" cx="' + cp[0] + '" cy="' + cp[1] + '" r="12" fill="none" stroke="#FFFFFF" stroke-width="3" opacity="0"/>'
+        + '<circle class="cv-burst2" cx="' + cp[0] + '" cy="' + cp[1] + '" r="12" fill="none" stroke="#ED1D24" stroke-width="2.5" opacity="0"/>'
         + '<circle class="pfD-ping" cx="' + cp[0] + '" cy="' + cp[1] + '" r="12" fill="none" stroke="#ED1D24" stroke-width="1.5" opacity="0"/>'
         + '<circle class="pfD-ping p2" cx="' + cp[0] + '" cy="' + cp[1] + '" r="12" fill="none" stroke="#ED1D24" stroke-width="1.5" opacity="0"/>'
         + '<circle class="cv-core" cx="' + cp[0] + '" cy="' + cp[1] + '" r="3" fill="#8FD0FF" stroke="#FFFFFF" stroke-width="2"/>';
 
       inG = svg.querySelector('.cv-ing'); outG = svg.querySelector('.cv-outg');
-      halo = svg.querySelector('.cv-halo'); burst = svg.querySelector('.cv-burst');
+      halo = svg.querySelector('.cv-halo'); burst = svg.querySelector('.cv-burst'); burst2 = svg.querySelector('.cv-burst2');
       core = svg.querySelector('.cv-core'); pings = svg.querySelectorAll('.pfD-ping');
 
       var labHtml = '';
@@ -3802,9 +3881,31 @@ setTimeout(function(){
         s.cur = f;
         var off = (1 - f).toFixed(4), vis = f > .002 ? '' : 'hidden';
         Array.prototype.forEach.call(s.paths, function(el){ el.style.strokeDashoffset = off; el.style.visibility = vis; });
-        s.labs.forEach(function(l){ l.el.style.opacity = f >= l.t ? 1 : 0; });
+        s.labs.forEach(function(l){
+          if(!s.out){ l.el.style.opacity = f >= l.t ? 1 : 0; return; }
+          // outcomes spring out (slight overshoot) as their stream reaches them
+          var k = seg(f, .7, 1);
+          l.el.style.opacity = Math.min(1, k * 3).toFixed(3);
+          l.el.style.setProperty('--s', (k <= 0 ? .4 : backOut(k) * .6 + .4).toFixed(3));
+        });
       });
-      inG.style.opacity = (1 - .45 * seg(p, .8, .9)).toFixed(3);
+      inG.style.opacity = (1 - .45 * seg(p, .78, .88)).toFixed(3);
+
+      // climax: section turns dark as everything lands, flash on the card, strands flare, second (red) shock ring
+      var dk = seg(p, .69, .75);
+      sec.style.backgroundColor = 'rgb(' + Math.round(lerp(247, 21, dk)) + ',' + Math.round(lerp(245, 28, dk)) + ',' + Math.round(lerp(242, 43, dk)) + ')';
+      var darkNow = dk > .5;
+      if(darkNow !== sec.classList.contains('is-dark')){
+        sec.classList.toggle('is-dark', darkNow);
+        if(darkNow) sec.setAttribute('data-header', 'dark'); else sec.removeAttribute('data-header');
+      }
+      var fl = seg(p, .705, .72) * (1 - seg(p, .72, .78));
+      flash.style.opacity = (fl * .85).toFixed(3);
+      svg.style.filter = fl > 0 ? 'brightness(' + (1 + fl).toFixed(3) + ')' : '';
+      card.style.transform = 'scale(' + (1 + .035 * dk).toFixed(4) + ')';
+      var b2 = seg(p, .73, .9);
+      burst2.setAttribute('r', (12 + 420 * b2).toFixed(1));
+      burst2.setAttribute('opacity', b2 > 0 && b2 < 1 ? ((1 - b2) * .9).toFixed(3) : 0);
 
       // the point: barely there in MOVE, wakes up in MIX, turns BTS red the moment everything lands
       var landed = p >= .71;
@@ -3814,7 +3915,7 @@ setTimeout(function(){
       halo.setAttribute('opacity', (.2 + .3 * seg(p, .3, .5) + .5 * seg(p, .62, .72)).toFixed(3));
       // visibility, not opacity — the ping keyframes animate opacity and would override the attribute
       Array.prototype.forEach.call(pings, function(el){ el.style.visibility = landed && !reduceMotion ? 'visible' : 'hidden'; });
-      var b = seg(p, .72, .84);
+      var b = seg(p, .71, .82);
       burst.setAttribute('r', (12 + 300 * b).toFixed(1));
       burst.setAttribute('opacity', b > 0 && b < 1 ? ((1 - b) * .8).toFixed(3) : 0);
       card.style.setProperty('--glow', (seg(p, .6, .74) * (1 - .4 * seg(p, .85, 1))).toFixed(3));
@@ -3848,7 +3949,7 @@ setTimeout(function(){
       particles.forEach(function(pt, i){
         var f = pt.s.cur, el = partEls[i];
         if(f < .03){ el.setAttribute('opacity', 0); return; }
-        pt.u += pt.v * dt;
+        pt.u += pt.v * (pt.s.out && lastP > .74 ? 1.9 : 1) * dt; // results rush outward after the landing
         if(pt.u > f) pt.u = 0;
         var q = pt.s.center.getPointAtLength(pt.u * pt.s.len);
         el.setAttribute('cx', q.x.toFixed(1));
@@ -3901,12 +4002,16 @@ setTimeout(function(){
     var clouds = document.getElementById('pfFClouds');
     var phTag = frame.querySelector('.pfF-ph');
     var VW = 1600, VH = 1000;
-    var PHASES = [0, .25, .5, .78], JUMP = [.12, .4, .7, .93];
+    var core = document.getElementById('pfFCore');
+    var flash = document.getElementById('pfFFlash');
+    var matchImg = frame.querySelector('.pfF-scene[data-i="2"] img');
+    var PHASES = [0, .25, .5], JUMP = [.12, .4, .82]; // MOVE · MIX · MATCH (MATCH includes the new possibility)
     var built = false, phase = -1, capPhase = -1, lastP = 0;
 
     function seg(p, a, b){ return Math.max(0, Math.min(1, (p - a) / (b - a))); }
     function ease(t){ return t * t * (3 - 2 * t); }
     function lerp(a, b, t){ return a + (b - a) * t; }
+    function backOut(t){ var c = 1.70158; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); }
     function rng(seed){ return function(){ seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 
     /* ---------- aerial placeholder generator (daylight city, top-down — matches the MOVE drone footage) ---------- */
@@ -4009,16 +4114,17 @@ setTimeout(function(){
 
     // MIX — a station on the line, skywalks branching into malls and buildings
     var MX_Y = 560;
+    // the four O2O channels from the live site's MIX; none ends bottom-left, where the caption sits
     var MX_BR = [
-      { p:[[700,527],[700,430],[480,430],[480,280]], l:'Data', i:'db' },
-      { p:[[900,527],[900,410],[1220,410],[1220,250]], l:'Media', i:'tv' },
-      { p:[[900,593],[900,690],[1245,690],[1245,850]], l:'Digital', i:'phone' },
-      { p:[[700,593],[700,690],[440,690],[440,860]], l:'Experience', i:'sparkles' }
+      { p:[[700,527],[700,430],[480,430],[480,280]], cat:'DATA', l:'ข้อมูลการเดินทาง', d:'หัวใจของ O2O ที่เชื่อมทุกช่องทาง', i:'db' },
+      { p:[[860,527],[860,420],[870,420],[870,195]], cat:'MEDIA', l:'สื่อโฆษณา', d:'สื่อนอกบ้านบนเส้นทางที่คนเมืองใช้ทุกวัน', i:'tv' },
+      { p:[[940,527],[940,440],[1220,440],[1220,250]], cat:'PAYMENT', l:'ชำระเงินดิจิทัล', d:'แตะจ่ายด้วยบัตรแรบบิท', i:'card' },
+      { p:[[900,593],[900,690],[1245,690],[1245,850]], cat:'LOGISTICS', l:'การกระจายสินค้า', d:'ส่งต่อถึงมือผู้คนทั่วเมือง', i:'package', mob:[1245,690] }
     ];
     function sceneMix(){
       var R = rng(23), s = city(R, { park:.05 });
       s += road(R, [-80, 250], [1680, 250], 26) + road(R, [-80, 880], [1680, 880], 26) + road(R, [330, -40], [330, 1040], 24) + road(R, [1400, -40], [1400, 1040], 24);
-      s += mall(R, 330, 150, 300, 220) + mall(R, 1060, 120, 320, 220) + mall(R, 1080, 760, 330, 200) + mall(R, 290, 770, 300, 190);
+      s += mall(R, 330, 150, 300, 220) + mall(R, 760, 95, 220, 190) + mall(R, 1060, 120, 320, 220) + mall(R, 1080, 760, 330, 200) + mall(R, 290, 770, 300, 190);
       s += road(R, [-80, MX_Y], [1680, MX_Y], 64) + rail([-80, MX_Y], [1680, MX_Y]);
       MX_BR.forEach(function(b){ s += skywalk(b.p.slice(0, 3).concat([[b.p[3][0], b.p[3][1] > MX_Y ? b.p[3][1] - 90 : b.p[3][1] + 90]])); });
       s += station([800, MX_Y], 0, 330, 76) + train([-80, MX_Y], [1680, MX_Y], .3, 4);
@@ -4042,6 +4148,15 @@ setTimeout(function(){
       for(var i = 0; i < 16; i++) s += '<line x1="800" y1="500" x2="' + (800 + Math.cos(i * Math.PI / 8) * 106) + '" y2="' + (500 + Math.sin(i * Math.PI / 8) * 106) + '" stroke="#A3B4C6" stroke-width="1.2"/>';
       s += '<circle cx="800" cy="500" r="56" fill="#7FB3DD" opacity=".8"/><circle cx="800" cy="500" r="56" fill="none" stroke="#FFFFFF" stroke-width="2"/>';
       s += train(RA[0], RA[1], .28, 4) + train(RB[0], RB[1], .75, 4) + train(RC[0], RC[1], .2, 4);
+      return s + finish();
+    }
+
+    // MOVE stand-in — same composition as the drone shot: the line runs straight down the middle of the city
+    function sceneMoveFb(){
+      var R = rng(51), s = city(R, { park:.07 });
+      s += road(R, [-80, 210], [1680, 210], 30) + road(R, [-80, 790], [1680, 790], 30) + road(R, [380, -40], [380, 1040], 26) + road(R, [1220, -40], [1220, 1040], 26);
+      s += road(R, [690, -80], [690, 1080], 44) + road(R, [910, -80], [910, 1080], 44) + rail([800, -80], [800, 1080]);
+      s += skywalk([[610, 500], [990, 500]]);
       return s + finish();
     }
 
@@ -4084,13 +4199,15 @@ setTimeout(function(){
     function buildOverlays(){
       CHIPS = []; OV = [[], [], []];
       function add(sc, html, f, chips){ OV[sc].push({ html: html, f: f, chips: chips || [] }); }
-      // ptMob: alternative spot for narrow screens (outcomes pulled toward C so the bottom caption doesn't cover them)
-      function chip(sc, pt, l, i, at, out, s, ptMob){ CHIPS.push({ sc: sc, pt: pt, ptMob: ptMob, l: l, i: i, at: at, out: !!out, s: s || '' }); return CHIPS.length - 1; }
+      // kind: 'lab' (small chip), 'card' (MIX destination, labelled like MOVE's modes), 'big' (MATCH result card)
+      // ptMob: alternative spot for narrow screens; dx: desktop nudge in px (keeps a card clear of the caption)
+      function chip(o){ CHIPS.push(o); return CHIPS.length - 1; }
 
       // MIX — the line is already lit (it's the MOVE route), branches grow out of the station
       add(1, route([[-80, MX_Y], [1680, MX_Y]], 'r', '#3FA3EC'), function(p){ return .55 + .45 * seg(p, .24, .32); });
       MX_BR.forEach(function(b, k){
-        add(1, route(b.p, 'r', '#8FD0FF', true), function(p){ return seg(p, .3 + k * .025, .45); }, [chip(1, b.p[3], b.l, b.i, .98)]);
+        add(1, route(b.p, 'r', '#8FD0FF', true), function(p){ return seg(p, .3 + k * .025, .45); },
+          [chip({ sc:1, pt:b.p[3], ptMob:b.mob || null, l:b.l, cat:b.cat, d:b.d, i:b.i, at:.98, kind:'card' })]);
       });
       // MATCH — five approaches converge on C at the same moment (p≈.72)…
       var IN = [
@@ -4103,28 +4220,29 @@ setTimeout(function(){
       ];
       IN.forEach(function(r, k){
         add(2, route(r.p, 'r', k < 2 ? '#3FA3EC' : '#C6D0DE'), function(p){ return seg(p, .6 + k * .012, .72); },
-          r.c.map(function(c){ return chip(2, lin(r.p[0], r.p[1], c[2]), c[0], c[1], c[2], false, '', c[3] ? lin(r.p[0], r.p[1], c[3]) : null); }));
+          r.c.map(function(c){ return chip({ sc:2, pt:lin(r.p[0], r.p[1], c[2]), ptMob:c[3] ? lin(r.p[0], r.p[1], c[3]) : null, l:c[0], i:c[1], at:c[2], kind:'lab' }); }));
       });
-      // …then New Possibility leaves along the three remaining directions
+      // …then the new possibility bursts out along the three remaining directions, in the same beat
       var OUT = [
-        { p:[C, RA[1]], l:'CITY', s:'เมือง', i:'city' },
-        { p:[C, RB[1]], l:'PEOPLE', s:'ผู้คน', i:'users' },
-        { p:[C, [800, 1080]], l:'BUSINESS', s:'ธุรกิจ', i:'trend' }
+        { p:[C, RA[1]], t:.55, tm:.3, l:'CITY', s:'เมือง', d:'เมืองที่เชื่อมต่อทั่วถึงยิ่งขึ้น', i:'city' },
+        { p:[C, RB[1]], t:.62, tm:.3, l:'PEOPLE', s:'ผู้คน', d:'ชีวิตที่สะดวกขึ้นทุกวัน', i:'users' },
+        { p:[C, [800, 1080]], t:.34, tm:.2, l:'BUSINESS', s:'ธุรกิจ', d:'ธุรกิจใหม่จากการผนึกกำลัง', i:'trend', dx:160 }
       ];
       OUT.forEach(function(r, k){
-        add(2, route(r.p, 'r', '#8FD0FF', true), function(p){ return seg(p, .8 + k * .02, .92 + k * .02); },
-          [chip(2, lin(r.p[0], r.p[1], .62), r.l, r.i, .62, true, r.s, lin(r.p[0], r.p[1], .3))]);
+        add(2, route(r.p, 'r', '#8FD0FF', true), function(p){ return seg(p, .74 + k * .02, .86 + k * .02); },
+          [chip({ sc:2, pt:lin(r.p[0], r.p[1], r.t), ptMob:lin(r.p[0], r.p[1], r.tm), l:r.l, s:r.s, d:r.d, i:r.i, at:.05, kind:'big', dx:r.dx || 0 })]);
       });
 
       Array.prototype.forEach.call(scenes, function(scene, sc){
         var svg = scene.querySelector('.pfF-ov');
         if(!svg) return; // MOVE has no overlay
+        // MATCH's red rings are sized to sit just outside the photo medallion
         var extra = sc === 2
           ? '<circle class="fw" cx="800" cy="500" r="20" fill="none" stroke="#FFFFFF" stroke-width="3" opacity="0"/>'
-            + '<circle class="fb" cx="800" cy="500" r="12" fill="none" stroke="#FFFFFF" stroke-width="4" opacity="0"/>'
-            + '<circle class="pfD-ping fp" cx="800" cy="500" r="16" fill="none" stroke="#ED1D24" stroke-width="2"/>'
-            + '<circle class="pfD-ping p2 fp" cx="800" cy="500" r="16" fill="none" stroke="#ED1D24" stroke-width="2"/>'
-            + '<circle class="fh" cx="800" cy="500" r="90" fill="url(#fHalo)"/>'
+            + '<circle class="fb" cx="800" cy="500" r="110" fill="none" stroke="#FFFFFF" stroke-width="6" opacity="0"/>'
+            + '<circle class="fh" cx="800" cy="500" r="260" fill="url(#fHalo)"/>'
+            + '<circle class="pfD-ping fp" cx="800" cy="500" r="112" fill="none" stroke="#ED1D24" stroke-width="3"/>'
+            + '<circle class="pfD-ping p2 fp" cx="800" cy="500" r="112" fill="none" stroke="#ED1D24" stroke-width="3"/>'
             + '<circle class="fc" cx="800" cy="500" r="6" fill="#8FD0FF" stroke="#FFFFFF" stroke-width="3"/>'
           : '';
         svg.innerHTML = '<defs><radialGradient id="fHalo"><stop offset="0" stop-color="#ED1D24" stop-opacity=".55"/><stop offset="1" stop-color="#ED1D24" stop-opacity="0"/></radialGradient></defs>'
@@ -4135,12 +4253,10 @@ setTimeout(function(){
       var ICON = {
         users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
         train:'<path d="M8 3.1V7a4 4 0 0 0 8 0V3.1"/><path d="m9 15-1-1"/><path d="m15 15 1-1"/><path d="M9 19c-2.8 0-5-2.2-5-5v-4a8 8 0 0 1 16 0v4c0 2.8-2.2 5-5 5Z"/><path d="m8 19-2 3"/><path d="m16 19 2 3"/>',
-        route:'<circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/>',
-        landmark:'<line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/>',
         db:'<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/>',
         tv:'<rect width="20" height="15" x="2" y="7" rx="2" ry="2"/><path d="m17 2-5 5-5-5"/>',
-        phone:'<rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/>',
-        sparkles:'<path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>',
+        card:'<rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/>',
+        package:'<path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><path d="m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7"/><path d="m7.5 4.27 9 5.15"/>',
         layers:'<path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/>',
         briefcase:'<path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/>',
         house:'<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
@@ -4152,22 +4268,35 @@ setTimeout(function(){
       };
       function ico(k){ return '<span class="cv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICON[k] + '</svg></span>'; }
       labsF.innerHTML = CHIPS.map(function(c){
-        return c.out
-          ? '<span class="cv-out">' + ico(c.i) + '<b>' + c.l + '</b><small>' + c.s + '</small></span>'
-          : '<span class="cv-lab">' + ico(c.i) + '<span>' + c.l + '</span></span>';
+        if(c.kind === 'card') return '<span class="cv-card">' + ico(c.i) + '<span class="m"><span class="m-cat" lang="en">' + c.cat + '</span><b>' + c.l + '</b><small>' + c.d + '</small></span></span>';
+        if(c.kind === 'big') return '<span class="cv-big">' + ico(c.i) + '<span class="m"><b lang="en">' + c.l + '</b><small>' + c.s + ' · ' + c.d + '</small></span></span>';
+        return '<span class="cv-lab">' + ico(c.i) + '<span>' + c.l + '</span></span>';
       }).join('');
-      CHIPS.forEach(function(c, k){ c.el = labsF.children[k]; });
+      CHIPS.forEach(function(c, k){ c.el = labsF.children[k]; c.hw = 0; });
+    }
+
+    // MOVE stand-in: if the footage can't load (blocked file, offline, unsupported), draw the same shot instead
+    var fb = frame.querySelector('.pfF-movefb'), fbOn = false, fbTrain = null;
+    function useFallback(){
+      if(fbOn) return;
+      fbOn = true;
+      vid.hidden = true; fb.hidden = false;
+      rasterise(sceneMoveFb(), fb.querySelector('img'));
+      fb.querySelector('.pfF-fbov').innerHTML = '<g class="fbt">' + train([0, -1], [0, 1], .5, 5) + '</g>';
+      fbTrain = fb.querySelector('.fbt');
+      update(lastP);
     }
 
     function build(){
       if(built) return;
       built = true;
-      var imgs = frame.querySelectorAll('.pfF-scene img'); // MIX, MATCH (MOVE is the video)
-      rasterise(sceneMix(), imgs[0]);
-      rasterise(sceneMatch(), imgs[1]);
+      rasterise(sceneMix(), frame.querySelector('.pfF-scene[data-i="1"] img'));
+      rasterise(sceneMatch(), frame.querySelector('.pfF-scene[data-i="2"] img'));
       if(!reduceMotion){ // reduced motion keeps the poster
         vid.addEventListener('loadedmetadata', function(){ update(lastP); });
+        vid.addEventListener('error', useFallback);
         vid.src = vid.getAttribute('data-src'); vid.load();
+        setTimeout(function(){ if(vid.readyState < 1) useFallback(); }, 6000); // never got metadata
       }
       buildOverlays();
       update(lastP);
@@ -4179,15 +4308,22 @@ setTimeout(function(){
       var bx = { w: stage.clientWidth, h: stage.clientHeight };
 
       // MOVE → MIX is a hard swap hidden behind the cloud bank (fully covered at p=.25); MIX → MATCH crossfades.
-      // Camera: MOVE descends (the footage itself), MIX pushes in, MATCH pulls back to show the whole interchange —
-      // with every phase full-bleed, that pull-back (plus the type size and the only red) is what makes MATCH the climax
+      // Camera: MOVE descends (the footage itself), MIX pushes in, MATCH pulls back to show the whole interchange,
+      // with a short punch-in at the moment everything lands
+      var punch = seg(p, .705, .72) * (1 - seg(p, .72, .8));
       var op = [p < .25 ? 1 : 0, (p >= .25 ? 1 : 0) * (1 - seg(p, .5, .58)), seg(p, .5, .58)];
-      var z = [1, 1 + .1 * ease(seg(p, .25, .52)), 1.24 - .24 * ease(seg(p, .5, .92))];
+      var z = [1, 1 + .1 * ease(seg(p, .25, .52)), 1.24 - .24 * ease(seg(p, .5, .92)) + .06 * punch];
 
       // MOVE footage runs in reverse: far above the line → just over the roof, the train coming toward us
-      if(vid.duration){
-        var vt = vid.duration * (1 - seg(p, 0, .23)) - .001;
+      var mt = seg(p, 0, .23);
+      if(!fbOn && vid.duration){
+        var vt = vid.duration * (1 - mt) - .001;
         if(Math.abs(vid.currentTime - vt) > .02) vid.currentTime = Math.max(0, vt);
+      }
+      if(fbOn){ // drawn stand-in: same move — camera descends onto the line while the train runs down toward us
+        var fz = 'scale(' + (1 + 1.3 * ease(mt)).toFixed(4) + ')';
+        fb.querySelector('img').style.transform = fz; fb.querySelector('.pfF-fbov').style.transform = fz;
+        if(fbTrain) fbTrain.setAttribute('transform', 'translate(800 ' + lerp(-260, 470, ease(mt)).toFixed(1) + ')');
       }
       Array.prototype.forEach.call(modes, function(li, k){
         var a = seg(p, .04 + k * .025, .08 + k * .025), o = 1 - seg(p, .17, .21);
@@ -4198,8 +4334,14 @@ setTimeout(function(){
       clouds.style.visibility = ct > 0 && ct < 1 ? 'visible' : 'hidden';
       clouds.style.transform = 'translateY(' + (bx.h - 3.6 * bx.h * ct).toFixed(1) + 'px)';
       // MOVE is real footage — no placeholder notice there; on phones MATCH's top chips need that corner too
-      phTag.style.visibility = p < .25 || (bx.w <= 1024 && p >= .5) ? 'hidden' : '';
+      phTag.style.visibility = (p < .25 && !fbOn) || (bx.w <= 1024 && p >= .5) ? 'hidden' : '';
       Array.prototype.forEach.call(scenes, function(el, k){ el.style.opacity = op[k].toFixed(3); el.style.transform = 'scale(' + z[k].toFixed(4) + ')'; el.style.visibility = op[k] > 0 ? '' : 'hidden'; });
+
+      // climax: the city drains and darkens so only the routes, the centre and the results carry light
+      var dim = seg(p, .7, .76);
+      matchImg.style.filter = dim > 0 ? 'saturate(' + (1 - .65 * dim).toFixed(3) + ') brightness(' + (1 - .5 * dim).toFixed(3) + ')' : '';
+      var fl = seg(p, .705, .72) * (1 - seg(p, .72, .79));
+      flash.style.opacity = (fl * .9).toFixed(3);
 
       if(built){
         OV.forEach(function(list){
@@ -4209,39 +4351,62 @@ setTimeout(function(){
             var offv = (1 - f).toFixed(4), vis = f > .002 ? '' : 'hidden';
             Array.prototype.forEach.call(o.rts, function(r){ r.style.strokeDashoffset = offv; r.style.visibility = vis; });
             o.dots.setAttribute('opacity', f >= 1 && !reduceMotion ? .9 : 0);
-            o.chips.forEach(function(ci){ CHIPS[ci].on = f >= CHIPS[ci].at; });
+            o.chips.forEach(function(ci){ CHIPS[ci].f = f; CHIPS[ci].on = f >= CHIPS[ci].at; });
           });
         });
-        // the interchange point: wakes as routes approach, turns red when they all land, then the wave
+        // the interchange point: wakes as routes approach, then the photo medallion lands with the rings and waves
         var mv = frame.querySelector('.pfF-scene[data-i="2"] .pfF-ov');
         var landed = p >= .71;
         mv.querySelector('.fc').setAttribute('r', (6 + 6 * seg(p, .62, .72)).toFixed(2));
         mv.querySelector('.fc').setAttribute('fill', landed ? '#ED1D24' : '#00599B');
         mv.querySelector('.fh').setAttribute('opacity', landed ? 1 : 0);
         Array.prototype.forEach.call(mv.querySelectorAll('.fp'), function(el){ el.style.visibility = landed && !reduceMotion ? 'visible' : 'hidden'; });
-        var b = seg(p, .72, .82), w = seg(p, .78, .97);
-        mv.querySelector('.fb').setAttribute('r', (12 + 320 * b).toFixed(1));
+        var b = seg(p, .71, .8), w = seg(p, .74, .95);
+        mv.querySelector('.fb').setAttribute('r', (110 + 420 * b).toFixed(1));
         mv.querySelector('.fb').setAttribute('opacity', b > 0 && b < 1 ? ((1 - b) * .9).toFixed(3) : 0);
-        mv.querySelector('.fw').setAttribute('r', (20 + 1000 * w).toFixed(1));
-        mv.querySelector('.fw').setAttribute('opacity', w > 0 && w < 1 ? ((1 - w) * .5).toFixed(3) : 0);
+        mv.querySelector('.fw').setAttribute('r', (110 + 1100 * w).toFixed(1));
+        mv.querySelector('.fw').setAttribute('opacity', w > 0 && w < 1 ? ((1 - w) * .6).toFixed(3) : 0);
+
+        var fw = bx.w, fh = bx.h, narrow = fw <= 1024;
+        var s2 = Math.max(fw / VW, fh / VH) * z[2];
+        var cx = fw / 2 + (C[0] - VW / 2) * s2, cy = fh / 2 + (C[1] - VH / 2) * s2;
+        var mk = seg(p, .7, .77);
+        core.style.left = cx.toFixed(1) + 'px'; core.style.top = cy.toFixed(1) + 'px';
+        core.style.opacity = (Math.min(1, mk * 3) * op[2]).toFixed(3);
+        core.style.setProperty('--s', (mk <= 0 ? .3 : .3 + .7 * backOut(mk)).toFixed(3));
 
         // chips follow the cover-crop + zoom of their scene, clamped inside the frame
-        var fw = bx.w, fh = bx.h, narrow = fw <= 1024;
+        var obstacles = [railF, phTag].map(function(el){
+          return { l: el.offsetLeft, r: el.offsetLeft + el.offsetWidth, b: el.offsetTop + el.offsetHeight, w: el.offsetWidth && el.style.visibility !== 'hidden' };
+        });
         CHIPS.forEach(function(c){
           var s = Math.max(fw / VW, fh / VH) * z[c.sc], pt = narrow && c.ptMob ? c.ptMob : c.pt;
-          var x = fw / 2 + (pt[0] - VW / 2) * s, y = fh / 2 + (pt[1] - VH / 2) * s;
-          var m = c.out ? 44 : 22;
-          x = Math.max(m, Math.min(fw - m, x)); y = Math.max(m, Math.min(fh - m, y));
+          var x = fw / 2 + (pt[0] - VW / 2) * s + (narrow ? 0 : c.dx || 0), y = fh / 2 + (pt[1] - VH / 2) * s;
+          if(!c.hw && c.el.offsetWidth) c.hw = c.el.offsetWidth / 2, c.hh = c.el.offsetHeight / 2;
+          var mx = (c.hw || 22) + 10, my = (c.hh || 22) + 10;
+          if(c.kind === 'big'){
+            // results burst out of the centre along their route, overshoot a little, then settle
+            var k = seg(c.f || 0, .1, 1);
+            x = lerp(cx, x, ease(k)); y = lerp(cy, y, ease(k));
+            c.el.style.setProperty('--s', (k <= 0 ? .3 : .3 + .7 * backOut(k)).toFixed(3));
+            c.el.style.opacity = (Math.min(1, k * 3) * op[2]).toFixed(3);
+          } else {
+            c.el.style.opacity = c.on ? op[c.sc].toFixed(3) : 0;
+          }
+          x = Math.max(mx, Math.min(fw - mx, x)); y = Math.max(my, Math.min(fh - my, y));
+          // MIX's info cards are big enough to land under the rail or the placeholder tag on shorter screens — drop them below
+          if(c.kind === 'card') obstacles.forEach(function(o){
+            if(o.w && x + c.hw > o.l && x - c.hw < o.r) y = Math.max(y, o.b + c.hh + 10);
+          });
           c.el.style.left = x.toFixed(1) + 'px'; c.el.style.top = y.toFixed(1) + 'px';
-          c.el.style.opacity = c.on ? op[c.sc].toFixed(3) : 0;
         });
       }
 
       railF.style.setProperty('--p', p.toFixed(4));
       Array.prototype.forEach.call(railItemsF, function(el, k){ el.classList.toggle('done', p >= PHASES[k] + .01 || (k === 0 && p > .01)); });
-      var ph = p >= PHASES[3] ? 3 : p >= PHASES[2] ? 2 : p >= PHASES[1] ? 1 : 0;
+      var ph = p >= PHASES[2] ? 2 : p >= PHASES[1] ? 1 : 0;
       // captions follow the picture, not the rail: MATCH's headline waits until its scene has faded in
-      var cph = p >= PHASES[3] ? 3 : p >= .58 ? 2 : p >= PHASES[1] ? 1 : 0;
+      var cph = p >= .58 ? 2 : p >= PHASES[1] ? 1 : 0;
       if(ph !== phase || cph !== capPhase){
         phase = ph; capPhase = cph;
         Array.prototype.forEach.call(ocs, function(el){ el.classList.toggle('on', +el.getAttribute('data-i') === cph); });
