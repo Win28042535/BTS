@@ -340,8 +340,12 @@
     box-shadow:0 2px 10px rgba(28,58,98,.15);
     transition:transform .2s ease, box-shadow .2s ease;
   }
+  .qm-btn{ letter-spacing:.06em; transition:transform .2s ease, box-shadow .2s ease, background-color .25s ease, color .25s ease; }
   .qm-btn:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(28,58,98,.22); }
   .qm-btn:focus-visible{ outline:2px solid var(--blue); outline-offset:3px; }
+  /* select state: BTS red */
+  .qm-btn[aria-expanded="true"]{ background:var(--red); color:var(--white); box-shadow:0 0 0 4px rgba(237,29,36,.22), 0 8px 22px -6px rgba(237,29,36,.6); }
+  .qm-btn[aria-expanded="true"]:focus-visible{ outline-color:var(--white); }
   .qm-chev{ transition:transform .3s ease; }
   .qm-btn[aria-expanded="true"] .qm-chev{ transform:rotate(180deg); }
   .qm-panel{
@@ -1124,43 +1128,86 @@
   .pfE-movefb{ position:absolute; inset:0; overflow:hidden; }
   .pfE-movefb img, .pfE-fbov{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; transform-origin:50% 50%; }
 
-  /* MIX: every destination labelled the way MOVE's modes are — icon, category, Thai name, one line */
+  /* MIX: every destination is a photo card (real photography from the live site) — photo, icon, category, Thai name, one line */
   .cv-card{
-    position:absolute; display:flex; gap:10px; align-items:flex-start;
-    width:220px; padding:10px 14px 11px 10px; border-radius:14px;
-    background:rgba(14,19,30,.78); border:1px solid rgba(169,183,204,.25);
+    position:absolute; display:flex; flex-direction:column;
+    width:236px; border-radius:16px; overflow:hidden;
+    background:rgba(14,19,30,.86); border:1px solid rgba(255,255,255,.28);
+    box-shadow:0 18px 40px -12px rgba(10,20,40,.55);
     -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
-    color:var(--white); transform:translate(-50%, -50%); opacity:0;
+    color:var(--white); transform:translate(-50%, -50%) scale(var(--s,1)); opacity:0;
   }
-  .cv-card .cv-ico{ width:34px; height:34px; background:#1C86D6; }
-  .cv-card .cv-ico svg{ width:16px; height:16px; }
-  .cv-card span.m{ display:flex; flex-direction:column; gap:1px; min-width:0; }
+  .cv-photo{ position:relative; display:block; height:112px; overflow:hidden; background:#1B2232; }
+  .cv-photo img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; animation:pfEdrift 9s ease-in-out infinite alternate; }
+  .cv-photo::after{ content:""; position:absolute; inset:0; background:linear-gradient(0deg, rgba(8,16,32,.55), rgba(8,16,32,0) 55%); }
+  @keyframes pfEdrift{ from{ transform:scale(1.02); } to{ transform:scale(1.16); } }
+  .cv-card .cv-ico{ position:absolute; z-index:1; left:10px; bottom:10px; width:34px; height:34px; border-radius:28%; background:var(--white); color:var(--blue); box-shadow:0 6px 14px -6px rgba(0,0,0,.5); }
+  .cv-card .cv-ico svg{ width:17px; height:17px; }
+  .cv-card span.m{ display:flex; flex-direction:column; gap:1px; padding:10px 14px 12px; }
   .cv-card .m-cat{ font-size:10px; letter-spacing:.14em; color:#8FD0FF; }
   .cv-card b{ font-size:15px; font-weight:700; line-height:1.35; }
-  .cv-card small{ font-size:11.5px; line-height:1.4; color:rgba(255,255,255,.72); }
+  .cv-card small{ font-size:11.5px; line-height:1.4; color:rgba(255,255,255,.74); }
 
-  /* MATCH results: big cards that burst out of the centre (JS drives position, scale, opacity) */
+  /* MATCH tiles — the live site's MATCH style: white rounded square, blue icon, white label pill; a tile "heats up" to red */
+  .cv-tile{
+    position:absolute; display:block; opacity:0; transform:translate(-50%, -50%) scale(var(--s,1));
+  }
+  .mt-tile{
+    display:grid; place-items:center; width:clamp(44px, 4.2vw, 62px); aspect-ratio:1;
+    border:1px solid #DCE3EC; border-radius:28%; background:var(--white); color:#2F5A93;
+    box-shadow:0 1px 2px rgba(10,20,40,.08), 0 12px 24px -12px rgba(10,20,40,.55);
+    transition:color .3s ease, border-color .3s ease, box-shadow .3s ease, translate .3s ease;
+  }
+  .mt-tile svg{ width:46%; height:46%; stroke-width:1.7; }
+  .cv-tile > b{
+    position:absolute; top:calc(100% + 8px); left:50%; translate:-50% 0;
+    padding:4px 12px; border-radius:8px; white-space:nowrap; text-align:center;
+    background:rgba(238,241,245,.95); color:#1B2433; font-size:15px; font-weight:700; line-height:1.4;
+    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); box-shadow:0 2px 8px rgba(10,20,40,.2);
+  }
+  .cv-tile.lab-r > b{ top:50%; left:calc(100% + 10px); translate:0 -50%; }
+  .cv-tile.is-hot .mt-tile{ translate:0 -2px; border-color:#F6B9BC; color:var(--red); box-shadow:0 0 0 4px rgba(237,29,36,.14), 0 16px 28px -14px rgba(237,29,36,.6); }
+
+  /* MATCH results: large cards that burst out of the centre (JS drives position, scale, opacity) */
   .cv-big{
     position:absolute; display:flex; gap:12px; align-items:center;
     width:250px; padding:12px 16px 12px 12px; border-radius:18px;
-    background:rgba(0,40,80,.82); border:1px solid rgba(143,208,255,.45);
+    background:rgba(0,40,80,.84); border:1px solid rgba(143,208,255,.45);
     box-shadow:0 20px 50px -10px rgba(0,30,70,.6), 0 0 40px rgba(28,134,214,.35);
     -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
     color:var(--white); transform:translate(-50%, -50%) scale(var(--s,1)); opacity:0;
   }
-  .cv-big .cv-ico{ width:48px; height:48px; background:var(--blue); box-shadow:0 0 0 5px rgba(28,134,214,.3); }
-  .cv-big .cv-ico svg{ width:22px; height:22px; }
+  .cv-big .cv-ico{ width:52px; height:52px; border-radius:28%; background:var(--white); color:var(--blue); box-shadow:0 8px 18px -8px rgba(0,0,0,.6); transition:color .3s ease, box-shadow .3s ease; }
+  .cv-big .cv-ico svg{ width:24px; height:24px; }
+  .cv-big.is-hot .cv-ico{ color:var(--red); box-shadow:0 0 0 4px rgba(237,29,36,.25), 0 8px 18px -8px rgba(237,29,36,.7); }
   .cv-big span.m{ display:flex; flex-direction:column; gap:2px; }
   .cv-big b{ font-size:17px; font-weight:700; letter-spacing:.06em; }
   .cv-big small{ font-size:12.5px; line-height:1.4; color:rgba(255,255,255,.8); }
 
+  /* MATCH centre: white rounded-square frame around the handshake photo, BTS Group logo badge on its lower edge,
+     two red rings pulsing out (as on the live site) */
   .pfE-core{
     position:absolute; left:0; top:0; z-index:2; width:clamp(130px, 13vw, 200px); aspect-ratio:1;
-    border-radius:50%; opacity:0; pointer-events:none; transform:translate(-50%, -50%) scale(var(--s,1));
+    border-radius:24%; opacity:0; pointer-events:none; transform:translate(-50%, -50%) scale(var(--s,1));
   }
-  .pfE-core img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:50%; border:4px solid var(--white); box-shadow:0 0 0 8px rgba(237,29,36,.55), 0 0 80px 10px rgba(237,29,36,.45), 0 20px 50px rgba(0,0,0,.45); }
-  .pfE-core-ring{ position:absolute; inset:-28px; border-radius:50%; border:2px dashed rgba(255,255,255,.7); animation:pfspin 18s linear infinite; }
+  .pfE-core-frame{
+    position:absolute; inset:0; border-radius:inherit; background:var(--white);
+    display:grid; place-items:center;
+    box-shadow:0 0 0 8px rgba(237,29,36,.5), 0 0 80px 10px rgba(237,29,36,.4), 0 24px 50px rgba(0,0,0,.45);
+  }
+  .pfE-core-frame::after{ content:""; position:absolute; inset:9px; border:1px solid #E3E8EF; border-radius:19%; }
+  .pfE-core-frame > img{ position:relative; z-index:1; width:44%; height:auto; display:block; }
+  .mt-ring{ position:absolute; inset:-1px; border:2px solid var(--red); border-radius:inherit; opacity:0; animation:pfEring 3s cubic-bezier(.2,.7,.2,1) infinite; }
+  .mt-ring.r2{ animation-delay:1.5s; }
+  @keyframes pfEring{ 0%{ opacity:.8; transform:scale(1); } 100%{ opacity:0; transform:scale(1.9); } }
   .pfE-flash{ position:absolute; inset:0; z-index:3; pointer-events:none; opacity:0; background:radial-gradient(circle at 50% 50%, #FFFFFF 0%, rgba(255,255,255,.7) 22%, rgba(255,255,255,0) 70%); }
+
+  /* red pulses running along the MATCH wires (head + fading tail), each wire on its own rhythm */
+  .pfE-ov .pulse{ fill:none; stroke:#ED1D24; stroke-linecap:round; animation:pfEflow var(--t,3.6s) linear var(--d,0s) infinite; }
+  .pfE-ov .pulse.tail{ stroke-width:8; stroke-opacity:.3; stroke-dasharray:16 34; }
+  .pfE-ov .pulse.head{ stroke-width:6; stroke-dasharray:2.5 47.5; }
+  .pfE-ov .pulse.rev{ animation-direction:reverse; }
+  @keyframes pfEflow{ to{ stroke-dashoffset:-50; } }
 
   @media (max-width:1024px){
     .pfE .pf-intro{ grid-template-columns:1fr; gap:28px; padding-bottom:40px; }
@@ -1179,23 +1226,28 @@
     .pfE-modes b{ font-size:13px; }
     .pfE-modes .m-cat, .pfE-modes small{ display:none; }
     .pfE-frame .pfE-ph{ right:auto; left:16px; top:calc(var(--header-h) + 44px); bottom:auto; font-size:9.5px; padding:4px 9px; white-space:nowrap; }
-    .cv-card{ width:auto; padding:3px 11px 3px 3px; border-radius:999px; align-items:center; gap:7px; }
-    .cv-card .cv-ico{ width:26px; height:26px; }
-    .cv-card .cv-ico svg{ width:13px; height:13px; }
+    /* phones: MIX cards shrink to a round photo + name pill */
+    .cv-card{ width:auto; flex-direction:row; align-items:center; gap:0; padding:3px 12px 3px 3px; border-radius:999px; }
+    .cv-photo{ width:36px; height:36px; flex:none; border-radius:50%; }
+    .cv-photo::after, .cv-card .cv-ico{ display:none; }
+    .cv-card span.m{ padding:0 0 0 8px; }
     .cv-card .m-cat, .cv-card small{ display:none; }
     .cv-card b{ font-size:12.5px; white-space:nowrap; }
+    /* MATCH tiles: icons only (the labels would crowd a phone-width frame) */
+    .mt-tile{ width:38px; }
+    .cv-tile > b{ display:none; }
     /* phones: results become bright pills so they fit between the medallion and the caption */
     .cv-big{ width:auto; gap:8px; padding:4px 14px 4px 4px; border-radius:999px; }
-    .cv-big .cv-ico{ width:32px; height:32px; box-shadow:0 0 0 3px rgba(28,134,214,.3); }
-    .cv-big .cv-ico svg{ width:15px; height:15px; }
+    .cv-big .cv-ico{ width:34px; height:34px; }
+    .cv-big .cv-ico svg{ width:16px; height:16px; }
     .cv-big b{ font-size:12.5px; }
     .cv-big small{ display:none; }
     .pfE-oc .pfE-sum{ display:none; }
     .pfE-core{ width:120px; }
-    .pfE-core-ring{ inset:-18px; }
   }
   @media (prefers-reduced-motion:reduce){
-    .pfE-core-ring{ animation:none; }
+    .mt-ring, .cv-photo img{ animation:none; }
+    .pfE-ov .pulse{ animation:none; }
     .pfE-ov .dots{ animation:none; }
     .pfE-oc{ transition:none; }
   }
@@ -2149,7 +2201,7 @@ setTimeout(function(){
       <div class="qm">
         <button class="qm-btn" id="qmBtn" type="button" aria-expanded="false" aria-controls="qmPanel">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/><path d="M14 17.5h7"/><path d="M17.5 14v7"/></svg>
-          <span lang="en">Quick Menu</span>
+          <span lang="en">BTS QUICK</span>
           <svg class="qm-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>
         </button>
         <div class="qm-panel" id="qmPanel" role="menu" aria-label="Quick Menu" hidden>
@@ -2688,7 +2740,7 @@ setTimeout(function(){
           <div class="pfE-scrim"></div>
           <div class="pfE-labs" id="pfELabs" aria-hidden="true"></div>
           <!-- MATCH's centre: a real photo of partners shaking hands (same image as the live site's MATCH) -->
-          <div class="pfE-core" id="pfECore" aria-hidden="true"><i class="pfE-core-ring"></i><img src="img/match-core.webp" alt=""></div>
+          <div class="pfE-core" id="pfECore" aria-hidden="true"><i class="mt-ring"></i><i class="mt-ring r2"></i><span class="pfE-core-frame"><img src="img/bts-group-logo-color.png" alt=""></span></div>
           <i class="pfE-flash" id="pfEFlash" aria-hidden="true"></i>
           <!-- cloud bank (same cloud art as the live site) that carries MOVE into MIX: ragged edge, solid middle, ragged edge -->
           <div class="pfE-clouds" id="pfEClouds" aria-hidden="true">
@@ -3883,10 +3935,10 @@ setTimeout(function(){
     var MX_Y = 560;
     // the four O2O channels from the live site's MIX; none ends bottom-left, where the caption sits
     var MX_BR = [
-      { p:[[700,527],[700,430],[480,430],[480,280]], cat:'DATA', l:'ข้อมูลการเดินทาง', d:'หัวใจของ O2O ที่เชื่อมทุกช่องทาง', i:'db' },
-      { p:[[860,527],[860,420],[870,420],[870,195]], cat:'MEDIA', l:'สื่อโฆษณา', d:'สื่อนอกบ้านบนเส้นทางที่คนเมืองใช้ทุกวัน', i:'tv' },
-      { p:[[940,527],[940,440],[1220,440],[1220,250]], cat:'PAYMENT', l:'ชำระเงินดิจิทัล', d:'แตะจ่ายด้วยบัตรแรบบิท', i:'card' },
-      { p:[[900,593],[900,690],[1245,690],[1245,850]], cat:'LOGISTICS', l:'การกระจายสินค้า', d:'ส่งต่อถึงมือผู้คนทั่วเมือง', i:'package', mob:[1245,690] }
+      { p:[[700,527],[700,430],[480,430],[480,280]], cat:'DATA', l:'ข้อมูลการเดินทาง', d:'หัวใจของ O2O ที่เชื่อมทุกช่องทาง', i:'db', img:'img/mix-rabbit.webp' },
+      { p:[[860,527],[860,420],[870,420],[870,195]], cat:'MEDIA', l:'สื่อโฆษณา', d:'สื่อนอกบ้านบนเส้นทางที่คนเมืองใช้ทุกวัน', i:'tv', img:'img/mix-media.webp' },
+      { p:[[940,527],[940,440],[1220,440],[1220,250]], cat:'PAYMENT', l:'ชำระเงินดิจิทัล', d:'แตะจ่ายด้วยบัตรแรบบิท', i:'card', img:'img/mix-payment.webp' },
+      { p:[[900,593],[900,690],[1245,690],[1245,850]], cat:'LOGISTICS', l:'การกระจายสินค้า', d:'ส่งต่อถึงมือผู้คนทั่วเมือง', i:'package', img:'img/mix-logistics.webp', mob:[1245,690] }
     ];
     function sceneMix(){
       var R = rng(23), s = city(R, { park:.05 });
@@ -3949,13 +4001,24 @@ setTimeout(function(){
     /* ---------- live overlay: routes over the image ---------- */
     // on daylight imagery a white glow disappears — routes are a soft halo + white casing + a saturated core
     var CORE = { '#3FA3EC':'#00599B', '#8FD0FF':'#1C86D6', '#C6D0DE':'#23324E' };
-    function route(p, cls, col, outward){
+    // `pulse`: MATCH wires carry the live site's red pulses (head + tail) instead of white dots — each wire on its own
+    // rhythm; incoming wires flow into the centre, results flow out of it (outward → reversed)
+    var pulseN = 0;
+    function route(p, cls, col, outward, pulse){
       var d = 'M' + pts(p).split(' ').join(' L');
+      var t = (3.2 + (pulseN % 5) * .35).toFixed(2), dl = (-(pulseN * 1.3 % 3.7)).toFixed(2);
+      var tail = '';
+      if(pulse){
+        pulseN++;
+        var st = ' style="--t:' + t + 's;--d:' + dl + 's" opacity="0"';
+        tail = '<path class="pulse tail' + (outward ? ' rev' : '') + '" pathLength="100" d="' + d + '"' + st + '/>'
+             + '<path class="pulse head' + (outward ? ' rev' : '') + '" pathLength="100" d="' + d + '"' + st + '/>';
+      }
       return '<g class="' + cls + '">'
         + '<path class="rt" pathLength="1" d="' + d + '" stroke="' + col + '" stroke-width="20" opacity=".22"/>'
         + '<path class="rt" pathLength="1" d="' + d + '" stroke="#FFFFFF" stroke-width="8" opacity=".95"/>'
         + '<path class="rt" pathLength="1" d="' + d + '" stroke="' + (CORE[col] || col) + '" stroke-width="3.6"/>'
-        + '<path class="dots' + (outward ? ' out' : '') + '" pathLength="1" d="' + d + '" stroke="#FFFFFF" stroke-width="5" opacity="0"/>'
+        + (pulse ? tail : '<path class="dots' + (outward ? ' out' : '') + '" pathLength="1" d="' + d + '" stroke="#FFFFFF" stroke-width="5" opacity="0"/>')
         + '</g>';
     }
     // chips: scene index, scene-space point, label, icon; `out` = big outcome label
@@ -3974,20 +4037,21 @@ setTimeout(function(){
       add(1, route([[-80, MX_Y], [1680, MX_Y]], 'r', '#3FA3EC'), function(p){ return .55 + .45 * seg(p, .24, .32); });
       MX_BR.forEach(function(b, k){
         add(1, route(b.p, 'r', '#8FD0FF', true), function(p){ return seg(p, .3 + k * .025, .45); },
-          [chip({ sc:1, pt:b.p[3], ptMob:b.mob || null, l:b.l, cat:b.cat, d:b.d, i:b.i, at:.98, kind:'card' })]);
+          [chip({ sc:1, pt:b.p[3], ptMob:b.mob || null, l:b.l, cat:b.cat, d:b.d, i:b.i, img:b.img, at:.9, kind:'card' })]);
       });
       // MATCH — five approaches converge on C at the same moment (p≈.72)…
       var IN = [
         { p:[RA[0], C], c:[['MOVE', 'train', .35]] },
         { p:[RB[0], C], c:[['MIX', 'layers', .5]] },
-        // 4th value: spot on phones, further down the route so the chip clears the rail under the header
-        { p:[[800, -80], C], c:[['Business', 'briefcase', .3, .46], ['Property', 'house', .46, .6], ['Technology', 'cpu', .62, .74]] },
-        { p:[RC[0], C], c:[['Hotel', 'bed', .3, .45], ['Finance', 'wallet', .5, .62]] },
+        // 4th value: spot on phones, further down the route so the tile clears the rail under the header;
+        // 5th: label to the right of the tile (the three tiles on the vertical route sit close together)
+        { p:[[800, -80], C], c:[['พันธมิตร', 'handshake', .3, .46, 'r'], ['อสังหาริมทรัพย์', 'building', .46, .6, 'r'], ['เทคโนโลยีสารสนเทศ<br>และการสื่อสาร', 'cpu', .62, .74, 'r']] },
+        { p:[RC[0], C], c:[['ธุรกิจโรงแรม', 'bed', .3, .45], ['บริการทางการเงิน', 'wallet', .5, .62]] },
         { p:[RC[1], C], c:[] }
       ];
       IN.forEach(function(r, k){
-        add(2, route(r.p, 'r', k < 2 ? '#3FA3EC' : '#C6D0DE'), function(p){ return seg(p, .6 + k * .012, .72); },
-          r.c.map(function(c){ return chip({ sc:2, pt:lin(r.p[0], r.p[1], c[2]), ptMob:c[3] ? lin(r.p[0], r.p[1], c[3]) : null, l:c[0], i:c[1], at:c[2], kind:'lab' }); }));
+        add(2, route(r.p, 'r', k < 2 ? '#3FA3EC' : '#C6D0DE', false, true), function(p){ return seg(p, .6 + k * .012, .72); },
+          r.c.map(function(c){ return chip({ sc:2, pt:lin(r.p[0], r.p[1], c[2]), ptMob:c[3] ? lin(r.p[0], r.p[1], c[3]) : null, l:c[0], i:c[1], at:c[2], side:c[4] || 'b', kind:'tile' }); }));
       });
       // …then the new possibility bursts out along the three remaining directions, in the same beat
       var OUT = [
@@ -3996,7 +4060,7 @@ setTimeout(function(){
         { p:[C, [800, 1080]], t:.34, tm:.2, l:'BUSINESS', s:'ธุรกิจ', d:'ธุรกิจใหม่จากการผนึกกำลัง', i:'trend', dx:160 }
       ];
       OUT.forEach(function(r, k){
-        add(2, route(r.p, 'r', '#8FD0FF', true), function(p){ return seg(p, .74 + k * .02, .86 + k * .02); },
+        add(2, route(r.p, 'r', '#8FD0FF', true, true), function(p){ return seg(p, .74 + k * .02, .86 + k * .02); },
           [chip({ sc:2, pt:lin(r.p[0], r.p[1], r.t), ptMob:lin(r.p[0], r.p[1], r.tm), l:r.l, s:r.s, d:r.d, i:r.i, at:.05, kind:'big', dx:r.dx || 0 })]);
       });
 
@@ -4014,7 +4078,7 @@ setTimeout(function(){
           : '';
         svg.innerHTML = '<defs><radialGradient id="fHalo"><stop offset="0" stop-color="#ED1D24" stop-opacity=".55"/><stop offset="1" stop-color="#ED1D24" stop-opacity="0"/></radialGradient></defs>'
           + OV[sc].map(function(o){ return o.html; }).join('') + extra;
-        Array.prototype.forEach.call(svg.querySelectorAll(':scope > g'), function(g, k){ OV[sc][k].g = g; OV[sc][k].rts = g.querySelectorAll('.rt'); OV[sc][k].dots = g.querySelector('.dots'); });
+        Array.prototype.forEach.call(svg.querySelectorAll(':scope > g'), function(g, k){ OV[sc][k].g = g; OV[sc][k].rts = g.querySelectorAll('.rt'); OV[sc][k].dots = g.querySelector('.dots'); OV[sc][k].pulses = g.querySelectorAll('.pulse'); });
       });
 
       var ICON = {
@@ -4024,6 +4088,8 @@ setTimeout(function(){
         tv:'<rect width="20" height="15" x="2" y="7" rx="2" ry="2"/><path d="m17 2-5 5-5-5"/>',
         card:'<rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/>',
         package:'<path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><path d="m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7"/><path d="m7.5 4.27 9 5.15"/>',
+        handshake:'<path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/>',
+        building:'<rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/>',
         layers:'<path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/>',
         briefcase:'<path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/>',
         house:'<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
@@ -4035,9 +4101,10 @@ setTimeout(function(){
       };
       function ico(k){ return '<span class="cv-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICON[k] + '</svg></span>'; }
       labsF.innerHTML = CHIPS.map(function(c){
-        if(c.kind === 'card') return '<span class="cv-card">' + ico(c.i) + '<span class="m"><span class="m-cat" lang="en">' + c.cat + '</span><b>' + c.l + '</b><small>' + c.d + '</small></span></span>';
+        if(c.kind === 'card') return '<span class="cv-card"><span class="cv-photo"><img src="' + c.img + '" alt="" loading="eager" decoding="async">' + ico(c.i) + '</span><span class="m"><span class="m-cat" lang="en">' + c.cat + '</span><b>' + c.l + '</b><small>' + c.d + '</small></span></span>';
         if(c.kind === 'big') return '<span class="cv-big">' + ico(c.i) + '<span class="m"><b lang="en">' + c.l + '</b><small>' + c.s + ' · ' + c.d + '</small></span></span>';
-        return '<span class="cv-lab">' + ico(c.i) + '<span>' + c.l + '</span></span>';
+        // MATCH tile — the live site's style: white rounded square + icon, label pill beside/below
+        return '<span class="cv-tile' + (c.side === 'r' ? ' lab-r' : '') + '"><span class="mt-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICON[c.i] + '</svg></span><b' + (/^[A-Z]+$/.test(c.l) ? ' lang="en"' : '') + '>' + c.l + '</b></span>';
       }).join('');
       CHIPS.forEach(function(c, k){ c.el = labsF.children[k]; c.hw = 0; });
     }
@@ -4067,6 +4134,16 @@ setTimeout(function(){
       }
       buildOverlays();
       update(lastP);
+      // like the live site's MATCH: one tile at a time "heats up" to red (icon + glow), then the next
+      if(!reduceMotion){
+        var hotI = 0;
+        setInterval(function(){
+          if(lastP < .72) return;
+          var hot = CHIPS.filter(function(c){ return c.sc === 2 && (c.kind === 'tile' || c.kind === 'big') && c.on; });
+          CHIPS.forEach(function(c){ c.el.classList.remove('is-hot'); });
+          if(hot.length) hot[hotI++ % hot.length].el.classList.add('is-hot');
+        }, 1300);
+      }
     }
 
     function update(p){
@@ -4117,7 +4194,8 @@ setTimeout(function(){
             o.cur = f;
             var offv = (1 - f).toFixed(4), vis = f > .002 ? '' : 'hidden';
             Array.prototype.forEach.call(o.rts, function(r){ r.style.strokeDashoffset = offv; r.style.visibility = vis; });
-            o.dots.setAttribute('opacity', f >= 1 && !reduceMotion ? .9 : 0);
+            if(o.dots) o.dots.setAttribute('opacity', f >= 1 && !reduceMotion ? .9 : 0);
+            if(o.pulses) Array.prototype.forEach.call(o.pulses, function(el){ el.setAttribute('opacity', f >= 1 ? 1 : 0); }); // CSS animation is off under reduced motion
             o.chips.forEach(function(ci){ CHIPS[ci].f = f; CHIPS[ci].on = f >= CHIPS[ci].at; });
           });
         });
@@ -4158,7 +4236,10 @@ setTimeout(function(){
             c.el.style.setProperty('--s', (k <= 0 ? .3 : .3 + .7 * backOut(k)).toFixed(3));
             c.el.style.opacity = (Math.min(1, k * 3) * op[2]).toFixed(3);
           } else {
-            c.el.style.opacity = c.on ? op[c.sc].toFixed(3) : 0;
+            // cards and tiles pop in (0.6 → 1, slight overshoot) as their route reaches them
+            var pk = c.on ? seg(c.f || 0, c.at, Math.min(1.001, c.at + .1)) : 0;
+            c.el.style.setProperty('--s', (pk <= 0 ? .6 : .6 + .4 * backOut(pk)).toFixed(3));
+            c.el.style.opacity = c.on ? (Math.min(1, pk * 3) * op[c.sc]).toFixed(3) : 0;
           }
           x = Math.max(mx, Math.min(fw - mx, x)); y = Math.max(my, Math.min(fh - my, y));
           // MIX's info cards are big enough to land under the rail or the placeholder tag on shorter screens — drop them below
