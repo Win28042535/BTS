@@ -1059,7 +1059,7 @@
   .pfE-modes li{ display:flex; flex-direction:column; gap:3px; opacity:0; }
   .pfE-modes .cv-ico{ width:36px; height:36px; margin-bottom:8px; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); }
   .pfE-modes .cv-ico svg{ width:16px; height:16px; }
-  .pfE-modes .m-cat{ font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#8FD0FF; }
+  .pfE-modes .m-cat{ font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#8FD0FF; }
   .pfE-modes b{ font-size:20px; font-weight:700; }
   .pfE-modes small{ font-size:12.5px; line-height:1.45; color:rgba(255,255,255,.78); }
 
@@ -1144,7 +1144,7 @@
   .cv-card .cv-ico{ position:absolute; z-index:1; left:10px; bottom:10px; width:34px; height:34px; border-radius:28%; background:var(--white); color:var(--blue); box-shadow:0 6px 14px -6px rgba(0,0,0,.5); }
   .cv-card .cv-ico svg{ width:17px; height:17px; }
   .cv-card span.m{ display:flex; flex-direction:column; gap:1px; padding:10px 14px 12px; }
-  .cv-card .m-cat{ font-size:10px; letter-spacing:.14em; color:#8FD0FF; }
+  .cv-card .m-cat{ font-size:11px; letter-spacing:.14em; color:#8FD0FF; }
   .cv-card b{ font-size:15px; font-weight:700; line-height:1.35; }
   .cv-card small{ font-size:11.5px; line-height:1.4; color:rgba(255,255,255,.74); }
 
@@ -1209,7 +1209,7 @@
     .pfE-modes .cv-ico svg{ width:13px; height:13px; }
     .pfE-modes b{ font-size:13px; }
     .pfE-modes .m-cat, .pfE-modes small{ display:none; }
-    .pfE-frame .pfE-ph{ right:auto; left:16px; top:calc(var(--header-h) + 44px); bottom:auto; font-size:9.5px; padding:4px 9px; white-space:nowrap; }
+    .pfE-frame .pfE-ph{ right:auto; left:16px; top:calc(var(--header-h) + 44px); bottom:auto; font-size:10.5px; padding:4px 9px; white-space:nowrap; }
     /* phones: MIX cards shrink to a round photo + name pill */
     .cv-card{ width:auto; flex-direction:row; align-items:center; gap:0; padding:3px 12px 3px 3px; border-radius:999px; }
     .cv-photo{ width:36px; height:36px; flex:none; border-radius:50%; }
@@ -1228,6 +1228,40 @@
     .pfE-ov .pulse{ animation:none; }
     .pfE-ov .dots{ animation:none; }
     .pfE-oc{ transition:none; }
+  }
+
+  /* ============ Responsive audit fixes ============ */
+  /* touch targets: an invisible pad brings small links/buttons to ~44px without touching the layout */
+  @media (max-width:1024px), (pointer:coarse){
+    .pf-link, .hd-tick, .menu-close-btn, .submenu-inner a, .ft-nav a{ position:relative; }
+    .pf-link::after, .hd-tick::after, .menu-close-btn::after, .submenu-inner a::after, .ft-nav a::after{ content:""; position:absolute; }
+    .pf-link::after{ inset:-8px -4px; }
+    .hd-tick::after{ inset:-12px -6px; }
+    .menu-close-btn::after{ inset:-12px -10px; }
+    .submenu-inner a::after{ inset:-6px -4px; }
+    .ft-nav a{ display:inline-block; }
+    .ft-nav a::after{ inset:-7px -6px; }
+  }
+  /* short screens (small phones, tablets/laptops with little height): MATCH/MIX/MOVE copy goes compact so the
+     headline, the icons and the centre logo never sit on top of each other */
+  @media (max-height:640px) and (max-width:1024px){
+    .pfE-oc p, .pfE-oc .pfE-sum{ display:none; }
+    .pfE-oc h3{ font-size:30px; margin-bottom:10px; }
+    .pfE-oc.sm h3{ font-size:22px; }
+    .pfE-oc .eyebrow{ margin-bottom:8px; }
+    .pfE-over{ bottom:18px; }
+    .pfE-core{ width:clamp(80px, 22vh, 120px); }
+  }
+  /* phones on their side: copy hugs the left half, the travel modes stack on the right, notices step aside */
+  @media (max-height:520px){
+    .pfE-over{ right:auto; width:min(52%, 420px); }
+    .pfE-oc h3{ font-size:24px; margin-bottom:8px; }
+    .pfE-oc.sm h3{ font-size:19px; }
+    .pfE-oc .eyebrow{ display:none; }
+    .pfE-modes{ left:auto; right:16px; width:auto; top:calc(var(--header-h) + 12px); grid-template-columns:1fr; gap:6px; }
+    .hero .hero-tag, .pfE-frame .pfE-ph{ display:none; }
+    .hero-content{ top:44%; }
+    .hero-h1{ font-size:clamp(26px, 5.2vw, 44px); }
   }
 
   /* ============ Section 3 · version B — sticky-stack full-bleed panels (DNA: unitedcarriers.com/about) ============ */
@@ -4194,6 +4228,8 @@ setTimeout(function(){
         core.style.setProperty('--s', (mk <= 0 ? .3 : .3 + .7 * backOut(mk)).toFixed(3));
 
         // chips follow the cover-crop + zoom of their scene, clamped inside the frame
+        var placed = [], capEl2 = frame.querySelector('.pfE-oc.on'), fr = frame.getBoundingClientRect(), capBox = null;
+        if(capEl2){ var cr = capEl2.getBoundingClientRect(); capBox = { l: cr.left - fr.left, r: cr.right - fr.left, t: cr.top - fr.top }; }
         var obstacles = [railF, phTag].map(function(el){
           return { l: el.offsetLeft, r: el.offsetLeft + el.offsetWidth, b: el.offsetTop + el.offsetHeight, w: el.offsetWidth && el.style.visibility !== 'hidden' };
         });
@@ -4201,7 +4237,14 @@ setTimeout(function(){
           var s = Math.max(fw / VW, fh / VH) * z[c.sc], pt = narrow && c.ptMob ? c.ptMob : c.pt;
           var x = fw / 2 + (pt[0] - VW / 2) * s, y = fh / 2 + (pt[1] - VH / 2) * s;
           // phones: the five partners sit in one row just under the centre instead of along the routes
-          if(narrow && c.row !== undefined){ x = fw * (.1 + .2 * c.row); y = cy + 112; }
+          if(narrow && c.row !== undefined){
+            var half = (core.offsetHeight || 120) / 2, land = fw > fh;
+            if(land){ var x0 = cx + half + 38, step = Math.min(50, (fw - 34 - x0) / 4); x = x0 + c.row * step; y = cy; }
+            else {
+              var capEl = frame.querySelector('.pfE-oc.on'), capTop = capEl ? capEl.getBoundingClientRect().top - frame.getBoundingClientRect().top : fh;
+              y = Math.max(cy + half + 30, Math.min(cy + half + 44, capTop - 34)); x = fw * (.1 + .2 * c.row);
+            }
+          }
           if(!c.hw && c.el.offsetWidth) c.hw = c.el.offsetWidth / 2, c.hh = c.el.offsetHeight / 2;
           var mx = (c.hw || 22) + 10, my = (c.hh || 22) + 10;
           if(c.burst){
@@ -4218,9 +4261,22 @@ setTimeout(function(){
           }
           x = Math.max(mx, Math.min(fw - mx, x)); y = Math.max(my, Math.min(fh - my, y));
           // MIX's info cards are big enough to land under the rail or the placeholder tag on shorter screens — drop them below
-          if(c.kind === 'card') obstacles.forEach(function(o){
-            if(o.w && x + c.hw > o.l && x - c.hw < o.r) y = Math.max(y, o.b + c.hh + 10);
-          });
+          if(c.kind === 'card'){
+            obstacles.forEach(function(o){
+              if(o.w && x + c.hw > o.l && x - c.hw < o.r) y = Math.max(y, o.b + c.hh + 10);
+            });
+            // the floating buttons own the bottom-right corner on small screens: cards stay out of that strip
+            if(narrow && y + c.hh > fh - 150) x = Math.min(x, fw - 78 - c.hw);
+            // keep clear of the caption (it sits bottom-left and grows with its copy)
+            if(capBox && x + c.hw > capBox.l && x - c.hw < capBox.r && y + c.hh > capBox.t) y = Math.min(y, capBox.t - c.hh - 10);
+            // …and of the other cards (they can land on each other on narrow screens)
+            for(var tries = 0; tries < 4; tries++){
+              var hit = placed.filter(function(q){ return Math.abs(x - q.x) < c.hw + q.hw + 6 && Math.abs(y - q.y) < c.hh + q.hh + 6; })[0];
+              if(!hit) break;
+              y = hit.y + hit.hh + c.hh + 6;
+            }
+            placed.push({ x: x, y: y, hw: c.hw, hh: c.hh });
+          }
           c.el.style.left = x.toFixed(1) + 'px'; c.el.style.top = y.toFixed(1) + 'px';
         });
       }
