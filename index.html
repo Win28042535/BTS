@@ -4055,21 +4055,23 @@ setTimeout(function(){
       [[RA[0], C], [RB[0], C], [[800, -80], C], [RC[0], C], [RC[1], C]].forEach(function(p2, k){
         add(2, route(p2, 'r', k < 2 ? '#3FA3EC' : '#C6D0DE', false, true), function(p){ return seg(p, .6 + k * .012, .72); });
       });
-      // …then the five partner businesses burst out of the centre where the old results sat (east, south-east, south),
-      // two per route on the first two; `row` is the order used for the single row phones get instead
-      var OUT = [
-        { p:[C, RA[1]], items:[
-          { l:'พันธมิตร', i:'handshake', t:.33, row:0 },
-          { l:'เทคโนโลยีสารสนเทศ<br>และการสื่อสาร', i:'cpu', t:.64, row:1, late:.3 } ] },
-        { p:[C, RB[1]], items:[
-          { l:'อสังหาริมทรัพย์', i:'building', t:.3, row:2 },
-          { l:'ธุรกิจโรงแรม', i:'bed', t:.6, row:3, late:.3 } ] },
-        { p:[C, [800, 1080]], items:[
-          { l:'บริการทางการเงิน', i:'wallet', t:.36, row:4 } ] }
+      // …the three outgoing wires leave after the landing (east, south-east, south)…
+      [[C, RA[1]], [C, RB[1]], [C, [800, 1080]]].forEach(function(p2, k){
+        add(2, route(p2, 'r', '#8FD0FF', true, true), function(p){ return seg(p, .74 + k * .02, .86 + k * .02); });
+      });
+      // …and the five partner businesses burst out of the centre, each along a different spoke so they ring the logo:
+      // north, north-east, south-east, south, west. t = how far out along the spoke (0 = centre, 1 = edge of the scene).
+      // `row` is both the order and the slot phones use: a ring around the logo in portrait, a row beside it in landscape.
+      var PARTNERS = [
+        { l:'พันธมิตร',                              i:'handshake', end:[800, -80],   t:.45, row:0 },
+        { l:'เทคโนโลยีสารสนเทศ<br>และการสื่อสาร',    i:'cpu',       end:RC[0],        t:.4,  row:1 },
+        { l:'ธุรกิจโรงแรม',                          i:'bed',       end:RB[1],        t:.42, row:2 },
+        { l:'บริการทางการเงิน',                      i:'wallet',    end:[800, 1080],  t:.42, row:3 },
+        { l:'อสังหาริมทรัพย์',                       i:'building',  end:RA[0],        t:.3,  row:4 }
       ];
-      OUT.forEach(function(r, k){
-        add(2, route(r.p, 'r', '#8FD0FF', true, true), function(p){ return seg(p, .74 + k * .02, .86 + k * .02); },
-          r.items.map(function(it){ return chip({ sc:2, pt:lin(r.p[0], r.p[1], it.t), l:it.l, i:it.i, at:.05, kind:'tile', burst:true, late:it.late || 0, row:it.row, side:'b' }); }));
+      PARTNERS.forEach(function(pt, k){
+        chip({ sc:2, pt:lin(C, pt.end, pt.t), l:pt.l, i:pt.i, at:.05, kind:'tile', burst:true, late:0, row:pt.row, side:'b',
+               pf:function(p){ return seg(p, .74 + k * .02, .9); } });
       });
 
       Array.prototype.forEach.call(scenes, function(scene, sc){
@@ -4206,6 +4208,7 @@ setTimeout(function(){
             o.chips.forEach(function(ci){ CHIPS[ci].f = f; CHIPS[ci].on = f >= CHIPS[ci].at; });
           });
         });
+        CHIPS.forEach(function(c){ if(c.pf){ c.f = c.pf(p); c.on = c.f >= c.at; } });
         // the interchange point: wakes as routes approach, then the photo medallion lands with the rings and waves
         var mv = frame.querySelector('.pfE-scene[data-i="2"] .pfE-ov');
         var landed = p >= .71;
@@ -4236,13 +4239,14 @@ setTimeout(function(){
         CHIPS.forEach(function(c){
           var s = Math.max(fw / VW, fh / VH) * z[c.sc], pt = narrow && c.ptMob ? c.ptMob : c.pt;
           var x = fw / 2 + (pt[0] - VW / 2) * s, y = fh / 2 + (pt[1] - VH / 2) * s;
-          // phones: the five partners sit in one row just under the centre instead of along the routes
+          // phones: the five partners ring the logo (portrait) or sit in a row beside it (landscape) instead of along the spokes
           if(narrow && c.row !== undefined){
             var half = (core.offsetHeight || 120) / 2, land = fw > fh;
             if(land){ var x0 = cx + half + 38, step = Math.min(50, (fw - 34 - x0) / 4); x = x0 + c.row * step; y = cy; }
             else {
               var capEl = frame.querySelector('.pfE-oc.on'), capTop = capEl ? capEl.getBoundingClientRect().top - frame.getBoundingClientRect().top : fh;
-              y = Math.max(cy + half + 30, Math.min(cy + half + 44, capTop - 34)); x = fw * (.1 + .2 * c.row);
+              var r = Math.max(half + 36, Math.min(half + 58, (capTop - 30 - cy) / .81)), ang = (-90 + 72 * c.row) * Math.PI / 180;
+              x = cx + r * Math.cos(ang); y = cy + r * Math.sin(ang);
             }
           }
           if(!c.hw && c.el.offsetWidth) c.hw = c.el.offsetWidth / 2, c.hh = c.el.offsetHeight / 2;
